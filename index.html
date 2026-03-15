@@ -168,7 +168,7 @@ footer a{color:var(--ac);text-decoration:none;}
   <div class="card">
     <div class="ct">Historical data table</div>
     <table class="pt">
-      <thead><tr><th>Week</th><th>Date</th><th>Brand</th><th>Fuel type</th><th>Price (₱/L)</th><th>Change</th></tr></thead>
+      <thead><tr><th>Date</th><th>Brand</th><th>Fuel type</th><th>Price (₱/L)</th><th>Change</th></tr></thead>
       <tbody id="hist-tbody"></tbody>
     </table>
   </div>
@@ -250,6 +250,8 @@ async function loadData(){
 const L=()=>DB.weekly_snapshots[DB.weekly_snapshots.length-1];
 const P=()=>DB.weekly_snapshots[DB.weekly_snapshots.length-2];
 function avg(snap,ft){const r=snap.prices.filter(p=>p.fuel_type===ft);return r.length?r.reduce((s,x)=>s+x.price,0)/r.length:null;}
+function fmtDate(d){return new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric'});}
+function fmtDateFull(d){return new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});}
 function mk(id,type,data,opts){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),{type,data,options:opts||CTO});}
 function lgn(fuels){return{display:true,position:'top',labels:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},boxWidth:10,padding:12}};}
 
@@ -281,7 +283,7 @@ function render(){
 }
 
 function renderTrend(){
-  const lbls=DB.weekly_snapshots.map(s=>s.week.replace(/\d{4}-W/,'W'));
+  const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
   const fuels=[{l:'Ron 91',c:'#3b9eff',ft:'Ron 91'},{l:'Ron 95',c:'#ffc847',ft:'Ron 95'},{l:'Ron 97',c:'#a78bfa',ft:'Ron 97'},{l:'Diesel',c:'#ff6b35',ft:'Diesel'}];
   document.getElementById('trend-legend').innerHTML=fuels.map(f=>`<div class="li"><div class="ld" style="background:${f.c}"></div>${f.l}</div>`).join('');
   mk('trend-chart','line',{labels:lbls,datasets:fuels.map(f=>({label:f.l,data:DB.weekly_snapshots.map(s=>avg(s,f.ft)),borderColor:f.c,backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,scales:{...CTO.scales,y:{...CTO.scales.y,min:54}}});
@@ -289,7 +291,7 @@ function renderTrend(){
 
 function renderWoW(){
   const snaps=DB.weekly_snapshots;
-  const lbls=snaps.slice(1).map(s=>s.week.replace(/\d{4}-W/,'W'));
+  const lbls=snaps.slice(1).map(s=>fmtDate(s.date));
   mk('wow-chart','bar',{
     labels:lbls,
     datasets:[
@@ -317,7 +319,7 @@ function renderTable(){
 function renderHistory(){
   const fuel=document.getElementById('hist-fuel').value,brand=document.getElementById('hist-brand').value;
   const brands=brand==='all'?['Petron','Shell','Caltex','Phoenix','Seaoil']:[brand];
-  const lbls=DB.weekly_snapshots.map(s=>s.week.replace(/\d{4}-W/,'W'));
+  const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
   mk('hist-chart','line',{labels:lbls,datasets:brands.map(b=>({label:b,data:DB.weekly_snapshots.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type===fuel)?.price||null),borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:3,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()}});
   const rows=[];
   DB.weekly_snapshots.slice().reverse().forEach(snap=>{
@@ -325,12 +327,12 @@ function renderHistory(){
       const pi=DB.weekly_snapshots.findIndex(s=>s.week===snap.week);
       const pv=pi>0?DB.weekly_snapshots[pi-1].prices.find(pp=>pp.brand===p.brand&&pp.fuel_type===p.fuel_type)?.price:null;
       const d=pv!==null?p.price-pv:null;
-      rows.push({week:snap.week,date:snap.date,brand:p.brand,fuel:p.fuel_type,price:p.price,d});
+      rows.push({date:snap.date,brand:p.brand,fuel:p.fuel_type,price:p.price,d});
     });
   });
   document.getElementById('hist-tbody').innerHTML=rows.map(r=>{
     const ds=r.d===null?'—':r.d>.005?`<span class="up">▲ +${r.d.toFixed(2)}</span>`:r.d<-.005?`<span class="dn">▼ ${r.d.toFixed(2)}</span>`:'<span class="nc">—</span>';
-    return`<tr><td>${r.week}</td><td>${r.date}</td><td style="color:${COLORS[r.brand]||'#e8edf5'}">${r.brand}</td><td>${r.fuel}</td><td>₱${r.price.toFixed(2)}</td><td>${ds}</td></tr>`;
+    return`<tr><td>${fmtDateFull(r.date)}</td><td style="color:${COLORS[r.brand]||'#e8edf5'}">${r.brand}</td><td>${r.fuel}</td><td>₱${r.price.toFixed(2)}</td><td>${ds}</td></tr>`;
   }).join('');
 }
 
@@ -342,7 +344,7 @@ function renderBrands(){
   const c9=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Ron 95')?.price||99)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Ron 95')?.price||99)?a:b);
   const ad=(brands.reduce((s,b)=>s+(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||0),0)/brands.length).toFixed(2);
   document.getElementById('brand-stats').innerHTML=`<div class="sm"><div class="sl">Cheapest diesel this week</div><div class="sv" style="color:${COLORS[cd]}">${cd}</div></div><div class="sm"><div class="sl">Cheapest Ron 95 this week</div><div class="sv" style="color:${COLORS[c9]}">${c9}</div></div><div class="sm"><div class="sl">Average diesel NCR</div><div class="sv">₱${ad}</div></div>`;
-  const lbls=DB.weekly_snapshots.map(s=>s.week.replace(/\d{4}-W/,'W'));
+  const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
   mk('diesel-brand-chart','line',{labels:lbls,datasets:brands.map(b=>({label:b,data:DB.weekly_snapshots.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||null),borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()}});
 }
 
