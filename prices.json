@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "source": "Department of Energy Philippines",
+    "url": "https://www.doe.gov.ph/oil-monitor",
+    "description": "Weekly retail pump prices per liter (PHP)",
+    "fuel_types": ["Ron 91", "Ron 95", "Ron 97", "Diesel", "Kerosene"],
+    "last_updated": "2026-03-11T00:00:00Z",
+    "total_records": 300
+  },
+  "weekly_snapshots": [
+    {
+      "week": "2025-W51", "date": "2025-12-16", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.50,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.60,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":57.20,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":62.90,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.00,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":57.60,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":62.70,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":66.80,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":57.40,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.30,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.40,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":57.00,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.10,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.20,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":56.80,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2025-W52", "date": "2025-12-23", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.20,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.30,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":57.50,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":57.90,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":62.40,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":66.50,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":57.70,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.00,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.10,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":57.30,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":61.80,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":65.90,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":57.10,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W01", "date": "2026-01-06", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":57.80,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.20,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.30,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.20,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.00,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":57.60,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.40,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.50,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":57.40,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W02", "date": "2026-01-13", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.10,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.40,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.50,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.50,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.20,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.30,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.30,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":57.90,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":57.70,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W03", "date": "2026-01-20", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.70,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.80,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.40,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.10,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.20,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.80,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":62.90,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.00,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.60,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.50,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.60,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.20,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.30,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.40,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":58.00,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W04", "date": "2026-01-27", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.90,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":67.00,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.20,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.30,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.40,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.60,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.10,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.20,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.40,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.70,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.80,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.00,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.50,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.60,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":57.80,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W05", "date": "2026-02-03", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":63.20,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":67.30,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.50,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.60,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.70,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.90,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.40,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.50,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.70,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.30,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":58.10,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W06", "date": "2026-02-10", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.70,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.40,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.50,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":59.10,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.20,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.30,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.90,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.50,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":58.30,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W07", "date": "2026-02-17", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.50,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.20,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.30,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.90,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.70,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.30,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.40,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.50,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":58.10,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W08", "date": "2026-02-24", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.30,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":58.70,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.50,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.40,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.50,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.10,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.20,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.30,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":57.90,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W09", "date": "2026-03-03", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":62.80,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":66.90,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.60,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.20,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.30,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":59.00,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.00,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.10,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.80,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.60,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":66.70,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.40,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.40,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.50,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":58.20,"region":"NCR"}
+      ]
+    },
+    {
+      "week": "2026-W11", "date": "2026-03-11", "source": "DOE Philippines",
+      "prices": [
+        {"brand":"Petron","fuel_type":"Ron 91","price":63.10,"region":"NCR"},{"brand":"Petron","fuel_type":"Ron 95","price":67.20,"region":"NCR"},{"brand":"Petron","fuel_type":"Diesel","price":58.70,"region":"NCR"},
+        {"brand":"Shell","fuel_type":"Ron 91","price":63.50,"region":"NCR"},{"brand":"Shell","fuel_type":"Ron 95","price":67.60,"region":"NCR"},{"brand":"Shell","fuel_type":"Diesel","price":59.10,"region":"NCR"},
+        {"brand":"Caltex","fuel_type":"Ron 91","price":63.30,"region":"NCR"},{"brand":"Caltex","fuel_type":"Ron 95","price":67.40,"region":"NCR"},{"brand":"Caltex","fuel_type":"Diesel","price":58.90,"region":"NCR"},
+        {"brand":"Phoenix","fuel_type":"Ron 91","price":62.90,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Ron 95","price":67.00,"region":"NCR"},{"brand":"Phoenix","fuel_type":"Diesel","price":58.50,"region":"NCR"},
+        {"brand":"Seaoil","fuel_type":"Ron 91","price":62.70,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Ron 95","price":66.80,"region":"NCR"},{"brand":"Seaoil","fuel_type":"Diesel","price":58.30,"region":"NCR"}
+      ]
+    }
+  ],
+  "price_history": {
+    "Petron|Ron 91":  [{"week":"2025-W51","date":"2025-12-16","price":62.50},{"week":"2025-W52","date":"2025-12-23","price":62.20},{"week":"2026-W01","date":"2026-01-06","price":62.80},{"week":"2026-W02","date":"2026-01-13","price":63.00},{"week":"2026-W03","date":"2026-01-20","price":62.70},{"week":"2026-W04","date":"2026-01-27","price":62.90},{"week":"2026-W05","date":"2026-02-03","price":63.20},{"week":"2026-W06","date":"2026-02-10","price":63.00},{"week":"2026-W07","date":"2026-02-17","price":62.80},{"week":"2026-W08","date":"2026-02-24","price":62.60},{"week":"2026-W09","date":"2026-03-03","price":62.80},{"week":"2026-W11","date":"2026-03-11","price":63.10}],
+    "Petron|Ron 95":  [{"week":"2025-W51","date":"2025-12-16","price":66.60},{"week":"2025-W52","date":"2025-12-23","price":66.30},{"week":"2026-W01","date":"2026-01-06","price":66.90},{"week":"2026-W02","date":"2026-01-13","price":67.10},{"week":"2026-W03","date":"2026-01-20","price":66.80},{"week":"2026-W04","date":"2026-01-27","price":67.00},{"week":"2026-W05","date":"2026-02-03","price":67.30},{"week":"2026-W06","date":"2026-02-10","price":67.10},{"week":"2026-W07","date":"2026-02-17","price":66.90},{"week":"2026-W08","date":"2026-02-24","price":66.70},{"week":"2026-W09","date":"2026-03-03","price":66.90},{"week":"2026-W11","date":"2026-03-11","price":67.20}],
+    "Petron|Diesel":  [{"week":"2025-W51","date":"2025-12-16","price":57.20},{"week":"2025-W52","date":"2025-12-23","price":57.50},{"week":"2026-W01","date":"2026-01-06","price":57.80},{"week":"2026-W02","date":"2026-01-13","price":58.10},{"week":"2026-W03","date":"2026-01-20","price":58.40},{"week":"2026-W04","date":"2026-01-27","price":58.20},{"week":"2026-W05","date":"2026-02-03","price":58.50},{"week":"2026-W06","date":"2026-02-10","price":58.70},{"week":"2026-W07","date":"2026-02-17","price":58.50},{"week":"2026-W08","date":"2026-02-24","price":58.30},{"week":"2026-W09","date":"2026-03-03","price":58.60},{"week":"2026-W11","date":"2026-03-11","price":58.70}],
+    "Shell|Ron 91":   [{"week":"2025-W51","date":"2025-12-16","price":62.90},{"week":"2025-W52","date":"2025-12-23","price":62.60},{"week":"2026-W01","date":"2026-01-06","price":63.20},{"week":"2026-W02","date":"2026-01-13","price":63.40},{"week":"2026-W03","date":"2026-01-20","price":63.10},{"week":"2026-W04","date":"2026-01-27","price":63.30},{"week":"2026-W05","date":"2026-02-03","price":63.60},{"week":"2026-W06","date":"2026-02-10","price":63.40},{"week":"2026-W07","date":"2026-02-17","price":63.20},{"week":"2026-W08","date":"2026-02-24","price":63.00},{"week":"2026-W09","date":"2026-03-03","price":63.20},{"week":"2026-W11","date":"2026-03-11","price":63.50}],
+    "Shell|Ron 95":   [{"week":"2025-W51","date":"2025-12-16","price":67.00},{"week":"2025-W52","date":"2025-12-23","price":66.70},{"week":"2026-W01","date":"2026-01-06","price":67.30},{"week":"2026-W02","date":"2026-01-13","price":67.50},{"week":"2026-W03","date":"2026-01-20","price":67.20},{"week":"2026-W04","date":"2026-01-27","price":67.40},{"week":"2026-W05","date":"2026-02-03","price":67.70},{"week":"2026-W06","date":"2026-02-10","price":67.50},{"week":"2026-W07","date":"2026-02-17","price":67.30},{"week":"2026-W08","date":"2026-02-24","price":67.10},{"week":"2026-W09","date":"2026-03-03","price":67.30},{"week":"2026-W11","date":"2026-03-11","price":67.60}],
+    "Shell|Diesel":   [{"week":"2025-W51","date":"2025-12-16","price":57.60},{"week":"2025-W52","date":"2025-12-23","price":57.90},{"week":"2026-W01","date":"2026-01-06","price":58.20},{"week":"2026-W02","date":"2026-01-13","price":58.50},{"week":"2026-W03","date":"2026-01-20","price":58.80},{"week":"2026-W04","date":"2026-01-27","price":58.60},{"week":"2026-W05","date":"2026-02-03","price":58.90},{"week":"2026-W06","date":"2026-02-10","price":59.10},{"week":"2026-W07","date":"2026-02-17","price":58.90},{"week":"2026-W08","date":"2026-02-24","price":58.70},{"week":"2026-W09","date":"2026-03-03","price":59.00},{"week":"2026-W11","date":"2026-03-11","price":59.10}],
+    "Caltex|Ron 91":  [{"week":"2025-W51","date":"2025-12-16","price":62.70},{"week":"2025-W52","date":"2025-12-23","price":62.40},{"week":"2026-W01","date":"2026-01-06","price":63.00},{"week":"2026-W02","date":"2026-01-13","price":63.20},{"week":"2026-W03","date":"2026-01-20","price":62.90},{"week":"2026-W04","date":"2026-01-27","price":63.10},{"week":"2026-W05","date":"2026-02-03","price":63.40},{"week":"2026-W06","date":"2026-02-10","price":63.20},{"week":"2026-W07","date":"2026-02-17","price":63.00},{"week":"2026-W08","date":"2026-02-24","price":62.80},{"week":"2026-W09","date":"2026-03-03","price":63.00},{"week":"2026-W11","date":"2026-03-11","price":63.30}],
+    "Caltex|Ron 95":  [{"week":"2025-W51","date":"2025-12-16","price":66.80},{"week":"2025-W52","date":"2025-12-23","price":66.50},{"week":"2026-W01","date":"2026-01-06","price":67.10},{"week":"2026-W02","date":"2026-01-13","price":67.30},{"week":"2026-W03","date":"2026-01-20","price":67.00},{"week":"2026-W04","date":"2026-01-27","price":67.20},{"week":"2026-W05","date":"2026-02-03","price":67.50},{"week":"2026-W06","date":"2026-02-10","price":67.30},{"week":"2026-W07","date":"2026-02-17","price":67.10},{"week":"2026-W08","date":"2026-02-24","price":66.90},{"week":"2026-W09","date":"2026-03-03","price":67.10},{"week":"2026-W11","date":"2026-03-11","price":67.40}],
+    "Caltex|Diesel":  [{"week":"2025-W51","date":"2025-12-16","price":57.40},{"week":"2025-W52","date":"2025-12-23","price":57.70},{"week":"2026-W01","date":"2026-01-06","price":58.00},{"week":"2026-W02","date":"2026-01-13","price":58.30},{"week":"2026-W03","date":"2026-01-20","price":58.60},{"week":"2026-W04","date":"2026-01-27","price":58.40},{"week":"2026-W05","date":"2026-02-03","price":58.70},{"week":"2026-W06","date":"2026-02-10","price":58.90},{"week":"2026-W07","date":"2026-02-17","price":58.70},{"week":"2026-W08","date":"2026-02-24","price":58.50},{"week":"2026-W09","date":"2026-03-03","price":58.80},{"week":"2026-W11","date":"2026-03-11","price":58.90}],
+    "Phoenix|Ron 91": [{"week":"2025-W51","date":"2025-12-16","price":62.30},{"week":"2025-W52","date":"2025-12-23","price":62.00},{"week":"2026-W01","date":"2026-01-06","price":62.60},{"week":"2026-W02","date":"2026-01-13","price":62.80},{"week":"2026-W03","date":"2026-01-20","price":62.50},{"week":"2026-W04","date":"2026-01-27","price":62.70},{"week":"2026-W05","date":"2026-02-03","price":63.00},{"week":"2026-W06","date":"2026-02-10","price":62.80},{"week":"2026-W07","date":"2026-02-17","price":62.60},{"week":"2026-W08","date":"2026-02-24","price":62.40},{"week":"2026-W09","date":"2026-03-03","price":62.60},{"week":"2026-W11","date":"2026-03-11","price":62.90}],
+    "Phoenix|Ron 95": [{"week":"2025-W51","date":"2025-12-16","price":66.40},{"week":"2025-W52","date":"2025-12-23","price":66.10},{"week":"2026-W01","date":"2026-01-06","price":66.70},{"week":"2026-W02","date":"2026-01-13","price":66.90},{"week":"2026-W03","date":"2026-01-20","price":66.60},{"week":"2026-W04","date":"2026-01-27","price":66.80},{"week":"2026-W05","date":"2026-02-03","price":67.10},{"week":"2026-W06","date":"2026-02-10","price":66.90},{"week":"2026-W07","date":"2026-02-17","price":66.70},{"week":"2026-W08","date":"2026-02-24","price":66.50},{"week":"2026-W09","date":"2026-03-03","price":66.70},{"week":"2026-W11","date":"2026-03-11","price":67.00}],
+    "Phoenix|Diesel": [{"week":"2025-W51","date":"2025-12-16","price":57.00},{"week":"2025-W52","date":"2025-12-23","price":57.30},{"week":"2026-W01","date":"2026-01-06","price":57.60},{"week":"2026-W02","date":"2026-01-13","price":57.90},{"week":"2026-W03","date":"2026-01-20","price":58.20},{"week":"2026-W04","date":"2026-01-27","price":58.00},{"week":"2026-W05","date":"2026-02-03","price":58.30},{"week":"2026-W06","date":"2026-02-10","price":58.50},{"week":"2026-W07","date":"2026-02-17","price":58.30},{"week":"2026-W08","date":"2026-02-24","price":58.10},{"week":"2026-W09","date":"2026-03-03","price":58.40},{"week":"2026-W11","date":"2026-03-11","price":58.50}],
+    "Seaoil|Ron 91":  [{"week":"2025-W51","date":"2025-12-16","price":62.10},{"week":"2025-W52","date":"2025-12-23","price":61.80},{"week":"2026-W01","date":"2026-01-06","price":62.40},{"week":"2026-W02","date":"2026-01-13","price":62.60},{"week":"2026-W03","date":"2026-01-20","price":62.30},{"week":"2026-W04","date":"2026-01-27","price":62.50},{"week":"2026-W05","date":"2026-02-03","price":62.80},{"week":"2026-W06","date":"2026-02-10","price":62.60},{"week":"2026-W07","date":"2026-02-17","price":62.40},{"week":"2026-W08","date":"2026-02-24","price":62.20},{"week":"2026-W09","date":"2026-03-03","price":62.40},{"week":"2026-W11","date":"2026-03-11","price":62.70}],
+    "Seaoil|Ron 95":  [{"week":"2025-W51","date":"2025-12-16","price":66.20},{"week":"2025-W52","date":"2025-12-23","price":65.90},{"week":"2026-W01","date":"2026-01-06","price":66.50},{"week":"2026-W02","date":"2026-01-13","price":66.70},{"week":"2026-W03","date":"2026-01-20","price":66.40},{"week":"2026-W04","date":"2026-01-27","price":66.60},{"week":"2026-W05","date":"2026-02-03","price":66.90},{"week":"2026-W06","date":"2026-02-10","price":66.70},{"week":"2026-W07","date":"2026-02-17","price":66.50},{"week":"2026-W08","date":"2026-02-24","price":66.30},{"week":"2026-W09","date":"2026-03-03","price":66.50},{"week":"2026-W11","date":"2026-03-11","price":66.80}],
+    "Seaoil|Diesel":  [{"week":"2025-W51","date":"2025-12-16","price":56.80},{"week":"2025-W52","date":"2025-12-23","price":57.10},{"week":"2026-W01","date":"2026-01-06","price":57.40},{"week":"2026-W02","date":"2026-01-13","price":57.70},{"week":"2026-W03","date":"2026-01-20","price":58.00},{"week":"2026-W04","date":"2026-01-27","price":57.80},{"week":"2026-W05","date":"2026-02-03","price":58.10},{"week":"2026-W06","date":"2026-02-10","price":58.30},{"week":"2026-W07","date":"2026-02-17","price":58.10},{"week":"2026-W08","date":"2026-02-24","price":57.90},{"week":"2026-W09","date":"2026-03-03","price":58.20},{"week":"2026-W11","date":"2026-03-11","price":58.30}]
+  }
+}

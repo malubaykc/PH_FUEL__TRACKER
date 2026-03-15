@@ -1,0 +1,36 @@
+name: Scrape DOE Fuel Prices
+
+on:
+  schedule:
+    - cron: '0 18 * * 1'   # Every Monday at 2 AM Manila time (UTC+8 = 18:00 UTC Monday)
+  workflow_dispatch:        # Allow manual trigger from GitHub UI
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install requests beautifulsoup4 lxml
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit updated prices.json
+        run: |
+          git config --global user.name  "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/prices.json
+          git diff --staged --quiet || git commit -m "chore: update fuel prices $(date +'%Y-%m-%d')"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
