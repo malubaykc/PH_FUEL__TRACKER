@@ -8,8 +8,8 @@ import pdfplumber
 import re
 
 DATA_FILE = Path("data/prices.json")
-DOE_URL = "https://www.doe.gov.ph/oil-monitor"
-BASE_URL = "https://www.doe.gov.ph"
+DOE_URL = "https://doe.gov.ph/articles/group/liquid-fuels?category=Oil+Monitor&display_type=Card"
+BASE_URL = "https://doe.gov.ph"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
 
 def run():
@@ -23,10 +23,10 @@ def run():
         
         links = []
         for a in soup.find_all("a", href=True):
-            text = a.get_text().strip().lower()
             href = a['href']
-            if ".pdf" in href.lower() and any(x in text or x in href.lower() for x in ["metro", "ncr", "manila", "pump"]):
-                links.append(href if href.startswith("http") else BASE_URL + href)
+            if ".pdf" in href.lower():
+                full = href if href.startswith("http") else BASE_URL + href
+                links.append(full)
 
         if not links:
             print("No PDF links found. DOE website might be updating or blocking the request.")
@@ -35,7 +35,7 @@ def run():
         latest_pdf = links[0]
         print(f"Target PDF: {latest_pdf}")
 
-        pdf_res = requests.get(latest_pdf, headers=HEADERS)
+        pdf_res = requests.get(latest_pdf, headers=HEADERS, timeout=30)
         records = []
         
         with pdfplumber.open(io.BytesIO(pdf_res.content)) as pdf:
@@ -81,7 +81,9 @@ def run():
         print(f"SUCCESS! Added {len(records)} prices.")
 
     except Exception as e:
+        import traceback
         print(f"ERROR: {str(e)}")
+        traceback.print_exc()
 
 if __name__ == "__main__":
     run()
