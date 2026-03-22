@@ -313,26 +313,21 @@ let DB = null, CH = {};
 async function loadData() {
   let ok = false;
   try {
-    // We add ?v=timestamp to bypass GitHub's cache and get the latest version
-    const cacheBuster = new Date().getTime();
-    const r = await fetch('data/prices.json?v=' + cacheBuster);
-    
+    // The "?t=" part forces the browser to bypass the cache every single time
+    const timestamp = new Date().getTime();
+    const r = await fetch('data/prices.json?t=' + timestamp);
     if (r.ok) {
       DB = await r.json();
       ok = true;
     }
-  } catch(e) {
-    console.error("Error fetching latest data:", e);
-  }
+  } catch(e) { console.error(e); }
 
   if (!ok) {
-    console.warn('data/prices.json not found — using SEED fallback');
     document.getElementById('seed-banner').style.display = 'flex';
     DB = SEED;
   }
   render();
 }
-
 /* ═══════════════════════════════════════════════════
    HELPERS
 ═══════════════════════════════════════════════════ */
