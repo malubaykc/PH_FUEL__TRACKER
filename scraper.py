@@ -7,6 +7,7 @@ from pathlib import Path
 import pdfplumber
 import re
 
+
 DATA_FILE = Path("data/prices.json")
 DOE_URL = "https://www.doe.gov.ph/oil-monitor"
 BASE_URL = "https://www.doe.gov.ph"
