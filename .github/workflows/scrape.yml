@@ -2,7 +2,7 @@ name: Scrape DOE Fuel Prices
 
 on:
   schedule:
-    - cron: '0 2 * * *'
+    - cron: '0 2 * * 1'
   workflow_dispatch:
 
 jobs:
@@ -11,8 +11,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -20,7 +19,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install Dependencies
-        run: pip install requests beautifulsoup4 pdfplumber lxml
+        run: |
+          pip install requests beautifulsoup4 pdfplumber lxml playwright
+          playwright install chromium
+          playwright install-deps chromium
 
       - name: Run Scraper
         run: python scraper.py
