@@ -19,28 +19,31 @@ def run():
     
     try:
         # 1. GET DOE PAGE
+        print(f"Connecting to {DOE_URL}...")
         res = requests.get(DOE_URL, headers=HEADERS, timeout=30)
         res.raise_for_status()
         soup = BeautifulSoup(res.text, "html.parser")
         
-        # 2. FIND PDF LINKS
+        # 2. FIND PDF LINKS (Aggressive Search)
         links = []
         for a in soup.find_all("a", href=True):
             text = a.get_text().strip().lower()
             href = a['href']
-            # Targeting Metro Manila / NCR summary
-            if ".pdf" in href.lower() and ("metro manila" in text or "ncr" in text or "pump price" in text):
-                full_url = href if href.startswith("http") else BASE_URL + href
-                links.append(full_url)
+            # Look for ANY PDF that looks like a price summary
+            if ".pdf" in href.lower():
+                if any(word in text or word in href.lower() for word in ["metro", "ncr", "manila", "pump", "retail", "price"]):
+                    full_url = href if href.startswith("http") else BASE_URL + href
+                    links.append(full_url)
 
         if not links:
-            print("❌ No PDF links found on the DOE page. Website might be updated with a new layout.")
+            print("❌ ERROR: Could not find any PDF links on the page.")
             sys.exit(1)
 
+        # Take the very first PDF link found (usually the latest)
         latest_pdf = links[0]
-        print(f"✅ Targeting PDF: {latest_pdf}")
+        print(f"✅ Found PDF: {latest_pdf}")
 
-        # 3. DOWNLOAD & PARSE PDF
+        # 3. DOWNLOAD & PARSE
         pdf_res = requests.get(latest_pdf, headers=HEADERS)
         records = []
         
@@ -50,45 +53,37 @@ def run():
                 if not table: continue
                 
                 for row in table:
-                    # Filter for rows starting with major brands
-                    brand_raw = str(row[0]).split('\n')[0].strip()
-                    if any(b in brand_raw for b in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil", "Cleanfuel", "PTT"]):
+                    # Clean the row
+                    row_data = [str(x).strip() for x in row if x]
+                    if not row_data: continue
+                    
+                    brand_name = row_data[0].split('\n')[0].strip()
+                    # Filter for known brands
+                    if any(b in brand_name for b in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil", "Cleanfuel", "PTT", "Jetti"]):
                         try:
-                            # Clean the row of None values and find numbers
-                            row_str = " ".join([str(x) for x in row if x])
+                            # Extract all numbers (prices) from the row string
+                            row_str = " ".join(row_data)
                             nums = re.findall(r"\d+\.\d+", row_str)
                             
                             if len(nums) >= 3:
-                                records.append({"brand": brand_raw, "fuel_type": "Ron 91", "price": float(nums[0]), "region": "NCR"})
-                                records.append({"brand": brand_raw, "fuel_type": "Ron 95", "price": float(nums[1]), "region": "NCR"})
-                                records.append({"brand": brand_raw, "fuel_type": "Diesel", "price": float(nums[-1]), "region": "NCR"})
+                                records.append({"brand": brand_name, "fuel_type": "Ron 91", "price": float(nums[0]), "region": "NCR"})
+                                records.append({"brand": brand_name, "fuel_type": "Ron 95", "price": float(nums[1]), "region": "NCR"})
+                                records.append({"brand": brand_name, "fuel_type": "Diesel", "price": float(nums[-1]), "region": "NCR"})
                         except: continue
 
         if not records:
-            print("❌ Found PDF but failed to extract price data. Layout might have changed.")
+            print("❌ Found PDF but table extraction failed.")
             sys.exit(1)
 
-        # 4. LOAD EXISTING DATA OR START FRESH
-        # Structure matches what your index.html expects (meta + weekly_snapshots)
-        db = {
-            "meta": {
-                "source": "DOE Philippines",
-                "last_updated": None
-            },
-            "weekly_snapshots": []
-        }
-
+        # 4. PREPARE JSON
+        db = {"meta": {"last_updated": None}, "weekly_snapshots": []}
         if DATA_FILE.exists():
             try:
-                loaded = json.loads(DATA_FILE.read_text())
-                if "weekly_snapshots" in loaded:
-                    db = loaded
-            except Exception as e:
-                print(f"Warning: Could not load existing JSON, starting new. Error: {e}")
+                db = json.loads(DATA_FILE.read_text())
+            except: pass
 
-        # 5. UPDATE DATA
         today_str = date.today().isoformat()
-        # Remove old entry for today if it exists to avoid duplicates
+        # Clean duplicates
         db["weekly_snapshots"] = [s for s in db["weekly_snapshots"] if s["date"] != today_str]
         
         db["weekly_snapshots"].append({
@@ -97,14 +92,13 @@ def run():
             "prices": records
         })
         
-        # Update meta and keep only last 15 updates to keep file size small
         db["meta"]["last_updated"] = datetime.utcnow().isoformat() + "Z"
-        db["weekly_snapshots"] = db["weekly_snapshots"][-15:]
+        db["weekly_snapshots"] = db["weekly_snapshots"][-15:] # Keep last 15 weeks
 
-        # 6. FORCE SAVE
+        # 5. SAVE
         DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
         DATA_FILE.write_text(json.dumps(db, indent=2), encoding="utf-8")
-        print(f"🎉 SUCCESS! Saved {len(records)} entries for {today_str}")
+        print(f"🎉 SUCCESS! Added {len(records)} prices for {today_str}")
 
     except Exception as e:
         print(f"🚨 CRITICAL ERROR: {e}")
