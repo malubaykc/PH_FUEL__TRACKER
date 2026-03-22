@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PH Fuel Price Tracker — DOE Philippines</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#0b0e13;--surface:#131720;--s2:#1a2030;
+  --b:rgba(255,255,255,0.07);--b2:rgba(255,255,255,0.13);
+  --tx:#e8edf5;--mu:#6b7891;--ac:#3b9eff;
+  --gr:#2dd4a0;--rd:#ff4d6d;--am:#ffc847;
+  --fh:'Syne',sans-serif;--fm:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{background:var(--bg);color:var(--tx);font-family:var(--fm);}
+body{min-height:100vh;padding-bottom:3rem;}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--b);background:var(--bg);position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:8px;}
+.nav-brand{display:flex;align-items:center;gap:10px;}
+.nav-title{font-family:var(--fh);font-size:16px;font-weight:700;}
+.nav-title span{color:var(--ac);}
+.nav-meta{font-size:11px;color:var(--mu);margin-top:2px;}
+.live-pill{display:flex;align-items:center;gap:6px;background:rgba(45,212,160,.1);border:1px solid rgba(45,212,160,.25);color:var(--gr);font-size:11px;padding:4px 12px;border-radius:20px;}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--gr);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* TABS */
+.tab-bar{display:flex;padding:0 2rem;border-bottom:1px solid var(--b);overflow-x:auto;}
+.tab{font-size:12px;font-family:var(--fm);padding:12px 16px;cursor:pointer;color:var(--mu);border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s;}
+.tab:hover{color:var(--tx);}
+.tab.active{color:var(--ac);border-bottom-color:var(--ac);}
+
+/* MAIN */
+main{padding:1.5rem 2rem;}
+
+/* BANNERS */
+.banner{border-radius:6px;padding:10px 16px;font-size:12px;margin-bottom:1rem;display:flex;align-items:flex-start;gap:8px;line-height:1.8;}
+.banner-warn{background:rgba(255,200,71,.08);border:1px solid rgba(255,200,71,.2);color:var(--am);}
+.banner-ok  {background:rgba(45,212,160,.08); border:1px solid rgba(45,212,160,.2);color:var(--gr);}
+.banner-err {background:rgba(255,77,109,.08); border:1px solid rgba(255,77,109,.25);color:#ff6b8a;display:none;}
+
+/* METRICS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.25rem;}
+.metric{background:var(--surface);border:1px solid var(--b);border-radius:8px;padding:14px 16px;}
+.m-label{font-size:10px;color:var(--mu);letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;}
+.m-val{font-family:var(--fh);font-size:26px;font-weight:700;}
+.m-chg{font-size:11px;margin-top:6px;}
+.up{color:var(--rd);}.dn{color:var(--gr);}.nc{color:var(--mu);}
+
+/* CARDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:1.25rem;}
+.card{background:var(--surface);border:1px solid var(--b);border-radius:8px;padding:1.25rem;margin-bottom:1.25rem;}
+.card-i{background:var(--surface);border:1px solid var(--b);border-radius:8px;padding:1.25rem;}
+.ct{font-size:11px;font-family:var(--fh);font-weight:600;letter-spacing:.06em;color:var(--mu);text-transform:uppercase;margin-bottom:1rem;}
+.cw{position:relative;height:220px;}
+
+/* TABLE */
+table.pt{width:100%;border-collapse:collapse;font-size:12px;}
+table.pt th{font-size:10px;color:var(--mu);letter-spacing:.07em;text-transform:uppercase;padding:8px 12px;text-align:left;border-bottom:1px solid var(--b);}
+table.pt td{padding:10px 12px;border-bottom:1px solid var(--b);vertical-align:middle;}
+table.pt tr:last-child td{border-bottom:none;}
+table.pt tr:hover td{background:var(--s2);}
+.bc{display:flex;align-items:center;gap:9px;}
+.bico{width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;font-family:var(--fh);}
+.bn{font-family:var(--fh);font-weight:600;font-size:13px;}
+.pill{display:inline-block;font-size:10px;padding:3px 9px;border-radius:20px;font-weight:500;}
+.pup{background:rgba(255,77,109,.15);color:var(--rd);}
+.pdn{background:rgba(45,212,160,.12);color:var(--gr);}
+.pnc{background:rgba(107,120,145,.15);color:var(--mu);}
+
+/* FILTERS */
+.frow{display:flex;gap:10px;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;}
+.frow select{background:var(--s2);border:1px solid var(--b2);color:var(--tx);font-family:var(--fm);font-size:11px;padding:6px 12px;border-radius:5px;outline:none;}
+.frow select:focus{border-color:var(--ac);}
+.frow label{font-size:11px;color:var(--mu);}
+
+/* LEGEND */
+.leg{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:10px;}
+.li{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--mu);}
+.ld{width:10px;height:10px;border-radius:50%;}
+
+/* PANELS */
+.panel{display:none;}.panel.active{display:block;}
+
+/* BRAND STATS */
+.srow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.25rem;}
+.sm{background:var(--s2);border-radius:6px;padding:10px 14px;}
+.sm .sl{font-size:10px;color:var(--mu);margin-bottom:4px;}
+.sm .sv{font-size:16px;font-family:var(--fh);font-weight:600;}
+
+/* REGIONS */
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1rem;}
+.rcard{background:var(--s2);border:1px solid var(--b);border-radius:8px;padding:12px 14px;}
+.rcard-title{font-family:var(--fh);font-size:11px;font-weight:600;color:var(--ac);margin-bottom:8px;line-height:1.4;}
+.rr{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid var(--b);}
+.rr:last-child{border-bottom:none;}
+.rf{color:var(--mu);}.rp{color:var(--tx);font-weight:500;}
+
+footer{text-align:center;font-size:11px;color:var(--mu);margin-top:2rem;padding-top:1rem;border-top:1px solid var(--b);}
+footer a{color:var(--ac);text-decoration:none;}
+
+@media(max-width:768px){
+  .metrics{grid-template-columns:repeat(2,1fr);}
+  .g2{grid-template-columns:1fr;}
+  .rgrid{grid-template-columns:1fr 1fr;}
+  nav,main{padding:.75rem 1rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <span style="font-size:22px">🇵🇭</span>
+    <div>
+      <div class="nav-title">PH <span>Fuel</span> Tracker</div>
+      <div class="nav-meta">Source: Department of Energy Philippines</div>
+    </div>
+  </div>
+  <div class="live-pill"><div class="ldot"></div><span id="last-updated">Loading...</span></div>
+</nav>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="showPanel('overview',this)">Overview</div>
+  <div class="tab" onclick="showPanel('history',this)">Price history</div>
+  <div class="tab" onclick="showPanel('brands',this)">By brand</div>
+  <div class="tab" onclick="showPanel('regions',this)">By region</div>
+</div>
+
+<main>
+  <!-- shown only when falling back to SEED -->
+  <div id="seed-banner" class="banner banner-err">
+    ⚠ &nbsp;Live data unavailable — showing cached fallback prices.
+    The scraper may have failed. Check GitHub Actions for details.
+  </div>
+
+  <!-- ═══ OVERVIEW ═══ -->
+  <div class="panel active" id="panel-overview">
+    <div class="banner banner-warn" id="alert-bar">
+      <span>⚠</span><div id="alert-text">Loading price data...</div>
+    </div>
+    <div class="metrics">
+      <div class="metric"><div class="m-label">Ron 91</div><div class="m-val" id="m-r91">—</div><div class="m-chg" id="c-r91">—</div></div>
+      <div class="metric"><div class="m-label">Ron 95</div><div class="m-val" id="m-r95">—</div><div class="m-chg" id="c-r95">—</div></div>
+      <div class="metric"><div class="m-label">Diesel</div><div class="m-val" id="m-dsl">—</div><div class="m-chg" id="c-dsl">—</div></div>
+      <div class="metric"><div class="m-label">YTD diesel change</div><div class="m-val" id="m-ytd">—</div><div class="m-chg" id="c-ytd">since Jan 1</div></div>
+    </div>
+    <div class="g2">
+      <div class="card-i">
+        <div class="ct">12-week trend (avg across brands)</div>
+        <div class="leg" id="trend-legend"></div>
+        <div class="cw"><canvas id="trend-chart"></canvas></div>
+      </div>
+      <div class="card-i">
+        <div class="ct">Week-on-week change (₱/L)</div>
+        <div class="cw"><canvas id="wow-chart"></canvas></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ct">Latest retail prices — NCR (₱ per liter)</div>
+      <div class="frow">
+        <label>Brand</label>
+        <select id="brand-filter" onchange="renderTable()">
+          <option value="all">All brands</option>
+          <option>Petron</option><option>Shell</option><option>Caltex</option>
+          <option>Phoenix</option><option>Seaoil</option>
+        </select>
+        <label>Sort by</label>
+        <select id="sort-filter" onchange="renderTable()">
+          <option value="brand">Brand A–Z</option>
+          <option value="diesel">Diesel cheapest first</option>
+          <option value="r95">Ron 95 cheapest first</option>
+        </select>
+      </div>
+      <table class="pt">
+        <thead><tr><th>Oil company</th><th>Ron 91</th><th>Ron 95</th><th>Ron 97</th><th>Diesel</th><th>vs last week</th></tr></thead>
+        <tbody id="price-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ HISTORY ═══ -->
+  <div class="panel" id="panel-history">
+    <div class="card">
+      <div class="ct">Full price history — select fuel &amp; brand</div>
+      <div class="frow">
+        <label>Fuel type</label>
+        <select id="hist-fuel" onchange="renderHistory()">
+          <option value="Ron 91">Ron 91</option>
+          <option value="Ron 95" selected>Ron 95</option>
+          <option value="Ron 97">Ron 97</option>
+          <option value="Diesel">Diesel</option>
+        </select>
+        <label>Brand</label>
+        <select id="hist-brand" onchange="renderHistory()">
+          <option value="all">All brands</option>
+          <option>Petron</option><option>Shell</option><option>Caltex</option>
+          <option>Phoenix</option><option>Seaoil</option>
+        </select>
+      </div>
+      <div class="cw" style="height:300px;"><canvas id="hist-chart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">Historical data table</div>
+      <table class="pt">
+        <thead><tr><th>Date</th><th>Brand</th><th>Fuel type</th><th>Price (₱/L)</th><th>Change</th></tr></thead>
+        <tbody id="hist-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ BRANDS ═══ -->
+  <div class="panel" id="panel-brands">
+    <div class="card">
+      <div class="ct">Brand comparison — current week (all fuel types)</div>
+      <div class="cw" style="height:260px;"><canvas id="brand-chart"></canvas></div>
+    </div>
+    <div class="srow" id="brand-stats"></div>
+    <div class="card">
+      <div class="ct">Diesel by brand — weekly trend</div>
+      <div class="cw" style="height:240px;"><canvas id="diesel-brand-chart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- ═══ REGIONS ═══ -->
+  <div class="panel" id="panel-regions">
+    <div class="card">
+      <div class="ct">Regional price comparison</div>
+      <p style="font-size:12px;color:var(--mu);line-height:1.8;margin-bottom:1rem;">
+        Prices vary by region due to <strong style="color:var(--tx)">transport costs</strong>,
+        <strong style="color:var(--tx)">local government taxes</strong>, and
+        <strong style="color:var(--tx)">distance from ports</strong>.
+        Mindanao typically runs ₱2–4 higher than NCR.
+      </p>
+      <div class="frow">
+        <label>Compare fuel</label>
+        <select id="reg-fuel" onchange="renderRegions()">
+          <option value="Diesel" selected>Diesel</option>
+          <option value="Ron 95">Ron 95</option>
+          <option value="Ron 91">Ron 91</option>
+        </select>
+      </div>
+      <div class="rgrid" id="region-grid"></div>
+      <p style="font-size:11px;color:var(--mu);">
+        * Regional prices are estimated from DOE per-region differential data.
+      </p>
+    </div>
+    <div class="card">
+      <div class="ct">Regional price bar chart</div>
+      <div class="cw" style="height:260px;"><canvas id="region-chart"></canvas></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  PH Fuel Tracker &nbsp;·&nbsp;
+  <a href="https://www.doe.gov.ph/oil-monitor" target="_blank">DOE Philippines</a>
+  &nbsp;·&nbsp; Auto-updated via GitHub Actions
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════════ */
+const COLORS = {
+  Petron:'#3b9eff', Shell:'#ff6b35', Caltex:'#ffc847',
+  Phoenix:'#2dd4a0', Seaoil:'#a78bfa'
+};
+const BICO = {
+  Petron:  {bg:'rgba(59,158,255,.15)', c:'#3b9eff'},
+  Shell:   {bg:'rgba(255,107,53,.15)', c:'#ff6b35'},
+  Caltex:  {bg:'rgba(255,200,71,.15)', c:'#ffc847'},
+  Phoenix: {bg:'rgba(45,212,160,.15)', c:'#2dd4a0'},
+  Seaoil:  {bg:'rgba(167,139,250,.15)',c:'#a78bfa'}
+};
+const REGIONS = [
+  {id:'NCR',   name:'NCR (Metro Manila)',       d:{Diesel:0,   'Ron 95':0,   'Ron 91':0  }},
+  {id:'R3',    name:'Region III — Central Luzon',d:{Diesel:.8,  'Ron 95':.7,  'Ron 91':.6 }},
+  {id:'R4A',   name:'Region IV-A — CALABARZON', d:{Diesel:.6,  'Ron 95':.5,  'Ron 91':.5 }},
+  {id:'R4B',   name:'Region IV-B — MIMAROPA',   d:{Diesel:1.8, 'Ron 95':1.5, 'Ron 91':1.4}},
+  {id:'R7',    name:'Region VII — Cebu',         d:{Diesel:1.2, 'Ron 95':1.0, 'Ron 91':.9 }},
+  {id:'R10',   name:'Region X — CDO',            d:{Diesel:2.1, 'Ron 95':1.8, 'Ron 91':1.7}},
+  {id:'R11',   name:'Region XI — Davao',         d:{Diesel:2.4, 'Ron 95':2.1, 'Ron 91':2.0}},
+  {id:'CAR',   name:'CAR — Baguio',              d:{Diesel:1.4, 'Ron 95':1.2, 'Ron 91':1.1}},
+  {id:'BARMM', name:'BARMM',                     d:{Diesel:3.2, 'Ron 95':2.8, 'Ron 91':2.6}},
+];
+const CHART_DEFAULTS = {
+  responsive:true, maintainAspectRatio:false,
+  plugins:{
+    legend:{display:false},
+    tooltip:{
+      backgroundColor:'#131720', borderColor:'rgba(255,255,255,.1)', borderWidth:1,
+      titleColor:'#e8edf5', bodyColor:'#6b7891', padding:10,
+      titleFont:{family:"'IBM Plex Mono'",size:11},
+      bodyFont: {family:"'IBM Plex Mono'",size:11}
+    }
+  },
+  scales:{
+    x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10}}},
+    y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},callback:v=>'₱'+v.toFixed(2)}}
+  }
+};
+
+let DB = null, CH = {};
+
+/* ═══════════════════════════════════════════════════
+   DATA LOADING — FIXED TO FORCE LIVE UPDATES
+═══════════════════════════════════════════════════ */
+async function loadData() {
+  let ok = false;
+  try {
+    // The "?t=" part forces the browser to bypass the cache every single time
+    const timestamp = new Date().getTime();
+    const r = await fetch('data/prices.json?t=' + timestamp);
+    if (r.ok) {
+      DB = await r.json();
+      ok = true;
+    }
+  } catch(e) { console.error(e); }
+
+  if (!ok) {
+    document.getElementById('seed-banner').style.display = 'flex';
+    DB = SEED;
+  }
+  render();
+}
+/* ═══════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════ */
+const last  = () => DB.weekly_snapshots[DB.weekly_snapshots.length - 1];
+const prev  = () => DB.weekly_snapshots[DB.weekly_snapshots.length - 2];
+const avg   = (snap, ft) => {
+  const r = snap.prices.filter(p => p.fuel_type === ft);
+  return r.length ? r.reduce((s,x) => s + x.price, 0) / r.length : null;
+};
+const fmtD  = d => new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric'});
+const fmtDF = d => new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+const lgn   = () => ({display:true,position:'top',labels:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},boxWidth:10,padding:12}});
+
+function mkChart(id, type, data, opts) {
+  if (CH[id]) CH[id].destroy();
+  CH[id] = new Chart(document.getElementById(id), {type, data, options: opts || CHART_DEFAULTS});
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════ */
+function render() {
+  const Ls = last(), Ps = prev();
+  document.getElementById('last-updated').textContent =
+    'Updated ' + fmtDF(Ls.date);
+
+  // Metric cards
+  [['r91','Ron 91'],['r95','Ron 95'],['dsl','Diesel']].forEach(([id, ft]) => {
+    const c = avg(Ls, ft), p = avg(Ps, ft), d = c - p;
+    document.getElementById('m-' + id).textContent = '₱' + c.toFixed(2);
+    const el = document.getElementById('c-' + id);
+    el.textContent = Math.abs(d) < .01
+      ? '— no change this week'
+      : d > 0 ? '▲ +₱' + d.toFixed(2) + ' this week'
+               : '▼ ₱'  + d.toFixed(2) + ' this week';
+    el.className = 'm-chg ' + (Math.abs(d) < .01 ? 'nc' : d > 0 ? 'up' : 'dn');
+  });
+
+  // YTD diesel
+  const jan = DB.weekly_snapshots.find(s => s.week.includes('W01') || s.week.includes('W02'));
+  if (jan) {
+    const ytd = avg(Ls,'Diesel') - avg(jan,'Diesel');
+    document.getElementById('m-ytd').textContent = (ytd >= 0 ? '+' : '') + ' ₱' + Math.abs(ytd).toFixed(2);
+    document.getElementById('c-ytd').className = 'm-chg ' + (ytd > .01 ? 'up' : ytd < -.01 ? 'dn' : 'nc');
+  }
+
+  // Alert banner
+  const dR91 = avg(Ls,'Ron 91') - avg(Ps,'Ron 91');
+  const dR95 = avg(Ls,'Ron 95') - avg(Ps,'Ron 95');
+  const dDsl = avg(Ls,'Diesel')  - avg(Ps,'Diesel');
+  const net  = dR91 + dR95 + dDsl;
+  const fmt  = v => (v > 0 ? '▲ +' : '▼ ') + '₱' + Math.abs(v).toFixed(2);
+  const bar  = document.getElementById('alert-bar');
+  const txt  = document.getElementById('alert-text');
+
+  if (Math.abs(net) < .05) {
+    bar.className = 'banner banner-ok';
+    txt.innerHTML = '<strong>No price change</strong> effective ' + fmtDF(Ls.date) + ' — all fuels unchanged.';
+  } else if (net < 0) {
+    bar.className = 'banner banner-ok';
+    txt.innerHTML = '<strong>Prices DOWN</strong> effective ' + fmtDF(Ls.date) +
+      ' &nbsp;·&nbsp; Ron 91 ' + fmt(dR91) + '/L' +
+      ' &nbsp;·&nbsp; Ron 95 ' + fmt(dR95) + '/L' +
+      ' &nbsp;·&nbsp; Diesel ' + fmt(dDsl) + '/L';
+  } else {
+    bar.className = 'banner banner-warn';
+    txt.innerHTML = '<strong>Price adjustment</strong> effective ' + fmtDF(Ls.date) +
+      ' &nbsp;·&nbsp; Ron 91 ' + fmt(dR91) + '/L' +
+      ' &nbsp;·&nbsp; Ron 95 ' + fmt(dR95) + '/L' +
+      ' &nbsp;·&nbsp; Diesel ' + fmt(dDsl) + '/L';
+  }
+
+  renderTrend(); renderWoW(); renderTable();
+  renderHistory(); renderBrands(); renderRegions();
+}
+
+function renderTrend() {
+  const lbls  = DB.weekly_snapshots.map(s => fmtD(s.date));
+  const fuels = [
+    {l:'Ron 91',c:'#3b9eff',ft:'Ron 91'},
+    {l:'Ron 95',c:'#ffc847',ft:'Ron 95'},
+    {l:'Ron 97',c:'#a78bfa',ft:'Ron 97'},
+    {l:'Diesel',c:'#ff6b35',ft:'Diesel'}
+  ];
+  document.getElementById('trend-legend').innerHTML =
+    fuels.map(f => `<div class="li"><div class="ld" style="background:${f.c}"></div>${f.l}</div>`).join('');
+  const allPrices = DB.weekly_snapshots.flatMap(s => fuels.map(f => avg(s,f.ft)||999));
+  const minP = Math.max(0, Math.floor(Math.min(...allPrices)) - 5);
+  mkChart('trend-chart','line',{
+    labels: lbls,
+    datasets: fuels.map(f => ({
+      label: f.l, borderColor: f.c, backgroundColor:'transparent',
+      pointRadius: 2, borderWidth: 2, tension: .3, spanGaps: true,
+      data: DB.weekly_snapshots.map(s => avg(s, f.ft))
+    }))
+  }, {...CHART_DEFAULTS, scales:{...CHART_DEFAULTS.scales, y:{...CHART_DEFAULTS.scales.y, min:minP}}});
+}
+
+function renderWoW() {
+  const snaps = DB.weekly_snapshots;
+  const lbls  = snaps.slice(1).map(s => fmtD(s.date));
+  mkChart('wow-chart','bar',{
+    labels: lbls,
+    datasets:[
+      {
+        label:'Diesel',
+        data: snaps.slice(1).map((s,i) => +(avg(s,'Diesel') - avg(snaps[i],'Diesel')).toFixed(2)),
+        backgroundColor: snaps.slice(1).map((s,i) =>
+          avg(s,'Diesel') >= avg(snaps[i],'Diesel') ? 'rgba(255,77,109,.6)' : 'rgba(45,212,160,.6)'),
+        borderRadius:3
+      },
+      {
+        label:'Ron 95',
+        data: snaps.slice(1).map((s,i) => +(avg(s,'Ron 95') - avg(snaps[i],'Ron 95')).toFixed(2)),
+        backgroundColor: snaps.slice(1).map((s,i) =>
+          avg(s,'Ron 95') >= avg(snaps[i],'Ron 95') ? 'rgba(255,107,53,.5)' : 'rgba(45,212,160,.4)'),
+        borderRadius:3
+      }
+    ]
+  },{...CHART_DEFAULTS,
+    plugins:{...CHART_DEFAULTS.plugins, legend:lgn()},
+    scales:{...CHART_DEFAULTS.scales, y:{...CHART_DEFAULTS.scales.y,
+      ticks:{...CHART_DEFAULTS.scales.y.ticks, callback:v => (v>=0?'+':'') + v.toFixed(2)}}}
+  });
+}
+
+function renderTable() {
+  const Ls = last(), Ps = prev();
+  let brands = ['Petron','Shell','Caltex','Phoenix','Seaoil'];
+  const bf = document.getElementById('brand-filter').value;
+  const sf = document.getElementById('sort-filter').value;
+  if (bf !== 'all') brands = brands.filter(b => b === bf);
+
+  const g = (snap, b, ft) => snap.prices.find(p => p.brand===b && p.fuel_type===ft)?.price;
+  let rows = brands.map(b => ({
+    brand: b,
+    r91: g(Ls,b,'Ron 91'), r95: g(Ls,b,'Ron 95'),
+    r97: g(Ls,b,'Ron 97'), dsl: g(Ls,b,'Diesel'),
+    pd:  g(Ps,b,'Diesel')
+  }));
+  if (sf==='diesel') rows.sort((a,b) => (a.dsl||999)-(b.dsl||999));
+  if (sf==='r95')    rows.sort((a,b) => (a.r95||999)-(b.r95||999));
+
+  document.getElementById('price-tbody').innerHTML = rows.map(r => {
+    const d  = r.dsl && r.pd ? r.dsl - r.pd : 0;
+    const pc = Math.abs(d)<.01?'pnc':d>0?'pup':'pdn';
+    const pt = Math.abs(d)<.01?'—':d>0?'▲ +'+d.toFixed(2):'▼ '+d.toFixed(2);
+    const ic = BICO[r.brand] || {bg:'rgba(255,255,255,.05)',c:'#6b7891'};
+    return `<tr>
+      <td><div class="bc">
+        <div class="bico" style="background:${ic.bg};color:${ic.c}">${r.brand.substring(0,2)}</div>
+        <span class="bn" style="color:${ic.c}">${r.brand}</span>
+      </div></td>
+      <td>${r.r91 ? '₱'+r.r91.toFixed(2) : '—'}</td>
+      <td>${r.r95 ? '₱'+r.r95.toFixed(2) : '—'}</td>
+      <td>${r.r97 ? '₱'+r.r97.toFixed(2) : '—'}</td>
+      <td>${r.dsl ? '₱'+r.dsl.toFixed(2) : '—'}</td>
+      <td><span class="pill ${pc}">${pt}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderHistory() {
+  const fuel  = document.getElementById('hist-fuel').value;
+  const brand = document.getElementById('hist-brand').value;
+  const brands = brand==='all' ? ['Petron','Shell','Caltex','Phoenix','Seaoil'] : [brand];
+  const lbls   = DB.weekly_snapshots.map(s => fmtD(s.date));
+
+  mkChart('hist-chart','line',{
+    labels: lbls,
+    datasets: brands.map(b => ({
+      label: b, borderColor: COLORS[b], backgroundColor:'transparent',
+      pointRadius:3, borderWidth:2, tension:.3, spanGaps:true,
+      data: DB.weekly_snapshots.map(s =>
+        s.prices.find(p => p.brand===b && p.fuel_type===fuel)?.price || null)
+    }))
+  },{...CHART_DEFAULTS, plugins:{...CHART_DEFAULTS.plugins, legend:lgn()}});
+
+  const rows = [];
+  DB.weekly_snapshots.slice().reverse().forEach(snap => {
+    snap.prices
+      .filter(p => p.fuel_type===fuel && (brand==='all' || p.brand===brand))
+      .forEach(p => {
+        const pi = DB.weekly_snapshots.findIndex(s => s.week===snap.week);
+        const pv = pi>0
+          ? DB.weekly_snapshots[pi-1].prices.find(pp => pp.brand===p.brand && pp.fuel_type===p.fuel_type)?.price
+          : null;
+        rows.push({date:snap.date, brand:p.brand, fuel:p.fuel_type, price:p.price, d:pv!==null?p.price-pv:null});
+      });
+  });
+  document.getElementById('hist-tbody').innerHTML = rows.map(r => {
+    const ds = r.d===null ? '—'
+      : r.d>.005  ? `<span class="up">▲ +${r.d.toFixed(2)}</span>`
+      : r.d<-.005 ? `<span class="dn">▼ ${r.d.toFixed(2)}</span>`
+                  : '<span class="nc">—</span>';
+    return `<tr>
+      <td>${fmtDF(r.date)}</td>
+      <td style="color:${COLORS[r.brand]||'#e8edf5'}">${r.brand}</td>
+      <td>${r.fuel}</td>
+      <td>₱${r.price.toFixed(2)}</td>
+      <td>${ds}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderBrands() {
+  const Ls     = last();
+  const brands = ['Petron','Shell','Caltex','Phoenix','Seaoil'];
+  const fuels  = [
+    {l:'Ron 91',c:'rgba(59,158,255,.5)', ft:'Ron 91'},
+    {l:'Ron 95',c:'rgba(255,200,71,.5)', ft:'Ron 95'},
+    {l:'Diesel', c:'rgba(255,107,53,.5)',ft:'Diesel'},
+    {l:'Ron 97',c:'rgba(167,139,250,.5)',ft:'Ron 97'}
+  ];
+
+  const allP = brands.flatMap(b => fuels.map(f => Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price||999));
+  const minP = Math.max(0, Math.floor(Math.min(...allP)) - 5);
+
+  mkChart('brand-chart','bar',{
+    labels: brands,
+    datasets: fuels.map(f => ({
+      label: f.l, backgroundColor: f.c, borderRadius:4,
+      data: brands.map(b => Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price||null)
+    }))
+  },{...CHART_DEFAULTS,
+    plugins:{...CHART_DEFAULTS.plugins,legend:lgn()},
+    scales:{...CHART_DEFAULTS.scales,y:{...CHART_DEFAULTS.scales.y,min:minP}}
+  });
+
+  const cd = brands.reduce((a,b)=>
+    (Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Diesel')?.price||999)<
+    (Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||999)?a:b);
+  const c9 = brands.reduce((a,b)=>
+    (Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Ron 95')?.price||999)<
+    (Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Ron 95')?.price||999)?a:b);
+  const ad = (brands.reduce((s,b)=>s+(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||0),0)/brands.length).toFixed(2);
+
+  document.getElementById('brand-stats').innerHTML = `
+    <div class="sm"><div class="sl">Cheapest diesel this week</div><div class="sv" style="color:${COLORS[cd]}">${cd}</div></div>
+    <div class="sm"><div class="sl">Cheapest Ron 95 this week</div><div class="sv" style="color:${COLORS[c9]}">${c9}</div></div>
+    <div class="sm"><div class="sl">Average diesel NCR</div><div class="sv">₱${ad}</div></div>`;
+
+  mkChart('diesel-brand-chart','line',{
+    labels: DB.weekly_snapshots.map(s => fmtD(s.date)),
+    datasets: brands.map(b => ({
+      label:b, borderColor:COLORS[b], backgroundColor:'transparent',
+      pointRadius:2, borderWidth:2, tension:.3, spanGaps:true,
+      data: DB.weekly_snapshots.map(s => s.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||null)
+    }))
+  },{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:lgn()}});
+}
+
+function renderRegions() {
+  const Ls   = last();
+  const fuel = document.getElementById('reg-fuel').value;
+  const fuels = ['Ron 91','Ron 95','Diesel'];
+
+  document.getElementById('region-grid').innerHTML = REGIONS.map(reg => {
+    const diff  = reg.d[fuel] || 0;
+    const badge = diff>0
+      ? `<span style="color:var(--rd);font-size:10px">+₱${diff.toFixed(1)}</span>`
+      : diff<0
+      ? `<span style="color:var(--gr);font-size:10px">-₱${Math.abs(diff).toFixed(1)}</span>`
+      : `<span style="color:var(--mu);font-size:10px">base</span>`;
+    const rows = fuels.map(ft =>
+      `<div class="rr"><span class="rf">${ft}</span><span class="rp">₱${(avg(Ls,ft)+(reg.d[ft]||0)).toFixed(2)}/L</span></div>`
+    ).join('');
+    return `<div class="rcard"><div class="rcard-title">${reg.name} ${badge}</div>${rows}</div>`;
+  }).join('');
+
+  const regPrices = REGIONS.map(r => +(avg(Ls,fuel)+(r.d[fuel]||0)).toFixed(2));
+  const mn = Math.min(...regPrices), mx = Math.max(...regPrices);
+  mkChart('region-chart','bar',{
+    labels: REGIONS.map(r => r.id),
+    datasets:[{
+      label: fuel+' ₱/L', data: regPrices, borderRadius:4,
+      backgroundColor: regPrices.map(p =>
+        p===mn ? 'rgba(45,212,160,.7)' : p===mx ? 'rgba(255,77,109,.7)' : 'rgba(59,158,255,.5)')
+    }]
+  },{...CHART_DEFAULTS, scales:{...CHART_DEFAULTS.scales, y:{...CHART_DEFAULTS.scales.y, min:Math.floor(mn)-1}}});
+}
+
+function showPanel(id, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  el.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════════════
+   SEED — last-resort fallback ONLY
+═══════════════════════════════════════════════════ */
+const SEED = {
+  meta:{source:"DOE Philippines (SEED fallback)",last_updated:"2026-03-22T00:00:00Z"},
+  weekly_snapshots:[
+    {week:"2026-W10",date:"2026-03-10",prices:[
+      {brand:"Petron",fuel_type:"Ron 91",price:68.20,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:72.00,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:73.70,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:74.00,region:"NCR"},
+      {brand:"Shell", fuel_type:"Ron 91",price:67.29,region:"NCR"},{brand:"Shell", fuel_type:"Ron 95",price:71.09,region:"NCR"},{brand:"Shell", fuel_type:"Ron 97",price:72.79,region:"NCR"},{brand:"Shell", fuel_type:"Diesel",price:73.09,region:"NCR"},
+      {brand:"Caltex",fuel_type:"Ron 91",price:68.00,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:71.80,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:73.50,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:73.80,region:"NCR"},
+      {brand:"Phoenix",fuel_type:"Ron 91",price:67.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:71.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:73.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:73.60,region:"NCR"},
+      {brand:"Seaoil",fuel_type:"Ron 91",price:67.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:71.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:73.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:73.40,region:"NCR"}
+    ]},
+    {week:"2026-W12",date:"2026-03-18",prices:[
+      {brand:"Petron",fuel_type:"Ron 91",price:81.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:84.90,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:86.60,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:94.40,region:"NCR"},
+      {brand:"Shell", fuel_type:"Ron 91",price:83.89,region:"NCR"},{brand:"Shell", fuel_type:"Ron 95",price:87.69,region:"NCR"},{brand:"Shell", fuel_type:"Ron 97",price:89.39,region:"NCR"},{brand:"Shell", fuel_type:"Diesel",price:96.99,region:"NCR"},
+      {brand:"Caltex",fuel_type:"Ron 91",price:81.80,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:85.60,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:87.30,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:95.10,region:"NCR"},
+      {brand:"Phoenix",fuel_type:"Ron 91",price:80.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:84.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:86.20,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:94.00,region:"NCR"},
+      {brand:"Seaoil",fuel_type:"Ron 91",price:81.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:85.00,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:86.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:94.50,region:"NCR"}
+    ]}
+  ]
+};
+
+loadData();
+</script>
+</body>
+</html>
