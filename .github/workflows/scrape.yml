@@ -2,36 +2,33 @@ name: Scrape DOE Fuel Prices
 
 on:
   schedule:
-    # This now runs every 6 hours (4 times a day) to catch updates faster
-    - cron: '0 */6 * * *'
-  workflow_dispatch: # Allows you to click "Run Workflow" manually
+    - cron: '0 2 * * *' # Runs daily at 10 AM Manila Time
+  workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    # Added this to make sure GitHub allows the "Push" command
     permissions:
-      contents: write
-
+      contents: write # THIS IS CRITICAL
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Set up Python 3.11
+      
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4 lxml pdfplumber
-
-      - name: Run scraper
+          
+      - name: Install Dependencies
+        run: pip install requests beautifulsoup4 pdfplumber
+        
+      - name: Run Scraper
         run: python scraper.py
-
-      - name: Commit and push updated prices.json
+        
+      - name: Save Changes
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/prices.json
-          # This checks if the file actually changed. If no change, it skips pushing.
-          git diff --staged --quiet || (git commit -m "chore: update fuel prices $(date +'%Y-%m-%d')" && git push)
+          git commit -m "Update fuel prices: $(date)" || echo "No changes"
+          git push
