@@ -3,68 +3,85 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, date
 import sys
+import io
 from pathlib import Path
+import pdfplumber
+import re
 
-# --- CONFIG ---
 DATA_FILE = Path("data/prices.json")
 DOE_URL = "https://www.doe.gov.ph/oil-monitor"
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+BASE_URL = "https://www.doe.gov.ph"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"}
 
 def run():
-    print(f"Checking DOE for new prices... {date.today()}")
+    print(f"--- Starting Scrape: {datetime.now()} ---")
     
-    # 1. Get the Page
+    # 1. Find the LATEST PDF Link
     try:
-        r = requests.get(DOE_URL, headers=HEADERS, timeout=30)
-        soup = BeautifulSoup(r.text, "html.parser")
-    except Exception as e:
-        print(f"Error connecting to DOE: {e}")
-        sys.exit(1)
+        res = requests.get(DOE_URL, headers=HEADERS, timeout=30)
+        soup = BeautifulSoup(res.text, "html.parser")
+        pdf_url = None
+        
+        # We look for links that mention "Metro Manila" and "Retail Pump Price"
+        # We take the first one found in the main content area
+        for a in soup.find_all("a", href=True):
+            text = a.get_text().lower()
+            href = a['href']
+            if ".pdf" in href and ("metro manila" in text or "ncr" in text):
+                pdf_url = href if href.startswith("http") else BASE_URL + href
+                print(f"Found Latest PDF: {pdf_url}")
+                break
+        
+        if not pdf_url:
+            print("Could not find a valid PDF link.")
+            return
 
-    # 2. Extract Data from HTML Table (DOE usually lists them on the page)
-    records = []
-    # Search for any table that looks like a price table
-    tables = soup.find_all("table")
-    for table in tables:
-        rows = table.find_all("tr")
-        for row in rows:
-            cells = [c.get_text(strip=True) for c in row.find_all(["td", "th"])]
-            # Look for rows that start with a Brand name
-            if any(brand in cells[0] for brand in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil"]):
-                try:
-                    # Generic mapping: Brand is Col 0, prices are usually in the next columns
-                    brand = cells[0].split()[0]
-                    records.append({"brand": brand, "fuel_type": "Ron 95", "price": float(cells[2].replace(',','')), "region": "NCR"})
-                    records.append({"brand": brand, "fuel_type": "Diesel", "price": float(cells[-1].replace(',','')), "region": "NCR"})
-                except: continue
+        # 2. Download and Parse PDF
+        pdf_res = requests.get(pdf_url, headers=HEADERS)
+        records = []
+        with pdfplumber.open(io.BytesIO(pdf_res.content)) as pdf:
+            for page in pdf.pages:
+                table = page.extract_table()
+                if not table: continue
+                for row in table:
+                    # Look for rows starting with major brands
+                    brand_name = str(row[0]).split('\n')[0].strip()
+                    if any(b in brand_name for b in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil"]):
+                        try:
+                            # Extracting prices (usually Ron 95 and Diesel)
+                            # We search for the numbers in the row string
+                            nums = re.findall(r"\d+\.\d+", " ".join([str(x) for x in row if x]))
+                            if len(nums) >= 2:
+                                records.append({"brand": brand_name, "fuel_type": "Ron 95", "price": float(nums[1]), "region": "NCR"})
+                                records.append({"brand": brand_name, "fuel_type": "Diesel", "price": float(nums[-1]), "region": "NCR"})
+                        except: continue
 
-    if not records:
-        print("Could not find new data in HTML. DOE page might be down or changed.")
-        # We don't exit(1) here so the action stays green, but we didn't find data.
-        return
+        if not records:
+            print("Failed to extract data from PDF.")
+            return
 
-    # 3. Load and Update JSON
-    if DATA_FILE.exists():
-        db = json.loads(DATA_FILE.read_text())
-    else:
+        # 3. Save to JSON
         db = {"weekly_snapshots": []}
+        if DATA_FILE.exists():
+            try: db = json.loads(DATA_FILE.read_text())
+            except: pass
 
-    # Only add if the date is new
-    today_str = date.today().isoformat()
-    if any(s["date"] == today_str for s in db["weekly_snapshots"]):
-        print("Already updated for today.")
-        return
+        # Prevent duplicate entries for the same date
+        today_str = date.today().isoformat()
+        db["weekly_snapshots"] = [s for s in db["weekly_snapshots"] if s["date"] != today_str]
+        
+        db["weekly_snapshots"].append({
+            "week": f"{date.today().year}-W{date.today().isocalendar()[1]}",
+            "date": today_str,
+            "prices": records
+        })
+        
+        DATA_FILE.parent.mkdir(exist_ok=True)
+        DATA_FILE.write_text(json.dumps(db, indent=2))
+        print(f"Successfully saved {len(records)} entries for {today_str}")
 
-    new_snap = {
-        "week": f"{date.today().year}-W{date.today().isocalendar()[1]}",
-        "date": today_str,
-        "prices": records
-    }
-    
-    db["weekly_snapshots"].append(new_snap)
-    DATA_FILE.parent.mkdir(exist_ok=True)
-    DATA_FILE.write_text(json.dumps(db, indent=2))
-    print(f"SUCCESS: Saved {len(records)} new price entries.")
+    except Exception as e:
+        print(f"Critical Error: {e}")
 
 if __name__ == "__main__":
     run()
