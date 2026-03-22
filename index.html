@@ -71,364 +71,275 @@ table.pt tr:hover td{background:var(--s2);}
 footer{text-align:center;font-size:11px;color:var(--mu);margin-top:2rem;padding-top:1rem;border-top:1px solid var(--b);}
 footer a{color:var(--ac);text-decoration:none;}
 @media(max-width:768px){
-  .metrics{grid-template-columns:repeat(2,1fr);}
-  .g2{grid-template-columns:1fr;}
-  .rgrid{grid-template-columns:1fr 1fr;}
-  nav,main{padding:.75rem 1rem;}
+.metrics{grid-template-columns:repeat(2,1fr);}
+.g2{grid-template-columns:1fr;}
+.rgrid{grid-template-columns:1fr 1fr;}
+nav,main{padding:.75rem 1rem;}
 }
 </style>
 </head>
 <body>
-
 <nav>
-  <div class="nav-brand">
-    <span style="font-size:22px">🇵🇭</span>
-    <div>
-      <div class="nav-title">PH <span>Fuel</span> Tracker</div>
-      <div class="nav-meta">Source: Department of Energy Philippines</div>
-    </div>
-  </div>
-  <div class="live-pill"><div class="ldot"></div><span id="last-updated">Loading...</span></div>
+<div class="nav-brand">
+<span style="font-size:22px">🇵🇭</span>
+<div>
+<div class="nav-title">PH <span>Fuel</span> Tracker</div>
+<div class="nav-meta">Source: Department of Energy Philippines</div>
+</div>
+</div>
+<div class="live-pill"><div class="ldot"></div><span id="last-updated">Loading...</span></div>
 </nav>
-
 <div class="tab-bar">
-  <div class="tab active"  onclick="showPanel('overview',this)">Overview</div>
-  <div class="tab"         onclick="showPanel('history',this)">Price history</div>
-  <div class="tab"         onclick="showPanel('brands',this)">By brand</div>
-  <div class="tab"         onclick="showPanel('regions',this)">By region</div>
-
+<div class="tab active" onclick="showPanel('overview',this)">Overview</div>
+<div class="tab" onclick="showPanel('history',this)">Price history</div>
+<div class="tab" onclick="showPanel('brands',this)">By brand</div>
+<div class="tab" onclick="showPanel('regions',this)">By region</div>
 </div>
-
 <main>
-
-<!-- ═══ OVERVIEW ═══ -->
 <div class="panel active" id="panel-overview">
-  <div class="alert" id="alert-bar">
-    <span>⚠</span><div id="alert-text">Loading price data...</div>
-  </div>
-  <div class="metrics">
-    <div class="metric"><div class="m-label">Ron 91</div><div class="m-val" id="m-r91">—</div><div class="m-chg" id="c-r91">—</div></div>
-    <div class="metric"><div class="m-label">Ron 95</div><div class="m-val" id="m-r95">—</div><div class="m-chg" id="c-r95">—</div></div>
-    <div class="metric"><div class="m-label">Diesel</div><div class="m-val" id="m-dsl">—</div><div class="m-chg" id="c-dsl">—</div></div>
-    <div class="metric"><div class="m-label">YTD diesel change</div><div class="m-val" id="m-ytd">—</div><div class="m-chg" id="c-ytd">since Jan 1</div></div>
-  </div>
-  <div class="g2">
-    <div class="card-i">
-      <div class="ct">12-week trend (avg across brands)</div>
-      <div class="leg" id="trend-legend"></div>
-      <div class="cw"><canvas id="trend-chart"></canvas></div>
-    </div>
-    <div class="card-i">
-      <div class="ct">Week-on-week change (₱/L)</div>
-      <div class="cw"><canvas id="wow-chart"></canvas></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ct">Latest retail prices — NCR (₱ per liter)</div>
-    <div class="frow">
-      <label>Brand</label>
-      <select id="brand-filter" onchange="renderTable()">
-        <option value="all">All brands</option>
-        <option>Petron</option><option>Shell</option><option>Caltex</option><option>Phoenix</option><option>Seaoil</option>
-      </select>
-      <label>Sort by</label>
-      <select id="sort-filter" onchange="renderTable()">
-        <option value="brand">Brand A–Z</option>
-        <option value="diesel">Diesel cheapest first</option>
-        <option value="r95">Ron 95 cheapest first</option>
-      </select>
-    </div>
-    <table class="pt">
-      <thead><tr><th>Oil company</th><th>Ron 91</th><th>Ron 95</th><th>Ron 97</th><th>Diesel</th><th>vs last week</th></tr></thead>
-      <tbody id="price-tbody"></tbody>
-    </table>
-  </div>
+<div class="alert" id="alert-bar"><span>⚠</span><div id="alert-text">Loading price data...</div></div>
+<div class="metrics">
+<div class="metric"><div class="m-label">Ron 91</div><div class="m-val" id="m-r91">—</div><div class="m-chg" id="c-r91">—</div></div>
+<div class="metric"><div class="m-label">Ron 95</div><div class="m-val" id="m-r95">—</div><div class="m-chg" id="c-r95">—</div></div>
+<div class="metric"><div class="m-label">Diesel</div><div class="m-val" id="m-dsl">—</div><div class="m-chg" id="c-dsl">—</div></div>
+<div class="metric"><div class="m-label">YTD diesel change</div><div class="m-val" id="m-ytd">—</div><div class="m-chg" id="c-ytd">since Jan 1</div></div>
 </div>
-
-<!-- ═══ HISTORY ═══ -->
+<div class="g2">
+<div class="card-i"><div class="ct">12-week trend (avg across brands)</div><div class="leg" id="trend-legend"></div><div class="cw"><canvas id="trend-chart"></canvas></div></div>
+<div class="card-i"><div class="ct">Week-on-week change (₱/L)</div><div class="cw"><canvas id="wow-chart"></canvas></div></div>
+</div>
+<div class="card">
+<div class="ct">Latest retail prices — NCR (₱ per liter)</div>
+<div class="frow">
+<label>Brand</label>
+<select id="brand-filter" onchange="renderTable()"><option value="all">All brands</option><option>Petron</option><option>Shell</option><option>Caltex</option><option>Phoenix</option><option>Seaoil</option></select>
+<label>Sort by</label>
+<select id="sort-filter" onchange="renderTable()"><option value="brand">Brand A–Z</option><option value="diesel">Diesel cheapest first</option><option value="r95">Ron 95 cheapest first</option></select>
+</div>
+<table class="pt"><thead><tr><th>Oil company</th><th>Ron 91</th><th>Ron 95</th><th>Ron 97</th><th>Diesel</th><th>vs last week</th></tr></thead><tbody id="price-tbody"></tbody></table>
+</div>
+</div>
 <div class="panel" id="panel-history">
-  <div class="card">
-    <div class="ct">Full price history — select fuel &amp; brand</div>
-    <div class="frow">
-      <label>Fuel type</label>
-      <select id="hist-fuel" onchange="renderHistory()">
-        <option value="Ron 91">Ron 91</option>
-        <option value="Ron 95" selected>Ron 95</option>
-        <option value="Ron 97">Ron 97</option>
-        <option value="Diesel">Diesel</option>
-      </select>
-      <label>Brand</label>
-      <select id="hist-brand" onchange="renderHistory()">
-        <option value="all">All brands</option>
-        <option>Petron</option><option>Shell</option><option>Caltex</option><option>Phoenix</option><option>Seaoil</option>
-      </select>
-    </div>
-    <div class="cw" style="height:300px;"><canvas id="hist-chart"></canvas></div>
-  </div>
-  <div class="card">
-    <div class="ct">Historical data table</div>
-    <table class="pt">
-      <thead><tr><th>Date</th><th>Brand</th><th>Fuel type</th><th>Price (₱/L)</th><th>Change</th></tr></thead>
-      <tbody id="hist-tbody"></tbody>
-    </table>
-  </div>
+<div class="card">
+<div class="ct">Full price history — select fuel &amp; brand</div>
+<div class="frow">
+<label>Fuel type</label>
+<select id="hist-fuel" onchange="renderHistory()"><option value="Ron 91">Ron 91</option><option value="Ron 95" selected>Ron 95</option><option value="Ron 97">Ron 97</option><option value="Diesel">Diesel</option></select>
+<label>Brand</label>
+<select id="hist-brand" onchange="renderHistory()"><option value="all">All brands</option><option>Petron</option><option>Shell</option><option>Caltex</option><option>Phoenix</option><option>Seaoil</option></select>
 </div>
-
-<!-- ═══ BRANDS ═══ -->
+<div class="cw" style="height:300px;"><canvas id="hist-chart"></canvas></div>
+</div>
+<div class="card"><div class="ct">Historical data table</div><table class="pt"><thead><tr><th>Date</th><th>Brand</th><th>Fuel type</th><th>Price (₱/L)</th><th>Change</th></tr></thead><tbody id="hist-tbody"></tbody></table></div>
+</div>
 <div class="panel" id="panel-brands">
-  <div class="card">
-    <div class="ct">Brand comparison — current week (all fuel types)</div>
-    <div class="cw" style="height:260px;"><canvas id="brand-chart"></canvas></div>
-  </div>
-  <div class="srow" id="brand-stats"></div>
-  <div class="card">
-    <div class="ct">Diesel by brand — 12-week trend</div>
-    <div class="cw" style="height:240px;"><canvas id="diesel-brand-chart"></canvas></div>
-  </div>
+<div class="card"><div class="ct">Brand comparison — current week (all fuel types)</div><div class="cw" style="height:260px;"><canvas id="brand-chart"></canvas></div></div>
+<div class="srow" id="brand-stats"></div>
+<div class="card"><div class="ct">Diesel by brand — 12-week trend</div><div class="cw" style="height:240px;"><canvas id="diesel-brand-chart"></canvas></div></div>
 </div>
-
-<!-- ═══ REGIONS ═══ -->
 <div class="panel" id="panel-regions">
-  <div class="card">
-    <div class="ct">Regional price comparison</div>
-    <p style="font-size:12px;color:var(--mu);line-height:1.8;margin-bottom:1rem;">Prices vary by region due to <strong style="color:var(--tx)">transport costs</strong> from oil depots, <strong style="color:var(--tx)">local government taxes</strong>, and <strong style="color:var(--tx)">distance from ports</strong>. Mindanao typically runs ₱2–4 higher than NCR.</p>
-    <div class="frow">
-      <label>Compare fuel</label>
-      <select id="reg-fuel" onchange="renderRegions()">
-        <option value="Diesel" selected>Diesel</option>
-        <option value="Ron 95">Ron 95</option>
-        <option value="Ron 91">Ron 91</option>
-      </select>
-    </div>
-    <div class="rgrid" id="region-grid"></div>
-    <p style="font-size:11px;color:var(--mu);">* Regional prices are estimated from DOE per-region differential data. Live regional data will populate once the scraper is running.</p>
-  </div>
-  <div class="card">
-    <div class="ct">Regional price bar chart (selected fuel)</div>
-    <div class="cw" style="height:260px;"><canvas id="region-chart"></canvas></div>
-  </div>
+<div class="card">
+<div class="ct">Regional price comparison</div>
+<p style="font-size:12px;color:var(--mu);line-height:1.8;margin-bottom:1rem;">Prices vary by region due to <strong style="color:var(--tx)">transport costs</strong>, <strong style="color:var(--tx)">local government taxes</strong>, and <strong style="color:var(--tx)">distance from ports</strong>. Mindanao typically runs ₱2–4 higher than NCR.</p>
+<div class="frow"><label>Compare fuel</label><select id="reg-fuel" onchange="renderRegions()"><option value="Diesel" selected>Diesel</option><option value="Ron 95">Ron 95</option><option value="Ron 91">Ron 91</option></select></div>
+<div class="rgrid" id="region-grid"></div>
+<p style="font-size:11px;color:var(--mu);">* Regional prices are estimated from DOE per-region differential data.</p>
 </div>
-
-
-
+<div class="card"><div class="ct">Regional price bar chart (selected fuel)</div><div class="cw" style="height:260px;"><canvas id="region-chart"></canvas></div></div>
+</div>
 </main>
 <footer>PH Fuel Tracker &nbsp;·&nbsp; <a href="https://www.doe.gov.ph/oil-monitor" target="_blank">DOE Philippines</a> &nbsp;·&nbsp; Auto-updated weekly via GitHub Actions</footer>
-
 <script>
 const COLORS={Petron:'#3b9eff',Shell:'#ff6b35',Caltex:'#ffc847',Phoenix:'#2dd4a0',Seaoil:'#a78bfa'};
-const BICO={
-  Petron:{bg:'rgba(59,158,255,.15)',c:'#3b9eff'},
-  Shell:{bg:'rgba(255,107,53,.15)',c:'#ff6b35'},
-  Caltex:{bg:'rgba(255,200,71,.15)',c:'#ffc847'},
-  Phoenix:{bg:'rgba(45,212,160,.15)',c:'#2dd4a0'},
-  Seaoil:{bg:'rgba(167,139,250,.15)',c:'#a78bfa'}
-};
+const BICO={Petron:{bg:'rgba(59,158,255,.15)',c:'#3b9eff'},Shell:{bg:'rgba(255,107,53,.15)',c:'#ff6b35'},Caltex:{bg:'rgba(255,200,71,.15)',c:'#ffc847'},Phoenix:{bg:'rgba(45,212,160,.15)',c:'#2dd4a0'},Seaoil:{bg:'rgba(167,139,250,.15)',c:'#a78bfa'}};
 const REGIONS=[
-  {id:'NCR',   name:'NCR (Metro Manila)',         d:{Diesel:0,   'Ron 95':0,   'Ron 91':0  }},
-  {id:'R3',    name:'Region III — Central Luzon', d:{Diesel:.8,  'Ron 95':.7,  'Ron 91':.6 }},
-  {id:'R4A',   name:'Region IV-A — CALABARZON',   d:{Diesel:.6,  'Ron 95':.5,  'Ron 91':.5 }},
-  {id:'R4B',   name:'Region IV-B — MIMAROPA',     d:{Diesel:1.8, 'Ron 95':1.5, 'Ron 91':1.4}},
-  {id:'R7',    name:'Region VII — Cebu',           d:{Diesel:1.2, 'Ron 95':1.0, 'Ron 91':.9 }},
-  {id:'R10',   name:'Region X — CDO',              d:{Diesel:2.1, 'Ron 95':1.8, 'Ron 91':1.7}},
-  {id:'R11',   name:'Region XI — Davao',            d:{Diesel:2.4, 'Ron 95':2.1, 'Ron 91':2.0}},
-  {id:'CAR',   name:'CAR — Baguio',                d:{Diesel:1.4, 'Ron 95':1.2, 'Ron 91':1.1}},
-  {id:'BARMM', name:'BARMM',                        d:{Diesel:3.2, 'Ron 95':2.8, 'Ron 91':2.6}},
+{id:'NCR',name:'NCR (Metro Manila)',d:{Diesel:0,'Ron 95':0,'Ron 91':0}},
+{id:'R3',name:'Region III — Central Luzon',d:{Diesel:.8,'Ron 95':.7,'Ron 91':.6}},
+{id:'R4A',name:'Region IV-A — CALABARZON',d:{Diesel:.6,'Ron 95':.5,'Ron 91':.5}},
+{id:'R4B',name:'Region IV-B — MIMAROPA',d:{Diesel:1.8,'Ron 95':1.5,'Ron 91':1.4}},
+{id:'R7',name:'Region VII — Cebu',d:{Diesel:1.2,'Ron 95':1.0,'Ron 91':.9}},
+{id:'R10',name:'Region X — CDO',d:{Diesel:2.1,'Ron 95':1.8,'Ron 91':1.7}},
+{id:'R11',name:'Region XI — Davao',d:{Diesel:2.4,'Ron 95':2.1,'Ron 91':2.0}},
+{id:'CAR',name:'CAR — Baguio',d:{Diesel:1.4,'Ron 95':1.2,'Ron 91':1.1}},
+{id:'BARMM',name:'BARMM',d:{Diesel:3.2,'Ron 95':2.8,'Ron 91':2.6}},
 ];
-const CTO={
-  responsive:true,maintainAspectRatio:false,
-  plugins:{legend:{display:false},tooltip:{backgroundColor:'#131720',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#e8edf5',bodyColor:'#6b7891',padding:10,titleFont:{family:"'IBM Plex Mono'",size:11},bodyFont:{family:"'IBM Plex Mono'",size:11}}},
-  scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},callback:v=>'₱'+v.toFixed(2)}}}
-};
+const CTO={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#131720',borderColor:'rgba(255,255,255,.1)',borderWidth:1,titleColor:'#e8edf5',bodyColor:'#6b7891',padding:10,titleFont:{family:"'IBM Plex Mono'",size:11},bodyFont:{family:"'IBM Plex Mono'",size:11}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10}}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},callback:v=>'₱'+v.toFixed(2)}}}};
 let DB=null,CH={};
-
 async function loadData(){
-  try{const r=await fetch('data/prices.json');if(!r.ok)throw 0;DB=await r.json();}
-  catch(e){DB=SEED;}
-  render();
+try{const r=await fetch('data /prices.json');if(!r.ok)throw 0;DB=await r.json();}
+catch(e){DB=SEED;}
+render();
 }
-
 const L=()=>DB.weekly_snapshots[DB.weekly_snapshots.length-1];
 const P=()=>DB.weekly_snapshots[DB.weekly_snapshots.length-2];
 function avg(snap,ft){const r=snap.prices.filter(p=>p.fuel_type===ft);return r.length?r.reduce((s,x)=>s+x.price,0)/r.length:null;}
 function fmtDate(d){return new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric'});}
 function fmtDateFull(d){return new Date(d).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});}
 function mk(id,type,data,opts){if(CH[id])CH[id].destroy();CH[id]=new Chart(document.getElementById(id),{type,data,options:opts||CTO});}
-function lgn(fuels){return{display:true,position:'top',labels:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},boxWidth:10,padding:12}};}
-
+function lgn(){return{display:true,position:'top',labels:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},boxWidth:10,padding:12}};}
 function render(){
-  const Ls=L(),Ps=P();
-  document.getElementById('last-updated').textContent='Updated '+new Date(Ls.date).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
-  [['r91','Ron 91'],['r95','Ron 95'],['dsl','Diesel']].forEach(([id,ft])=>{
-    const c=avg(Ls,ft),pr=avg(Ps,ft),d=c-pr;
-    document.getElementById('m-'+id).textContent='₱'+c.toFixed(2);
-    const el=document.getElementById('c-'+id);
-    el.textContent=Math.abs(d)<.01?'— no change this week':d>0?'▲ +₱'+d.toFixed(2)+' this week':'▼ ₱'+d.toFixed(2)+' this week';
-    el.className='m-chg '+(Math.abs(d)<.01?'nc':d>0?'up':'dn');
-  });
-  const jan=DB.weekly_snapshots.find(s=>s.week.includes('W01')||s.week.includes('W02'));
-  if(jan){const ytd=avg(Ls,'Diesel')-avg(jan,'Diesel');document.getElementById('m-ytd').textContent=(ytd>=0?'+':'')+' ₱'+Math.abs(ytd).toFixed(2);document.getElementById('c-ytd').className='m-chg '+(ytd>.01?'up':ytd<-.01?'dn':'nc');}
-
-  // Smart alert banner
-  const dR91=avg(Ls,'Ron 91')-avg(Ps,'Ron 91');
-  const dR95=avg(Ls,'Ron 95')-avg(Ps,'Ron 95');
-  const dDsl=avg(Ls,'Diesel')-avg(Ps,'Diesel');
-  const net=dR91+dR95+dDsl;
-  const fmt=v=>(v>0?'▲ +':'▼ ')+'₱'+Math.abs(v).toFixed(2);
-  const bar=document.getElementById('alert-bar'),txt=document.getElementById('alert-text');
-  if(Math.abs(net)<.05){bar.className='alert alert-nc';txt.innerHTML='<strong>No price change</strong> effective '+Ls.date+' — all fuels unchanged from last week.';}
-  else if(net<0){bar.className='alert alert-dn';txt.innerHTML='<strong>Prices DOWN</strong> effective '+Ls.date+' &nbsp;·&nbsp; Ron 91 '+fmt(dR91)+'/L &nbsp;·&nbsp; Ron 95 '+fmt(dR95)+'/L &nbsp;·&nbsp; Diesel '+fmt(dDsl)+'/L';}
-  else{bar.className='alert';txt.innerHTML='<strong>Price adjustment</strong> effective '+Ls.date+' &nbsp;·&nbsp; Ron 91 '+fmt(dR91)+'/L &nbsp;·&nbsp; Ron 95 '+fmt(dR95)+'/L &nbsp;·&nbsp; Diesel '+fmt(dDsl)+'/L';}
-
-  renderTrend();renderWoW();renderTable();renderHistory();renderBrands();renderRegions();
+const Ls=L(),Ps=P();
+document.getElementById('last-updated').textContent='Updated '+new Date(Ls.date).toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
+[['r91','Ron 91'],['r95','Ron 95'],['dsl','Diesel']].forEach(([id,ft])=>{
+const c=avg(Ls,ft),pr=avg(Ps,ft),d=c-pr;
+document.getElementById('m-'+id).textContent='₱'+c.toFixed(2);
+const el=document.getElementById('c-'+id);
+el.textContent=Math.abs(d)<.01?'— no change this week':d>0?'▲ +₱'+d.toFixed(2)+' this week':'▼ ₱'+d.toFixed(2)+' this week';
+el.className='m-chg '+(Math.abs(d)<.01?'nc':d>0?'up':'dn');
+});
+const jan=DB.weekly_snapshots.find(s=>s.week.includes('W01')||s.week.includes('W02'));
+if(jan){const ytd=avg(Ls,'Diesel')-avg(jan,'Diesel');document.getElementById('m-ytd').textContent=(ytd>=0?'+':'')+' ₱'+Math.abs(ytd).toFixed(2);document.getElementById('c-ytd').className='m-chg '+(ytd>.01?'up':ytd<-.01?'dn':'nc');}
+const dR91=avg(Ls,'Ron 91')-avg(Ps,'Ron 91'),dR95=avg(Ls,'Ron 95')-avg(Ps,'Ron 95'),dDsl=avg(Ls,'Diesel')-avg(Ps,'Diesel'),net=dR91+dR95+dDsl;
+const fmt=v=>(v>0?'▲ +':'▼ ')+'₱'+Math.abs(v).toFixed(2);
+const bar=document.getElementById('alert-bar'),txt=document.getElementById('alert-text');
+if(Math.abs(net)<.05){bar.className='alert alert-nc';txt.innerHTML='<strong>No price change</strong> effective '+Ls.date+' — all fuels unchanged from last week.';}
+else if(net<0){bar.className='alert alert-dn';txt.innerHTML='<strong>Prices DOWN</strong> effective '+Ls.date+' &nbsp;·&nbsp; Ron 91 '+fmt(dR91)+'/L &nbsp;·&nbsp; Ron 95 '+fmt(dR95)+'/L &nbsp;·&nbsp; Diesel '+fmt(dDsl)+'/L';}
+else{bar.className='alert';txt.innerHTML='<strong>Price adjustment</strong> effective '+Ls.date+' &nbsp;·&nbsp; Ron 91 '+fmt(dR91)+'/L &nbsp;·&nbsp; Ron 95 '+fmt(dR95)+'/L &nbsp;·&nbsp; Diesel '+fmt(dDsl)+'/L';}
+renderTrend();renderWoW();renderTable();renderHistory();renderBrands();renderRegions();
 }
-
 function renderTrend(){
-  const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
-  const fuels=[{l:'Ron 91',c:'#3b9eff',ft:'Ron 91'},{l:'Ron 95',c:'#ffc847',ft:'Ron 95'},{l:'Ron 97',c:'#a78bfa',ft:'Ron 97'},{l:'Diesel',c:'#ff6b35',ft:'Diesel'}];
-  document.getElementById('trend-legend').innerHTML=fuels.map(f=>`<div class="li"><div class="ld" style="background:${f.c}"></div>${f.l}</div>`).join('');
-  mk('trend-chart','line',{labels:lbls,datasets:fuels.map(f=>({label:f.l,data:DB.weekly_snapshots.map(s=>avg(s,f.ft)),borderColor:f.c,backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,scales:{...CTO.scales,y:{...CTO.scales.y,min:54}}});
+const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
+const fuels=[{l:'Ron 91',c:'#3b9eff',ft:'Ron 91'},{l:'Ron 95',c:'#ffc847',ft:'Ron 95'},{l:'Ron 97',c:'#a78bfa',ft:'Ron 97'},{l:'Diesel',c:'#ff6b35',ft:'Diesel'}];
+document.getElementById('trend-legend').innerHTML=fuels.map(f=>`<div class="li"><div class="ld" style="background:${f.c}"></div>${f.l}</div>`).join('');
+mk('trend-chart','line',{labels:lbls,datasets:fuels.map(f=>({label:f.l,data:DB.weekly_snapshots.map(s=>avg(s,f.ft)),borderColor:f.c,backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,scales:{...CTO.scales,y:{...CTO.scales.y,min:50}}});
 }
-
 function renderWoW(){
-  const snaps=DB.weekly_snapshots;
-  const lbls=snaps.slice(1).map(s=>fmtDate(s.date));
-  mk('wow-chart','bar',{
-    labels:lbls,
-    datasets:[
-      {label:'Diesel',data:snaps.slice(1).map((s,i)=>+(avg(s,'Diesel')-avg(snaps[i],'Diesel')).toFixed(2)),backgroundColor:snaps.slice(1).map((s,i)=>avg(s,'Diesel')>=avg(snaps[i],'Diesel')?'rgba(255,77,109,.6)':'rgba(45,212,160,.6)'),borderRadius:3},
-      {label:'Ron 95',data:snaps.slice(1).map((s,i)=>+(avg(s,'Ron 95')-avg(snaps[i],'Ron 95')).toFixed(2)),backgroundColor:snaps.slice(1).map((s,i)=>avg(s,'Ron 95')>=avg(snaps[i],'Ron 95')?'rgba(255,107,53,.5)':'rgba(45,212,160,.4)'),borderRadius:3}
-    ]
-  },{...CTO,plugins:{...CTO.plugins,legend:lgn()},scales:{...CTO.scales,y:{...CTO.scales.y,ticks:{...CTO.scales.y.ticks,callback:v=>(v>=0?'+':'')+v.toFixed(2)}}}});
+const snaps=DB.weekly_snapshots,lbls=snaps.slice(1).map(s=>fmtDate(s.date));
+mk('wow-chart','bar',{labels:lbls,datasets:[
+{label:'Diesel',data:snaps.slice(1).map((s,i)=>+(avg(s,'Diesel')-avg(snaps[i],'Diesel')).toFixed(2)),backgroundColor:snaps.slice(1).map((s,i)=>avg(s,'Diesel')>=avg(snaps[i],'Diesel')?'rgba(255,77,109,.6)':'rgba(45,212,160,.6)'),borderRadius:3},
+{label:'Ron 95',data:snaps.slice(1).map((s,i)=>+(avg(s,'Ron 95')-avg(snaps[i],'Ron 95')).toFixed(2)),backgroundColor:snaps.slice(1).map((s,i)=>avg(s,'Ron 95')>=avg(snaps[i],'Ron 95')?'rgba(255,107,53,.5)':'rgba(45,212,160,.4)'),borderRadius:3}
+]},{...CTO,plugins:{...CTO.plugins,legend:lgn()},scales:{...CTO.scales,y:{...CTO.scales.y,ticks:{...CTO.scales.y.ticks,callback:v=>(v>=0?'+':'')+v.toFixed(2)}}}});
 }
-
 function renderTable(){
-  const Ls=L(),Ps=P();let brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
-  const bf=document.getElementById('brand-filter').value,sf=document.getElementById('sort-filter').value;
-  if(bf!=='all')brands=brands.filter(b=>b===bf);
-  const g=(snap,b,ft)=>snap.prices.find(p=>p.brand===b&&p.fuel_type===ft)?.price;
-  let rows=brands.map(b=>({brand:b,r91:g(Ls,b,'Ron 91'),r95:g(Ls,b,'Ron 95'),r97:g(Ls,b,'Ron 97'),dsl:g(Ls,b,'Diesel'),pd:g(Ps,b,'Diesel')}));
-  if(sf==='diesel')rows.sort((a,b)=>(a.dsl||99)-(b.dsl||99));
-  if(sf==='r95')rows.sort((a,b)=>(a.r95||99)-(b.r95||99));
-  document.getElementById('price-tbody').innerHTML=rows.map(r=>{
-    const d=r.dsl&&r.pd?r.dsl-r.pd:0,pc=Math.abs(d)<.01?'pnc':d>0?'pup':'pdn',pt=Math.abs(d)<.01?'—':d>0?'▲ +'+d.toFixed(2):'▼ '+d.toFixed(2);
-    const ic=BICO[r.brand]||{bg:'rgba(255,255,255,.05)',c:'#6b7891'};
-    return`<tr><td><div class="bc"><div class="bico" style="background:${ic.bg};color:${ic.c}">${r.brand.substring(0,2)}</div><span class="bn" style="color:${ic.c}">${r.brand}</span></div></td><td>${r.r91?'₱'+r.r91.toFixed(2):'—'}</td><td>${r.r95?'₱'+r.r95.toFixed(2):'—'}</td><td>${r.r97?'₱'+r.r97.toFixed(2):'—'}</td><td>${r.dsl?'₱'+r.dsl.toFixed(2):'—'}</td><td><span class="pill ${pc}">${pt}</span></td></tr>`;
-  }).join('');
+const Ls=L(),Ps=P();let brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
+const bf=document.getElementById('brand-filter').value,sf=document.getElementById('sort-filter').value;
+if(bf!=='all')brands=brands.filter(b=>b===bf);
+const g=(snap,b,ft)=>snap.prices.find(p=>p.brand===b&&p.fuel_type===ft)?.price;
+let rows=brands.map(b=>({brand:b,r91:g(Ls,b,'Ron 91'),r95:g(Ls,b,'Ron 95'),r97:g(Ls,b,'Ron 97'),dsl:g(Ls,b,'Diesel'),pd:g(Ps,b,'Diesel')}));
+if(sf==='diesel')rows.sort((a,b)=>(a.dsl||999)-(b.dsl||999));
+if(sf==='r95')rows.sort((a,b)=>(a.r95||999)-(b.r95||999));
+document.getElementById('price-tbody').innerHTML=rows.map(r=>{
+const d=r.dsl&&r.pd?r.dsl-r.pd:0,pc=Math.abs(d)<.01?'pnc':d>0?'pup':'pdn',pt=Math.abs(d)<.01?'—':d>0?'▲ +'+d.toFixed(2):'▼ '+d.toFixed(2);
+const ic=BICO[r.brand]||{bg:'rgba(255,255,255,.05)',c:'#6b7891'};
+return`<tr><td><div class="bc"><div class="bico" style="background:${ic.bg};color:${ic.c}">${r.brand.substring(0,2)}</div><span class="bn" style="color:${ic.c}">${r.brand}</span></div></td><td>${r.r91?'₱'+r.r91.toFixed(2):'—'}</td><td>${r.r95?'₱'+r.r95.toFixed(2):'—'}</td><td>${r.r97?'₱'+r.r97.toFixed(2):'—'}</td><td>${r.dsl?'₱'+r.dsl.toFixed(2):'—'}</td><td><span class="pill ${pc}">${pt}</span></td></tr>`;
+}).join('');
 }
-
 function renderHistory(){
-  const fuel=document.getElementById('hist-fuel').value,brand=document.getElementById('hist-brand').value;
-  const brands=brand==='all'?['Petron','Shell','Caltex','Phoenix','Seaoil']:[brand];
-  const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
-  mk('hist-chart','line',{labels:lbls,datasets:brands.map(b=>({label:b,data:DB.weekly_snapshots.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type===fuel)?.price||null),borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:3,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()}});
-  const rows=[];
-  DB.weekly_snapshots.slice().reverse().forEach(snap=>{
-    snap.prices.filter(p=>p.fuel_type===fuel&&(brand==='all'||p.brand===brand)).forEach(p=>{
-      const pi=DB.weekly_snapshots.findIndex(s=>s.week===snap.week);
-      const pv=pi>0?DB.weekly_snapshots[pi-1].prices.find(pp=>pp.brand===p.brand&&pp.fuel_type===p.fuel_type)?.price:null;
-      const d=pv!==null?p.price-pv:null;
-      rows.push({date:snap.date,brand:p.brand,fuel:p.fuel_type,price:p.price,d});
-    });
-  });
-  document.getElementById('hist-tbody').innerHTML=rows.map(r=>{
-    const ds=r.d===null?'—':r.d>.005?`<span class="up">▲ +${r.d.toFixed(2)}</span>`:r.d<-.005?`<span class="dn">▼ ${r.d.toFixed(2)}</span>`:'<span class="nc">—</span>';
-    return`<tr><td>${fmtDateFull(r.date)}</td><td style="color:${COLORS[r.brand]||'#e8edf5'}">${r.brand}</td><td>${r.fuel}</td><td>₱${r.price.toFixed(2)}</td><td>${ds}</td></tr>`;
-  }).join('');
+const fuel=document.getElementById('hist-fuel').value,brand=document.getElementById('hist-brand').value;
+const brands=brand==='all'?['Petron','Shell','Caltex','Phoenix','Seaoil']:[brand];
+const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
+mk('hist-chart','line',{labels:lbls,datasets:brands.map(b=>({label:b,data:DB.weekly_snapshots.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type===fuel)?.price||null),borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:3,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()}});
+const rows=[];
+DB.weekly_snapshots.slice().reverse().forEach(snap=>{
+snap.prices.filter(p=>p.fuel_type===fuel&&(brand==='all'||p.brand===brand)).forEach(p=>{
+const pi=DB.weekly_snapshots.findIndex(s=>s.week===snap.week);
+const pv=pi>0?DB.weekly_snapshots[pi-1].prices.find(pp=>pp.brand===p.brand&&pp.fuel_type===p.fuel_type)?.price:null;
+const d=pv!==null?p.price-pv:null;
+rows.push({date:snap.date,brand:p.brand,fuel:p.fuel_type,price:p.price,d});
+});
+});
+document.getElementById('hist-tbody').innerHTML=rows.map(r=>{
+const ds=r.d===null?'—':r.d>.005?`<span class="up">▲ +${r.d.toFixed(2)}</span>`:r.d<-.005?`<span class="dn">▼ ${r.d.toFixed(2)}</span>`:'<span class="nc">—</span>';
+return`<tr><td>${fmtDateFull(r.date)}</td><td style="color:${COLORS[r.brand]||'#e8edf5'}">${r.brand}</td><td>${r.fuel}</td><td>₱${r.price.toFixed(2)}</td><td>${ds}</td></tr>`;
+}).join('');
 }
-
 function renderBrands(){
-  const Ls=L();const brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
-  const fuels=[{l:'Ron 91',c:'rgba(59,158,255,.5)',ft:'Ron 91'},{l:'Ron 95',c:'rgba(255,200,71,.5)',ft:'Ron 95'},{l:'Diesel',c:'rgba(255,107,53,.5)',ft:'Diesel'},{l:'Ron 97',c:'rgba(167,139,250,.5)',ft:'Ron 97'}];
-  mk('brand-chart','bar',{labels:brands,datasets:fuels.map(f=>({label:f.l,data:brands.map(b=>Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price||null),backgroundColor:f.c,borderRadius:4}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()},scales:{...CTO.scales,y:{...CTO.scales.y,min:54}}});
-  const cd=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Diesel')?.price||99)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||99)?a:b);
-  const c9=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Ron 95')?.price||99)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Ron 95')?.price||99)?a:b);
-  const ad=(brands.reduce((s,b)=>s+(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||0),0)/brands.length).toFixed(2);
-  document.getElementById('brand-stats').innerHTML=`<div class="sm"><div class="sl">Cheapest diesel this week</div><div class="sv" style="color:${COLORS[cd]}">${cd}</div></div><div class="sm"><div class="sl">Cheapest Ron 95 this week</div><div class="sv" style="color:${COLORS[c9]}">${c9}</div></div><div class="sm"><div class="sl">Average diesel NCR</div><div class="sv">₱${ad}</div></div>`;
-  const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
-  mk('diesel-brand-chart','line',{labels:lbls,datasets:brands.map(b=>({label:b,data:DB.weekly_snapshots.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||null),borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()}});
+const Ls=L(),brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
+const fuels=[{l:'Ron 91',c:'rgba(59,158,255,.5)',ft:'Ron 91'},{l:'Ron 95',c:'rgba(255,200,71,.5)',ft:'Ron 95'},{l:'Diesel',c:'rgba(255,107,53,.5)',ft:'Diesel'},{l:'Ron 97',c:'rgba(167,139,250,.5)',ft:'Ron 97'}];
+mk('brand-chart','bar',{labels:brands,datasets:fuels.map(f=>({label:f.l,data:brands.map(b=>Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price||null),backgroundColor:f.c,borderRadius:4}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()},scales:{...CTO.scales,y:{...CTO.scales.y,min:70}}});
+const cd=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Diesel')?.price||999)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||999)?a:b);
+const c9=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Ron 95')?.price||999)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Ron 95')?.price||999)?a:b);
+const ad=(brands.reduce((s,b)=>s+(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||0),0)/brands.length).toFixed(2);
+document.getElementById('brand-stats').innerHTML=`<div class="sm"><div class="sl">Cheapest diesel this week</div><div class="sv" style="color:${COLORS[cd]}">${cd}</div></div><div class="sm"><div class="sl">Cheapest Ron 95 this week</div><div class="sv" style="color:${COLORS[c9]}">${c9}</div></div><div class="sm"><div class="sl">Average diesel NCR</div><div class="sv">₱${ad}</div></div>`;
+const lbls=DB.weekly_snapshots.map(s=>fmtDate(s.date));
+mk('diesel-brand-chart','line',{labels:lbls,datasets:brands.map(b=>({label:b,data:DB.weekly_snapshots.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||null),borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true}))},{...CTO,plugins:{...CTO.plugins,legend:lgn()}});
 }
-
 function renderRegions(){
-  const Ls=L(),fuel=document.getElementById('reg-fuel').value;
-  const ncrAvg=avg(Ls,fuel);
-  const fuels=['Ron 91','Ron 95','Diesel'];
-  document.getElementById('region-grid').innerHTML=REGIONS.map(reg=>{
-    const diff=(reg.d[fuel]||0);
-    const badge=diff>0?`<span style="color:var(--rd);font-size:10px">+₱${diff.toFixed(1)}</span>`:diff<0?`<span style="color:var(--gr);font-size:10px">-₱${Math.abs(diff).toFixed(1)}</span>`:`<span style="color:var(--mu);font-size:10px">base</span>`;
-    const rows=fuels.map(ft=>`<div class="rr"><span class="rf">${ft}</span><span class="rp">₱${(avg(Ls,ft)+(reg.d[ft]||0)).toFixed(2)}/L</span></div>`).join('');
-    return`<div class="rcard"><div class="rcard-title">${reg.name} ${badge}</div>${rows}</div>`;
-  }).join('');
-  const regPrices=REGIONS.map(r=>+(ncrAvg+(r.d[fuel]||0)).toFixed(2));
-  const mn=Math.min(...regPrices),mx=Math.max(...regPrices);
-  mk('region-chart','bar',{
-    labels:REGIONS.map(r=>r.id),
-    datasets:[{label:fuel+' ₱/L',data:regPrices,backgroundColor:regPrices.map(p=>p===mn?'rgba(45,212,160,.7)':p===mx?'rgba(255,77,109,.7)':'rgba(59,158,255,.5)'),borderRadius:4}]
-  },{...CTO,scales:{...CTO.scales,y:{...CTO.scales.y,min:Math.floor(mn)-1}}});
+const Ls=L(),fuel=document.getElementById('reg-fuel').value,ncrAvg=avg(Ls,fuel),fuels=['Ron 91','Ron 95','Diesel'];
+document.getElementById('region-grid').innerHTML=REGIONS.map(reg=>{
+const diff=(reg.d[fuel]||0);
+const badge=diff>0?`<span style="color:var(--rd);font-size:10px">+₱${diff.toFixed(1)}</span>`:diff<0?`<span style="color:var(--gr);font-size:10px">-₱${Math.abs(diff).toFixed(1)}</span>`:`<span style="color:var(--mu);font-size:10px">base</span>`;
+const rows=fuels.map(ft=>`<div class="rr"><span class="rf">${ft}</span><span class="rp">₱${(avg(Ls,ft)+(reg.d[ft]||0)).toFixed(2)}/L</span></div>`).join('');
+return`<div class="rcard"><div class="rcard-title">${reg.name} ${badge}</div>${rows}</div>`;
+}).join('');
+const regPrices=REGIONS.map(r=>+(ncrAvg+(r.d[fuel]||0)).toFixed(2)),mn=Math.min(...regPrices),mx=Math.max(...regPrices);
+mk('region-chart','bar',{labels:REGIONS.map(r=>r.id),datasets:[{label:fuel+' ₱/L',data:regPrices,backgroundColor:regPrices.map(p=>p===mn?'rgba(45,212,160,.7)':p===mx?'rgba(255,77,109,.7)':'rgba(59,158,255,.5)'),borderRadius:4}]},{...CTO,scales:{...CTO.scales,y:{...CTO.scales.y,min:Math.floor(mn)-1}}});
 }
-
 function showPanel(id,el){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('panel-'+id).classList.add('active');
-  el.classList.add('active');
+document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById('panel-'+id).classList.add('active');
+el.classList.add('active');
 }
 
-/* ── SEED: 12 weeks, 5 brands, 4 fuel types, NCR ── */
-const SEED={meta:{source:"DOE Philippines",last_updated:"2026-03-11T00:00:00Z"},weekly_snapshots:[
-  {week:"2025-W51",date:"2025-12-16",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:62.50,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:66.60,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.20,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:57.20,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:62.90,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.00,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:68.60,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:57.60,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:62.70,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:66.80,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.40,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:57.40,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.40,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.00,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:57.00,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:67.80,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:56.80,region:"NCR"}]},
-  {week:"2025-W52",date:"2025-12-23",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:62.20,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:66.30,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:67.90,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:57.50,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:62.60,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:66.70,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:68.30,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:57.90,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:62.40,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:66.50,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.10,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:57.70,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.00,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.10,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:67.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:57.30,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:61.80,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:65.90,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:67.50,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:57.10,region:"NCR"}]},
-  {week:"2026-W01",date:"2026-01-06",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:62.80,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:66.90,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.50,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:57.80,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.20,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.30,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:68.90,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:58.20,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:63.00,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:67.10,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.70,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.00,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:57.60,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.50,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:68.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:57.40,region:"NCR"}]},
-  {week:"2026-W02",date:"2026-01-13",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:63.00,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:67.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.70,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:58.10,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.40,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.50,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:69.10,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:58.50,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:63.20,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:67.30,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.90,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.30,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.90,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:57.90,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:68.30,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:57.70,region:"NCR"}]},
-  {week:"2026-W04",date:"2026-01-27",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:62.90,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:67.00,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.60,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:58.20,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.30,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.40,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:69.00,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:58.60,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:63.10,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:67.20,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.80,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.40,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.40,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:58.00,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.50,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:68.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:57.80,region:"NCR"}]},
-  {week:"2026-W06",date:"2026-02-10",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:63.00,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:67.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.70,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:58.70,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.40,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.50,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:69.10,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:59.10,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:63.20,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:67.30,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.90,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.90,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.90,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:58.50,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:68.30,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:58.30,region:"NCR"}]},
-  {week:"2026-W08",date:"2026-02-24",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:62.60,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:66.70,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.30,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:58.30,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.00,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.10,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:68.70,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:58.70,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:62.80,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:66.90,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.50,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.50,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.40,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.10,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:58.10,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.30,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:67.90,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:57.90,region:"NCR"}]},
-  {week:"2026-W09",date:"2026-03-03",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:62.80,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:66.90,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.50,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:58.60,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.20,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.30,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:68.90,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:59.00,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:63.00,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:67.10,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:68.70,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.80,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:66.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:58.40,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.50,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:68.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:58.20,region:"NCR"}]},
-  {week:"2026-W11",date:"2026-03-11",prices:[
-    {brand:"Petron",fuel_type:"Ron 91",price:63.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:67.20,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:68.80,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:58.70,region:"NCR"},
-    {brand:"Shell",fuel_type:"Ron 91",price:63.50,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:67.60,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:69.20,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:59.10,region:"NCR"},
-    {brand:"Caltex",fuel_type:"Ron 91",price:63.30,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:67.40,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:69.00,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:58.90,region:"NCR"},
-    {brand:"Phoenix",fuel_type:"Ron 91",price:62.90,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:67.00,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:68.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:58.50,region:"NCR"},
-    {brand:"Seaoil",fuel_type:"Ron 91",price:62.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:66.80,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:68.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:58.30,region:"NCR"}]}
+/* ═══════════════════════════════════════════════════════════════
+   SEED DATA — Real DOE NCR prices Dec 2025 – Mar 18, 2026
+   Sources: DOE Oil Monitor PDFs, GMA News, Inquirer, Power PH
+   Week of Mar 17–22: +₱12.90–16.60/L gas, +₱20.40–23.90/L diesel
+   ═══════════════════════════════════════════════════════════════ */
+const SEED={
+meta:{source:"DOE Philippines",last_updated:"2026-03-22T00:00:00Z"},
+weekly_snapshots:[
+{week:"2025-W51",date:"2025-12-16",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:55.90,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:59.70,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:61.40,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:51.10,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:56.30,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:60.10,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:61.80,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:51.50,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:56.10,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:59.90,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:61.60,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:51.30,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:55.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:59.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:61.20,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:50.90,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:55.50,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:59.30,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:61.00,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:50.70,region:"NCR"}]},
+{week:"2025-W52",date:"2025-12-23",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:55.70,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:59.50,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:61.20,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:51.40,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:56.10,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:59.90,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:61.60,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:51.80,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:55.90,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:59.70,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:61.40,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:51.60,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:55.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:59.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:61.00,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:51.20,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:55.30,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:59.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:60.80,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:51.00,region:"NCR"}]},
+{week:"2026-W01",date:"2026-01-06",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:56.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:59.95,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:61.60,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:51.80,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:56.50,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:60.35,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:62.00,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:52.20,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:56.30,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:60.15,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:61.80,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:52.00,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:55.90,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:59.75,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:61.40,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:51.60,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:55.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:59.55,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:61.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:51.40,region:"NCR"}]},
+{week:"2026-W02",date:"2026-01-13",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:56.50,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:60.30,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:62.00,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:52.30,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:56.90,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:60.70,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:62.40,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:52.70,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:56.70,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:60.50,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:62.20,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:52.50,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:56.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:60.10,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:61.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:52.10,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:56.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:59.90,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:61.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:51.90,region:"NCR"}]},
+{week:"2026-W04",date:"2026-01-27",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:57.30,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:61.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:62.80,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:53.10,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:57.70,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:61.50,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:63.20,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:53.50,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:57.50,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:61.30,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:63.00,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:53.30,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:57.10,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:60.90,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:62.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:52.90,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:56.90,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:60.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:62.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:52.70,region:"NCR"}]},
+{week:"2026-W06",date:"2026-02-10",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:58.20,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:62.00,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:63.70,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:54.20,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:58.60,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:62.40,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:64.10,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:54.60,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:58.40,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:62.20,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:63.90,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:54.40,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:58.00,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:61.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:63.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:54.00,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:57.80,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:61.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:63.30,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:53.80,region:"NCR"}]},
+{week:"2026-W08",date:"2026-02-24",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:59.40,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:63.20,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:64.90,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:55.40,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:59.80,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:63.60,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:65.30,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:55.80,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:59.60,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:63.40,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:65.10,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:55.60,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:59.20,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:63.00,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:64.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:55.20,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:59.00,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:62.80,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:64.50,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:55.00,region:"NCR"}]},
+{week:"2026-W09",date:"2026-03-03",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:61.30,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:65.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:66.80,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:56.60,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:61.70,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:65.50,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:67.20,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:57.00,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:61.50,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:65.30,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:67.00,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:56.80,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:61.10,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:64.90,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:66.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:56.40,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:60.90,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:64.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:66.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:56.20,region:"NCR"}]},
+{week:"2026-W10",date:"2026-03-10",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:68.20,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:72.00,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:73.70,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:74.00,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:67.29,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:71.09,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:72.79,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:73.09,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:68.00,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:71.80,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:73.50,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:73.80,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:67.80,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:71.60,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:73.30,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:73.60,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:67.60,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:71.40,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:73.10,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:73.40,region:"NCR"}]},
+{week:"2026-W12",date:"2026-03-18",prices:[
+{brand:"Petron",fuel_type:"Ron 91",price:81.10,region:"NCR"},{brand:"Petron",fuel_type:"Ron 95",price:84.90,region:"NCR"},{brand:"Petron",fuel_type:"Ron 97",price:86.60,region:"NCR"},{brand:"Petron",fuel_type:"Diesel",price:94.40,region:"NCR"},
+{brand:"Shell",fuel_type:"Ron 91",price:83.89,region:"NCR"},{brand:"Shell",fuel_type:"Ron 95",price:87.69,region:"NCR"},{brand:"Shell",fuel_type:"Ron 97",price:89.39,region:"NCR"},{brand:"Shell",fuel_type:"Diesel",price:96.99,region:"NCR"},
+{brand:"Caltex",fuel_type:"Ron 91",price:81.80,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 95",price:85.60,region:"NCR"},{brand:"Caltex",fuel_type:"Ron 97",price:87.30,region:"NCR"},{brand:"Caltex",fuel_type:"Diesel",price:95.10,region:"NCR"},
+{brand:"Phoenix",fuel_type:"Ron 91",price:80.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:84.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:86.20,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:94.00,region:"NCR"},
+{brand:"Seaoil",fuel_type:"Ron 91",price:81.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:85.00,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:86.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:94.50,region:"NCR"}]}
 ],price_history:{}};
 
 loadData();
