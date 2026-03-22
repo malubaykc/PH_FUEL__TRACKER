@@ -2,49 +2,37 @@ name: Scrape DOE Fuel Prices
 
 on:
   schedule:
-    # Runs daily at 10 AM Manila Time (2 AM UTC)
-    - cron: '0 2 * * *' 
-  workflow_dispatch: # Allows you to run it manually from the Actions tab
+    - cron: '0 2 * * *'
+  workflow_dispatch:
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
-    
-    # This gives the action permission to save the file back to your repo
     permissions:
       contents: write
-      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.11
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           
       - name: Install Dependencies
-        run: |
-          pip install requests beautifulsoup4 pdfplumber lxml
-
-      - name: Create data directory
-        run: mkdir -p data
+        run: pip install requests beautifulsoup4 pdfplumber lxml
 
       - name: Run Scraper
-        run: python scraper.py
+        # This command checks if the file exists before running it
+        run: |
+          if [ -f scraper.py ]; then python scraper.py; 
+          elif [ -f scrapper.py ]; then python scrapper.py; 
+          else echo "Error: No scraper file found!"; exit 1; fi
         
-      - name: Commit and Push changes
+      - name: Commit and Push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Force add the file in case it is being ignored
-          git add -f data/prices.json
-          
-          # Check if there are actually changes to commit
-          if git diff --staged --quiet; then
-            echo "No changes in fuel prices found today."
-          else
-            git commit -m "Update fuel prices: $(date +'%Y-%m-%d')"
-            git push origin main
-          fi
+          mkdir -p data
+          if [ -f data/prices.json ]; then
+            git add data/prices.json
