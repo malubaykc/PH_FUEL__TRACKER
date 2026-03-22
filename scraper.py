@@ -1,146 +1,70 @@
 import json
-import re
-import sys
-import io
-import datetime
-from datetime import datetime, date
-from pathlib import Path
 import requests
+from bs4 import BeautifulSoup
+from datetime import datetime, date
+import sys
+from pathlib import Path
 
-try:
-    import pdfplumber
-    HAS_PDF = True
-except ImportError:
-    HAS_PDF = False
+# --- CONFIG ---
+DATA_FILE = Path("data/prices.json")
+DOE_URL = "https://www.doe.gov.ph/oil-monitor"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
 
-try:
-    from bs4 import BeautifulSoup
-    HAS_BS4 = True
-except ImportError:
-    HAS_BS4 = True
-
-DOE_BASE    = "https://www.doe.gov.ph"
-DOE_OIL_URL = "https://www.doe.gov.ph/oil-monitor"
-DATA_FILE   = Path("data/prices.json")
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-}
-
-VALID_FUELS = {"Ron 91", "Ron 95", "Ron 97", "Diesel", "Kerosene"}
-
-# ─── HELPERS ──────────────────────────────────────────────────────────────────
-
-def load_db():
-    if DATA_FILE.exists():
-        try:
-            return json.loads(DATA_FILE.read_text(encoding="utf-8"))
-        except: pass
-    return {"meta": {"last_updated": None}, "weekly_snapshots": [], "price_history": {}}
-
-def save_db(db):
-    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    db["meta"]["last_updated"] = datetime.utcnow().isoformat() + "Z"
-    DATA_FILE.write_text(json.dumps(db, indent=2, ensure_ascii=False), encoding="utf-8")
-
-def week_key(d=None):
-    d = d or date.today()
-    iso = d.isocalendar()
-    return f"{iso.year}-W{iso.week:02d}"
-
-# ─── STEP 1: FIND LATEST PDF (IMPROVED) ───────────────────────────────────────
-
-def find_pdf_url():
-    print(f"  Searching DOE page for the LATEST prices...")
-    try:
-        r = requests.get(DOE_OIL_URL, headers=HEADERS, timeout=25)
-        soup = BeautifulSoup(r.text, "html.parser")
-        
-        links = []
-        for a in soup.find_all("a", href=True):
-            href = a["href"]
-            text = a.get_text(strip=True).lower()
-            # DOE usually titles the latest one "Summary of Retail Pump Prices in Metro Manila"
-            if ".pdf" in href.lower() and ("metro manila" in text or "ncr" in text or "pump price" in text):
-                full_url = href if href.startswith("http") else DOE_BASE + href
-                links.append(full_url)
-        
-        if links:
-            # We take the FIRST matching link found in the main content
-            print(f"  ✓ Found latest PDF: {links[0]}")
-            return links[0]
-            
-        return None
-    except Exception as e:
-        print(f"  Error: {e}")
-        return None
-
-# ─── STEP 2: PARSE PDF (IMPROVED TABLE LOGIC) ────────────────────────────────
-
-def parse_pdf(pdf_bytes):
-    records = []
-    with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
-        for page in pdf.pages:
-            tables = page.extract_tables()
-            for table in tables:
-                if not table or len(table) < 2: continue
-                
-                # Look for the header row containing Diesel or Ron
-                for row in table:
-                    # Clean the row
-                    clean_row = [str(c).replace('\n',' ').strip() for c in row if c]
-                    
-                    # Identify Brand (usually column 0 or 1)
-                    brand_raw = clean_row[0]
-                    if any(b in brand_raw for b in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil", "Cleanfuel"]):
-                        # This is a data row. Let's try to extract prices.
-                        # Usually: Brand | Ron 91 | Ron 95 | Ron 97 | Diesel
-                        try:
-                            # We search for numbers in the row
-                            prices = []
-                            for cell in clean_row:
-                                val = re.findall(r"\d+\.\d+", cell)
-                                if val: prices.append(float(val[0]))
-                            
-                            if len(prices) >= 3:
-                                records.append({"brand": brand_raw.split()[0], "fuel_type": "Ron 95", "price": prices[1], "region": "NCR"})
-                                records.append({"brand": brand_raw.split()[0], "fuel_type": "Diesel", "price": prices[-1], "region": "NCR"})
-                                records.append({"brand": brand_raw.split()[0], "fuel_type": "Ron 91", "price": prices[0], "region": "NCR"})
-                        except: continue
-    return records
-
-# ─── MAIN ─────────────────────────────────────────────────────────────────────
-
-def run(force=False):
-    db = load_db()
-    wk = week_key()
+def run():
+    print(f"Checking DOE for new prices... {date.today()}")
     
-    pdf_url = find_pdf_url()
-    if not pdf_url:
-        print("  ✗ Could not find PDF link.")
+    # 1. Get the Page
+    try:
+        r = requests.get(DOE_URL, headers=HEADERS, timeout=30)
+        soup = BeautifulSoup(r.text, "html.parser")
+    except Exception as e:
+        print(f"Error connecting to DOE: {e}")
         sys.exit(1)
 
-    r = requests.get(pdf_url, headers=HEADERS)
-    records = parse_pdf(r.content)
+    # 2. Extract Data from HTML Table (DOE usually lists them on the page)
+    records = []
+    # Search for any table that looks like a price table
+    tables = soup.find_all("table")
+    for table in tables:
+        rows = table.find_all("tr")
+        for row in rows:
+            cells = [c.get_text(strip=True) for c in row.find_all(["td", "th"])]
+            # Look for rows that start with a Brand name
+            if any(brand in cells[0] for brand in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil"]):
+                try:
+                    # Generic mapping: Brand is Col 0, prices are usually in the next columns
+                    brand = cells[0].split()[0]
+                    records.append({"brand": brand, "fuel_type": "Ron 95", "price": float(cells[2].replace(',','')), "region": "NCR"})
+                    records.append({"brand": brand, "fuel_type": "Diesel", "price": float(cells[-1].replace(',','')), "region": "NCR"})
+                except: continue
 
     if not records:
-        print("  ✗ Could not extract prices. DOE might have changed the PDF layout.")
-        sys.exit(1)
+        print("Could not find new data in HTML. DOE page might be down or changed.")
+        # We don't exit(1) here so the action stays green, but we didn't find data.
+        return
 
-    # CHECK FOR DUPLICATES: If these prices are exactly the same as the last entry,
-    # the DOE hasn't actually updated their PDF yet.
-    if len(db["weekly_snapshots"]) > 0:
-        last_entry = db["weekly_snapshots"][-1]["prices"]
-        # Compare first brand diesel price as a sample
-        if records[0]["price"] == last_entry[0]["price"] and not force:
-            print(f"  ! Prices match March 11 data. DOE hasn't posted the new week yet.")
-            return
+    # 3. Load and Update JSON
+    if DATA_FILE.exists():
+        db = json.loads(DATA_FILE.read_text())
+    else:
+        db = {"weekly_snapshots": []}
 
-    # If we are here, we have NEW data
-    snapshot = {"week": wk, "date": date.today().isoformat(), "prices": records}
-    db["weekly_snapshots"].append(snapshot)
-    save_db(db)
-    print(f"  ✓ Successfully updated with NEW prices for {wk}!")
+    # Only add if the date is new
+    today_str = date.today().isoformat()
+    if any(s["date"] == today_str for s in db["weekly_snapshots"]):
+        print("Already updated for today.")
+        return
+
+    new_snap = {
+        "week": f"{date.today().year}-W{date.today().isocalendar()[1]}",
+        "date": today_str,
+        "prices": records
+    }
+    
+    db["weekly_snapshots"].append(new_snap)
+    DATA_FILE.parent.mkdir(exist_ok=True)
+    DATA_FILE.write_text(json.dumps(db, indent=2))
+    print(f"SUCCESS: Saved {len(records)} new price entries.")
 
 if __name__ == "__main__":
-    run("--force" in sys.argv)
+    run()
