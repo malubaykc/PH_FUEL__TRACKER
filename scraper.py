@@ -1,35 +1,37 @@
 import json
-import requests
-from bs4 import BeautifulSoup
-from datetime import datetime, date
-import io
-from pathlib import Path
-import pdfplumber
 import re
+import io
+from datetime import datetime, date
+from pathlib import Path
+from playwright.sync_api import sync_playwright
+import pdfplumber
+import requests
 
 DATA_FILE = Path("data/prices.json")
-DOE_URL = "https://doe.gov.ph/articles/group/liquid-fuels?category=Oil+Monitor&display_type=Card"
-BASE_URL = "https://doe.gov.ph"
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
+DOE_URL = "https://www.doe.gov.ph/oil-monitor"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+
+def get_pdf_links():
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.goto(DOE_URL, wait_until="networkidle", timeout=60000)
+        links = []
+        for a in page.query_selector_all("a"):
+            href = a.get_attribute("href") or ""
+            if ".pdf" in href.lower() and any(x in href.lower() or x in (a.inner_text().lower()) for x in ["metro", "ncr", "manila", "pump", "monitor"]):
+                links.append(href if href.startswith("http") else "https://www.doe.gov.ph" + href)
+        browser.close()
+        return links
 
 def run():
     print(f"--- DEBUG START: {datetime.now()} ---")
-    
     try:
-        print(f"Attempting to connect to: {DOE_URL}")
-        res = requests.get(DOE_URL, headers=HEADERS, timeout=30)
-        res.raise_for_status()
-        soup = BeautifulSoup(res.text, "html.parser")
-        
-        links = []
-        for a in soup.find_all("a", href=True):
-            href = a['href']
-            if ".pdf" in href.lower():
-                full = href if href.startswith("http") else BASE_URL + href
-                links.append(full)
+        print("Launching browser to fetch DOE page...")
+        links = get_pdf_links()
 
         if not links:
-            print("No PDF links found. DOE website might be updating or blocking the request.")
+            print("No PDF links found even with browser.")
             return
 
         latest_pdf = links[0]
@@ -37,7 +39,7 @@ def run():
 
         pdf_res = requests.get(latest_pdf, headers=HEADERS, timeout=30)
         records = []
-        
+
         with pdfplumber.open(io.BytesIO(pdf_res.content)) as pdf:
             for page in pdf.pages:
                 table = page.extract_table()
@@ -56,7 +58,7 @@ def run():
                             records.append({"brand": brand, "fuel_type": "Diesel", "price": float(nums[-1]), "region": "NCR"})
 
         if not records:
-            print("PDF found but no price data could be extracted.")
+            print("PDF found but no price data extracted.")
             return
 
         db = {"meta": {"last_updated": None}, "weekly_snapshots": []}
