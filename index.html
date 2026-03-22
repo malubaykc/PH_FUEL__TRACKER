@@ -259,7 +259,7 @@ footer a{color:var(--ac);text-decoration:none;}
 <footer>
   PH Fuel Tracker &nbsp;·&nbsp;
   <a href="https://www.doe.gov.ph/oil-monitor" target="_blank">DOE Philippines</a>
-  &nbsp;·&nbsp; Auto-updated weekly via GitHub Actions
+  &nbsp;·&nbsp; Auto-updated via GitHub Actions
 </footer>
 
 <script>
@@ -308,18 +308,22 @@ const CHART_DEFAULTS = {
 let DB = null, CH = {};
 
 /* ═══════════════════════════════════════════════════
-   DATA LOADING — tries data/prices.json first,
-   falls back to SEED only if file is missing
+   DATA LOADING — FIXED TO FORCE LIVE UPDATES
 ═══════════════════════════════════════════════════ */
 async function loadData() {
   let ok = false;
   try {
-    const r = await fetch('data/prices.json');
+    // We add ?v=timestamp to bypass GitHub's cache and get the latest version
+    const cacheBuster = new Date().getTime();
+    const r = await fetch('data/prices.json?v=' + cacheBuster);
+    
     if (r.ok) {
       DB = await r.json();
       ok = true;
     }
-  } catch(e) {}
+  } catch(e) {
+    console.error("Error fetching latest data:", e);
+  }
 
   if (!ok) {
     console.warn('data/prices.json not found — using SEED fallback');
@@ -620,9 +624,6 @@ function showPanel(id, el) {
 
 /* ═══════════════════════════════════════════════════
    SEED — last-resort fallback ONLY
-   Shown with a red warning banner so you always know
-   when real data isn't loading.
-   Real data = data/prices.json written by scraper.py
 ═══════════════════════════════════════════════════ */
 const SEED = {
   meta:{source:"DOE Philippines (SEED fallback)",last_updated:"2026-03-22T00:00:00Z"},
@@ -641,8 +642,7 @@ const SEED = {
       {brand:"Phoenix",fuel_type:"Ron 91",price:80.70,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 95",price:84.50,region:"NCR"},{brand:"Phoenix",fuel_type:"Ron 97",price:86.20,region:"NCR"},{brand:"Phoenix",fuel_type:"Diesel",price:94.00,region:"NCR"},
       {brand:"Seaoil",fuel_type:"Ron 91",price:81.20,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 95",price:85.00,region:"NCR"},{brand:"Seaoil",fuel_type:"Ron 97",price:86.70,region:"NCR"},{brand:"Seaoil",fuel_type:"Diesel",price:94.50,region:"NCR"}
     ]}
-  ],
-  price_history:{}
+  ]
 };
 
 loadData();
