@@ -8,39 +8,39 @@ from pathlib import Path
 import pdfplumber
 import re
 
+# --- CONFIGURATION ---
 DATA_FILE = Path("data/prices.json")
 DOE_URL = "https://www.doe.gov.ph/oil-monitor"
 BASE_URL = "https://www.doe.gov.ph"
-HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"}
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"}
 
 def run():
     print(f"--- STARTING SCRAPE: {datetime.now()} ---")
     
     try:
+        # 1. GET DOE PAGE
         res = requests.get(DOE_URL, headers=HEADERS, timeout=30)
+        res.raise_for_status()
         soup = BeautifulSoup(res.text, "html.parser")
         
-        # 1. FIND ALL VALID PDF LINKS
+        # 2. FIND PDF LINKS
         links = []
         for a in soup.find_all("a", href=True):
             text = a.get_text().strip().lower()
             href = a['href']
-            # Target Metro Manila summary specifically
-            if ".pdf" in href.lower() and ("metro manila" in text or "ncr" in text):
+            # Targeting Metro Manila / NCR summary
+            if ".pdf" in href.lower() and ("metro manila" in text or "ncr" in text or "pump price" in text):
                 full_url = href if href.startswith("http") else BASE_URL + href
-                links.append({"url": full_url, "text": text})
+                links.append(full_url)
 
         if not links:
-            print("No PDF links found.")
-            return
+            print("❌ No PDF links found on the DOE page. Website might be updated with a new layout.")
+            sys.exit(1)
 
-        # 2. PICK THE LATEST (Skips old links like Mar 11)
-        # We sort by keywords to try and find 'current' or 'latest'
-        # Or we simply take the one with the latest date mentioned in text if possible
-        latest_pdf = links[0]["url"]
-        print(f"Targeting PDF: {latest_pdf}")
+        latest_pdf = links[0]
+        print(f"✅ Targeting PDF: {latest_pdf}")
 
-        # 3. DOWNLOAD & PARSE
+        # 3. DOWNLOAD & PARSE PDF
         pdf_res = requests.get(latest_pdf, headers=HEADERS)
         records = []
         
@@ -49,55 +49,66 @@ def run():
                 table = page.extract_table()
                 if not table: continue
                 
-                # Dynamic Column Finder
-                headers = [str(c).lower().replace('\n',' ') for c in table[0] if c]
-                idx_91 = next((i for i, h in enumerate(headers) if "91" in h), 1)
-                idx_95 = next((i for i, h in enumerate(headers) if "95" in h), 2)
-                idx_dsl = next((i for i, h in enumerate(headers) if "diesel" in h and "plus" not in h), -1)
-
-                for row in table[1:]:
-                    brand_name = str(row[0]).split('\n')[0].strip()
-                    if any(b in brand_name for b in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil", "Cleanfuel"]):
+                for row in table:
+                    # Filter for rows starting with major brands
+                    brand_raw = str(row[0]).split('\n')[0].strip()
+                    if any(b in brand_raw for b in ["Petron", "Shell", "Caltex", "Phoenix", "Seaoil", "Unioil", "Cleanfuel", "PTT"]):
                         try:
-                            # Extract all numbers from the row
+                            # Clean the row of None values and find numbers
                             row_str = " ".join([str(x) for x in row if x])
                             nums = re.findall(r"\d+\.\d+", row_str)
                             
                             if len(nums) >= 3:
-                                records.append({"brand": brand_name, "fuel_type": "Ron 91", "price": float(nums[0]), "region": "NCR"})
-                                records.append({"brand": brand_name, "fuel_type": "Ron 95", "price": float(nums[1]), "region": "NCR"})
-                                records.append({"brand": brand_name, "fuel_type": "Diesel", "price": float(nums[-1]), "region": "NCR"})
+                                records.append({"brand": brand_raw, "fuel_type": "Ron 91", "price": float(nums[0]), "region": "NCR"})
+                                records.append({"brand": brand_raw, "fuel_type": "Ron 95", "price": float(nums[1]), "region": "NCR"})
+                                records.append({"brand": brand_raw, "fuel_type": "Diesel", "price": float(nums[-1]), "region": "NCR"})
                         except: continue
 
         if not records:
-            print("Failed to extract data. The PDF might be a scanned image or layout changed.")
-            return
+            print("❌ Found PDF but failed to extract price data. Layout might have changed.")
+            sys.exit(1)
 
-        # 4. SAVE (With overwrite protection)
-        db = {"weekly_snapshots": []}
+        # 4. LOAD EXISTING DATA OR START FRESH
+        # Structure matches what your index.html expects (meta + weekly_snapshots)
+        db = {
+            "meta": {
+                "source": "DOE Philippines",
+                "last_updated": None
+            },
+            "weekly_snapshots": []
+        }
+
         if DATA_FILE.exists():
-            try: db = json.loads(DATA_FILE.read_text())
-            except: pass
+            try:
+                loaded = json.loads(DATA_FILE.read_text())
+                if "weekly_snapshots" in loaded:
+                    db = loaded
+            except Exception as e:
+                print(f"Warning: Could not load existing JSON, starting new. Error: {e}")
 
+        # 5. UPDATE DATA
         today_str = date.today().isoformat()
-        # Only add if this date doesn't exist OR it's a forced update
+        # Remove old entry for today if it exists to avoid duplicates
         db["weekly_snapshots"] = [s for s in db["weekly_snapshots"] if s["date"] != today_str]
         
         db["weekly_snapshots"].append({
-            "week": f"{date.today().year}-W{date.today().isocalendar()[1]}",
+            "week": f"{date.today().year}-W{date.today().isocalendar()[1]:02d}",
             "date": today_str,
             "prices": records
         })
         
-        # Cleanup: Keep only last 20 weeks to keep file small
-        db["weekly_snapshots"] = db["weekly_snapshots"][-20:]
+        # Update meta and keep only last 15 updates to keep file size small
+        db["meta"]["last_updated"] = datetime.utcnow().isoformat() + "Z"
+        db["weekly_snapshots"] = db["weekly_snapshots"][-15:]
 
-        DATA_FILE.parent.mkdir(exist_ok=True)
-        DATA_FILE.write_text(json.dumps(db, indent=2))
-        print(f"SUCCESS! Site should now show data for {today_str}")
+        # 6. FORCE SAVE
+        DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
+        DATA_FILE.write_text(json.dumps(db, indent=2), encoding="utf-8")
+        print(f"🎉 SUCCESS! Saved {len(records)} entries for {today_str}")
 
     except Exception as e:
-        print(f"CRITICAL ERROR: {e}")
+        print(f"🚨 CRITICAL ERROR: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     run()
