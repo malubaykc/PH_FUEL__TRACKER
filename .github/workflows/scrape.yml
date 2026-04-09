@@ -5,7 +5,7 @@ on:
     # Every Tuesday 6:00 AM Manila time (UTC+8 = Monday 22:00 UTC)
     # zigwheels.ph updates after the DOE Tuesday advisory, so 6AM is safe
     - cron: '0 22 * * 1'
-  workflow_dispatch: # Allows you to trigger manually from the Actions tab
+  workflow_dispatch:
 
 jobs:
   scrape:
