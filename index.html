@@ -452,16 +452,128 @@ let DB=null, CH={}, trendRange='12w', histRange='all', tableMode='brand', regFil
 /* ═══ DATA ═══ */
 async function loadData(){
   try{
-    const r=await fetch('data/prices.json?t='+Date.now());
-    if(r.ok){DB=await r.json();render();return;}
-  }catch(e){console.error(e);}
+    const r = await fetch('data/prices.json?t=' + Date.now(), { cache: 'no-store' });
+    if(!r.ok) throw new Error('Failed to load prices.json');
+    DB = await r.json();
+    normalizeDB();
+    render();
+    return;
+  }catch(e){
+    console.error('loadData failed:', e);
+  }
   document.getElementById('seed-banner').classList.remove('hidden');
 }
 
 /* ═══ HELPERS ═══ */
-const last = ()=>DB.weekly_snapshots[DB.weekly_snapshots.length-1];
-const prev = ()=>DB.weekly_snapshots[DB.weekly_snapshots.length-2];
-const ncr  = (s,k)=>s.ncr_common?s.ncr_common[k]:null;
+function normalizeDB(){
+  if(!DB) return;
+  if(!Array.isArray(DB.weekly_snapshots)) DB.weekly_snapshots = [];
+
+  DB.weekly_snapshots = DB.weekly_snapshots
+    .filter(s => s && s.date)
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  // Remove duplicate weeks, keep the latest complete record
+  const byWeek = new Map();
+  for(const s of DB.weekly_snapshots){
+    const existing = byWeek.get(s.week);
+    const score = snapshotScore(s);
+    if(!existing || score >= snapshotScore(existing)){
+      byWeek.set(s.week, s);
+    }
+  }
+
+  DB.weekly_snapshots = [...byWeek.values()]
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  // Rebuild price_history safely from snapshots if missing/inconsistent
+  if(!DB.price_history || typeof DB.price_history !== 'object'){
+    DB.price_history = {};
+  }
+
+  for(const snap of DB.weekly_snapshots){
+    if(!Array.isArray(snap.prices)) continue;
+    for(const rec of snap.prices){
+      const key = `${rec.brand}|${rec.fuel_type}`;
+      if(!DB.price_history[key]) DB.price_history[key] = [];
+      const exists = DB.price_history[key].some(h => h.week === snap.week);
+      if(!exists){
+        DB.price_history[key].push({
+          week: snap.week,
+          date: snap.date,
+          price: rec.price
+        });
+      }
+    }
+  }
+
+  Object.keys(DB.price_history).forEach(key => {
+    DB.price_history[key] = DB.price_history[key]
+      .filter(h => h && h.date && typeof h.price === 'number')
+      .sort((a,b) => new Date(a.date) - new Date(b.date));
+  });
+}
+
+function snapshotScore(s){
+  let score = 0;
+  if(s?.ncr_common){
+    if(typeof s.ncr_common.ron91 === 'number') score++;
+    if(typeof s.ncr_common.ron95 === 'number') score++;
+    if(typeof s.ncr_common.ron97 === 'number') score++;
+    if(typeof s.ncr_common.diesel === 'number') score += 2;
+  }
+  if(Array.isArray(s?.prices) && s.prices.length) score += 2;
+  return score;
+}
+
+function isValidSnapshot(s){
+  return !!(
+    s &&
+    s.date &&
+    s.ncr_common &&
+    typeof s.ncr_common.ron91 === 'number' &&
+    typeof s.ncr_common.ron95 === 'number' &&
+    typeof s.ncr_common.ron97 === 'number' &&
+    typeof s.ncr_common.diesel === 'number'
+  );
+}
+
+function getLatestSnapshot(){
+  const snaps = [...(DB?.weekly_snapshots || [])]
+    .filter(isValidSnapshot)
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+  return snaps.length ? snaps[snaps.length - 1] : null;
+}
+
+function getPreviousSnapshot(current){
+  const snaps = [...(DB?.weekly_snapshots || [])]
+    .filter(isValidSnapshot)
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+
+  if(!current) return snaps.length > 1 ? snaps[snaps.length - 2] : null;
+
+  const idx = snaps.findIndex(s => s.week === current.week);
+  return idx > 0 ? snaps[idx - 1] : null;
+}
+
+function getDaysOld(isoDate){
+  const today = new Date();
+  const d = new Date(isoDate + 'T00:00:00');
+  const diff = today - d;
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
+function isStaleSnapshot(s){
+  if(!s?.date) return true;
+  return getDaysOld(s.date) > 9;
+}
+
+const last = ()=>getLatestSnapshot();
+const prev = ()=>{
+  const L = getLatestSnapshot();
+  return getPreviousSnapshot(L);
+};
+const ncr  = (s,k)=>s?.ncr_common ? s.ncr_common[k] : null;
 const fmtD = d=>new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric'});
 const fmtDF= d=>new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
 
