@@ -592,8 +592,28 @@ function mkChart(id,type,data,opts){
 
 /* ═══ RENDER ═══ */
 function render(){
-  const Ls=last(),Ps=prev();
-  document.getElementById('last-updated').textContent='Updated '+fmtDF(Ls.date);
+  const Ls = last();
+  const Ps = prev();
+
+  if(!Ls){
+    document.getElementById('seed-banner').classList.remove('hidden');
+    document.getElementById('last-updated').textContent = 'No valid data loaded';
+    return;
+  }
+
+  const stale = isStaleSnapshot(Ls);
+  const lastUpdatedEl = document.getElementById('last-updated');
+  lastUpdatedEl.textContent = stale
+    ? 'Showing cached week of ' + fmtDF(Ls.date)
+    : 'Updated ' + fmtDF(Ls.date);
+
+  const seedBanner = document.getElementById('seed-banner');
+  if(stale){
+    seedBanner.classList.remove('hidden');
+    seedBanner.innerHTML = '⚠ &nbsp;Current dashboard is using cached/stale data from <strong>' + fmtDF(Ls.date) + '</strong>. It may not reflect the latest rollback yet.';
+  }else{
+    seedBanner.classList.add('hidden');
+  }
 
   // DOE caption
   document.getElementById('doe-caption').textContent=
@@ -611,12 +631,25 @@ function render(){
   }).join('');
 
   // Metric cards
-  [['r91','ron91'],['r95','ron95'],['dsl','diesel']].forEach(([id,k])=>{
-    const c=ncr(Ls,k),p=ncr(Ps,k),d=c&&p?c-p:0;
-    document.getElementById('m-'+id).textContent=c?'₱'+c.toFixed(2):'—';
-    const el=document.getElementById('c-'+id);
-    el.textContent=Math.abs(d)<.01?'— no change this week':d>0?'▲ +₱'+d.toFixed(2)+' this week':'▼ ₱'+d.toFixed(2)+' this week';
-    el.className='m-chg '+(Math.abs(d)<.01?'nc':d>0?'up':'dn');
+    [['r91','ron91'],['r95','ron95'],['dsl','diesel']].forEach(([id,k])=>{
+    const c = ncr(Ls,k);
+    const p = Ps ? ncr(Ps,k) : null;
+    const d = (typeof c === 'number' && typeof p === 'number') ? (c - p) : null;
+
+    document.getElementById('m-'+id).textContent =
+      (typeof c === 'number') ? '₱' + c.toFixed(2) : '—';
+
+    const el = document.getElementById('c-'+id);
+    if(d === null){
+      el.textContent = '— no prior week';
+      el.className = 'm-chg nc';
+    }else{
+      el.textContent =
+        Math.abs(d) < .01 ? '— no change this week'
+        : d > 0 ? '▲ +₱' + d.toFixed(2) + ' this week'
+        : '▼ ₱' + Math.abs(d).toFixed(2) + ' this week';
+      el.className = 'm-chg ' + (Math.abs(d) < .01 ? 'nc' : d > 0 ? 'up' : 'dn');
+    }
   });
 
   // YTD
@@ -630,12 +663,46 @@ function render(){
   }
 
   // Alert banner
-  const d91=ncr(Ls,'ron91')-ncr(Ps,'ron91'),d95=ncr(Ls,'ron95')-ncr(Ps,'ron95'),dDsl=ncr(Ls,'diesel')-ncr(Ps,'diesel');
-  const net=d91+d95+dDsl,fmt=v=>(v>0?'▲ +':'▼ ')+'₱'+Math.abs(v).toFixed(2);
-  const bar=document.getElementById('alert-bar'),txt=document.getElementById('alert-text');
-  if(Math.abs(net)<.05){bar.className='banner banner-ok';txt.innerHTML='<strong>No price change</strong> effective '+fmtDF(Ls.date)+'.';}
-  else if(net<0){bar.className='banner banner-ok';txt.innerHTML='<strong>Prices DOWN</strong> effective '+fmtDF(Ls.date)+' &nbsp;·&nbsp; RON 91 '+fmt(d91)+'/L &nbsp;·&nbsp; RON 95 '+fmt(d95)+'/L &nbsp;·&nbsp; Diesel '+fmt(dDsl)+'/L';}
-  else{bar.className='banner banner-warn';txt.innerHTML='<strong>Price adjustment</strong> effective '+fmtDF(Ls.date)+' &nbsp;·&nbsp; RON 91 '+fmt(d91)+'/L &nbsp;·&nbsp; RON 95 '+fmt(d95)+'/L &nbsp;·&nbsp; Diesel '+fmt(dDsl)+'/L';}
+   const d91  = Ps ? (ncr(Ls,'ron91')  - ncr(Ps,'ron91'))  : null;
+  const d95  = Ps ? (ncr(Ls,'ron95')  - ncr(Ps,'ron95'))  : null;
+  const dDsl = Ps ? (ncr(Ls,'diesel') - ncr(Ps,'diesel')) : null;
+
+  const bar = document.getElementById('alert-bar');
+  const txt = document.getElementById('alert-text');
+
+  if(!Ps){
+    bar.className = 'banner banner-warn';
+    txt.innerHTML = '<strong>Loaded latest available week</strong> effective ' + fmtDF(Ls.date) + '. No previous week found for comparison.';
+  }else{
+    const net = d91 + d95 + dDsl;
+    const fmt = v => (v > 0 ? '▲ +' : '▼ ') + '₱' + Math.abs(v).toFixed(2);
+
+    if(stale){
+      bar.className = 'banner banner-warn';
+      txt.innerHTML =
+        '<strong>Cached week loaded</strong> effective ' + fmtDF(Ls.date) +
+        ' &nbsp;·&nbsp; RON 91 ' + fmt(d91) + '/L' +
+        ' &nbsp;·&nbsp; RON 95 ' + fmt(d95) + '/L' +
+        ' &nbsp;·&nbsp; Diesel ' + fmt(dDsl) + '/L';
+    }else if(Math.abs(net) < .05){
+      bar.className = 'banner banner-ok';
+      txt.innerHTML = '<strong>No price change</strong> effective ' + fmtDF(Ls.date) + '.';
+    }else if(net < 0){
+      bar.className = 'banner banner-ok';
+      txt.innerHTML =
+        '<strong>Prices DOWN</strong> effective ' + fmtDF(Ls.date) +
+        ' &nbsp;·&nbsp; RON 91 ' + fmt(d91) + '/L' +
+        ' &nbsp;·&nbsp; RON 95 ' + fmt(d95) + '/L' +
+        ' &nbsp;·&nbsp; Diesel ' + fmt(dDsl) + '/L';
+    }else{
+      bar.className = 'banner banner-warn';
+      txt.innerHTML =
+        '<strong>Price adjustment</strong> effective ' + fmtDF(Ls.date) +
+        ' &nbsp;·&nbsp; RON 91 ' + fmt(d91) + '/L' +
+        ' &nbsp;·&nbsp; RON 95 ' + fmt(d95) + '/L' +
+        ' &nbsp;·&nbsp; Diesel ' + fmt(dDsl) + '/L';
+    }
+  }
 
   renderTrend();renderWoW();renderBrandTable();renderDoeSum();
   renderHistory();renderHistTable();renderBrands();renderBrandTrend();renderRegions();
