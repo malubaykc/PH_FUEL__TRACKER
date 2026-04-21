@@ -473,7 +473,6 @@ function normalizeDB(){
     .filter(s => s && s.date)
     .sort((a,b) => new Date(a.date) - new Date(b.date));
 
-  // Remove duplicate weeks, keep the latest complete record
   const byWeek = new Map();
   for(const s of DB.weekly_snapshots){
     const existing = byWeek.get(s.week);
@@ -486,7 +485,6 @@ function normalizeDB(){
   DB.weekly_snapshots = [...byWeek.values()]
     .sort((a,b) => new Date(a.date) - new Date(b.date));
 
-  // Rebuild price_history safely from snapshots if missing/inconsistent
   if(!DB.price_history || typeof DB.price_history !== 'object'){
     DB.price_history = {};
   }
@@ -578,15 +576,16 @@ const fmtD = d=>new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short
 const fmtDF= d=>new Date(d+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});
 
 function rangeSnaps(r){
-  const s=DB.weekly_snapshots;
-  if(r==='all')return s;
-  const days={12:'84','12w':84,'6m':183,'1y':365,'3y':1095,'5y':1825}[r]||84;
-  const cut=new Date(); cut.setDate(cut.getDate()-days);
+  const s=(DB?.weekly_snapshots || []).filter(isValidSnapshot);
+  if(r==='all') return s;
+  const days={12w:84,'6m':183,'1y':365,'3y':1095,'5y':1825}[r] || 84;
+  const cut=new Date();
+  cut.setDate(cut.getDate()-days);
   return s.filter(x=>new Date(x.date)>=cut);
 }
 
 function mkChart(id,type,data,opts){
-  if(CH[id])CH[id].destroy();
+  if(CH[id]) CH[id].destroy();
   CH[id]=new Chart(document.getElementById(id),{type,data,options:opts||CD});
 }
 
@@ -615,23 +614,25 @@ function render(){
     seedBanner.classList.add('hidden');
   }
 
-  // DOE caption
-  document.getElementById('doe-caption').textContent=
-    'PREVAILING RETAIL PRICES OF PETROLEUM PRODUCTS — NCR (for the week of '+fmtDF(Ls.date)+')';
+  document.getElementById('doe-caption').textContent =
+    'PREVAILING RETAIL PRICES OF PETROLEUM PRODUCTS — NCR (for the week of ' + fmtDF(Ls.date) + ')';
 
-  // DOE table
-  document.getElementById('doe-tbody').innerHTML=PRODUCTS.map(p=>{
-    const c=ncr(Ls,p.key),pv=ncr(Ps,p.key);
-    if(!c)return'';
-    const mn=(c-p.lo).toFixed(2),mx=(c+p.hi).toFixed(2);
-    const d=pv?c-pv:null;
-    const chg=d===null?'—':Math.abs(d)<.01?'<span class="nc">No change</span>':
-      d>0?`<span class="up">▲ +₱${d.toFixed(2)}</span>`:`<span class="dn">▼ ₱${d.toFixed(2)}</span>`;
-    return`<tr><td class="prod">${p.label}</td><td class="range">₱${mn}</td><td class="range">₱${mx}</td><td class="common">₱${c.toFixed(2)}</td><td>${chg}</td></tr>`;
+  document.getElementById('doe-tbody').innerHTML = PRODUCTS.map(p=>{
+    const c = ncr(Ls,p.key), pv = Ps ? ncr(Ps,p.key) : null;
+    if(typeof c !== 'number') return '';
+    const mn = (c-p.lo).toFixed(2), mx = (c+p.hi).toFixed(2);
+    const d = typeof pv === 'number' ? c-pv : null;
+    const chg = d === null
+      ? '—'
+      : Math.abs(d) < .01
+        ? '<span class="nc">No change</span>'
+        : d > 0
+          ? `<span class="up">▲ +₱${d.toFixed(2)}</span>`
+          : `<span class="dn">▼ ₱${Math.abs(d).toFixed(2)}</span>`;
+    return `<tr><td class="prod">${p.label}</td><td class="range">₱${mn}</td><td class="range">₱${mx}</td><td class="common">₱${c.toFixed(2)}</td><td>${chg}</td></tr>`;
   }).join('');
 
-  // Metric cards
-    [['r91','ron91'],['r95','ron95'],['dsl','diesel']].forEach(([id,k])=>{
+  [['r91','ron91'],['r95','ron95'],['dsl','diesel']].forEach(([id,k])=>{
     const c = ncr(Ls,k);
     const p = Ps ? ncr(Ps,k) : null;
     const d = (typeof c === 'number' && typeof p === 'number') ? (c - p) : null;
@@ -652,18 +653,21 @@ function render(){
     }
   });
 
-  // YTD
-  const jan=DB.weekly_snapshots.find(s=>s.date.startsWith('2026-01'));
+  const jan = DB.weekly_snapshots.find(s => s.date && s.date.startsWith('2026-01') && isValidSnapshot(s));
   if(jan){
-    const ytd=ncr(Ls,'diesel')-ncr(jan,'diesel');
+    const ytd = ncr(Ls,'diesel') - ncr(jan,'diesel');
     if(!isNaN(ytd)){
-      document.getElementById('m-ytd').textContent=(ytd>=0?'+':'')+'₱'+Math.abs(ytd).toFixed(2);
-      document.getElementById('c-ytd').className='m-sub '+(ytd>.01?'up':ytd<-.01?'dn':'nc');
+      document.getElementById('m-ytd').textContent =
+        (ytd > 0 ? '+' : ytd < 0 ? '−' : '') + '₱' + Math.abs(ytd).toFixed(2);
+      document.getElementById('c-ytd').className = 'm-sub ' + (ytd > .01 ? 'up' : ytd < -.01 ? 'dn' : 'nc');
+      document.getElementById('c-ytd').textContent =
+        ytd > .01 ? 'higher vs first Jan week'
+        : ytd < -.01 ? 'lower vs first Jan week'
+        : 'flat vs first Jan week';
     }
   }
 
-  // Alert banner
-   const d91  = Ps ? (ncr(Ls,'ron91')  - ncr(Ps,'ron91'))  : null;
+  const d91  = Ps ? (ncr(Ls,'ron91')  - ncr(Ps,'ron91'))  : null;
   const d95  = Ps ? (ncr(Ls,'ron95')  - ncr(Ps,'ron95'))  : null;
   const dDsl = Ps ? (ncr(Ls,'diesel') - ncr(Ps,'diesel')) : null;
 
@@ -704,143 +708,316 @@ function render(){
     }
   }
 
-  renderTrend();renderWoW();renderBrandTable();renderDoeSum();
-  renderHistory();renderHistTable();renderBrands();renderBrandTrend();renderRegions();
+  renderTrend();
+  renderWoW();
+  renderBrandTable();
+  renderDoeSum();
+  renderHistory();
+  renderHistTable();
+  renderBrands();
+  renderBrandTrend();
+  renderRegions();
 }
 
 function renderTrend(){
-  const snaps=rangeSnaps(trendRange);
-  const fuels=[{l:'RON 91',c:'#3b9eff',k:'ron91'},{l:'RON 95',c:'#ffc847',k:'ron95'},{l:'RON 97',c:'#a78bfa',k:'ron97'},{l:'Diesel',c:'#ff6b35',k:'diesel'}];
-  document.getElementById('trend-legend').innerHTML=fuels.map(f=>`<div class="li"><div class="ld" style="background:${f.c}"></div>${f.l}</div>`).join('');
-  const vals=snaps.flatMap(s=>fuels.map(f=>ncr(s,f.k)||999));
-  const minP=Math.max(0,Math.floor(Math.min(...vals))-5);
+  const snaps = rangeSnaps(trendRange);
+  const fuels = [
+    {l:'RON 91',c:'#3b9eff',k:'ron91'},
+    {l:'RON 95',c:'#ffc847',k:'ron95'},
+    {l:'RON 97',c:'#a78bfa',k:'ron97'},
+    {l:'Diesel',c:'#ff6b35',k:'diesel'}
+  ];
+  document.getElementById('trend-legend').innerHTML = fuels.map(f=>`<div class="li"><div class="ld" style="background:${f.c}"></div>${f.l}</div>`).join('');
+  const vals = snaps.flatMap(s=>fuels.map(f=>ncr(s,f.k) ?? 999)).filter(v => typeof v === 'number');
+  const minP = vals.length ? Math.max(0,Math.floor(Math.min(...vals))-5) : 0;
+
   mkChart('trend-chart','line',{
     labels:snaps.map(s=>fmtD(s.date)),
-    datasets:fuels.map(f=>({label:f.l,borderColor:f.c,backgroundColor:'transparent',pointRadius:snaps.length>60?0:2,borderWidth:2,tension:.3,spanGaps:true,data:snaps.map(s=>ncr(s,f.k))}))
-  },{...CD,plugins:{...CD.plugins,legend:{display:true,position:'top',labels:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},boxWidth:10,padding:10}}},scales:{...CD.scales,y:{...CD.scales.y,min:minP}}});
+    datasets:fuels.map(f=>({
+      label:f.l,
+      borderColor:f.c,
+      backgroundColor:'transparent',
+      pointRadius:snaps.length>60?0:2,
+      borderWidth:2,
+      tension:.3,
+      spanGaps:true,
+      data:snaps.map(s=>ncr(s,f.k))
+    }))
+  },{
+    ...CD,
+    plugins:{...CD.plugins,legend:{display:true,position:'top',labels:{color:'#6b7891',font:{family:"'IBM Plex Mono'",size:10},boxWidth:10,padding:10}}},
+    scales:{...CD.scales,y:{...CD.scales.y,min:minP}}
+  });
 }
 
 function renderWoW(){
-  const snaps=rangeSnaps('12w');
-  if(snaps.length<2)return;
+  const snaps = rangeSnaps('12w');
+  if(snaps.length < 2) return;
   mkChart('wow-chart','bar',{
     labels:snaps.slice(1).map(s=>fmtD(s.date)),
     datasets:[
-      {label:'Diesel',data:snaps.slice(1).map((s,i)=>+(ncr(s,'diesel')-ncr(snaps[i],'diesel')).toFixed(2)),backgroundColor:snaps.slice(1).map((s,i)=>ncr(s,'diesel')>=ncr(snaps[i],'diesel')?'rgba(255,77,109,.6)':'rgba(45,212,160,.6)'),borderRadius:3},
-      {label:'RON 95',data:snaps.slice(1).map((s,i)=>+(ncr(s,'ron95')-ncr(snaps[i],'ron95')).toFixed(2)),backgroundColor:snaps.slice(1).map((s,i)=>ncr(s,'ron95')>=ncr(snaps[i],'ron95')?'rgba(255,107,53,.5)':'rgba(45,212,160,.4)'),borderRadius:3}
+      {
+        label:'Diesel',
+        data:snaps.slice(1).map((s,i)=>+(ncr(s,'diesel')-ncr(snaps[i],'diesel')).toFixed(2)),
+        backgroundColor:snaps.slice(1).map((s,i)=>ncr(s,'diesel')>=ncr(snaps[i],'diesel')?'rgba(255,77,109,.6)':'rgba(45,212,160,.6)'),
+        borderRadius:3
+      },
+      {
+        label:'RON 95',
+        data:snaps.slice(1).map((s,i)=>+(ncr(s,'ron95')-ncr(snaps[i],'ron95')).toFixed(2)),
+        backgroundColor:snaps.slice(1).map((s,i)=>ncr(s,'ron95')>=ncr(snaps[i],'ron95')?'rgba(255,107,53,.5)':'rgba(45,212,160,.4)'),
+        borderRadius:3
+      }
     ]
-  },{...CD,plugins:{...CD.plugins,legend:lgn()},scales:{...CD.scales,y:{...CD.scales.y,ticks:{...CD.scales.y.ticks,callback:v=>(v>=0?'+':'')+v.toFixed(2)}}}});
+  },{
+    ...CD,
+    plugins:{...CD.plugins,legend:lgn()},
+    scales:{...CD.scales,y:{...CD.scales.y,ticks:{...CD.scales.y.ticks,callback:v=>(v>=0?'+':'')+v.toFixed(2)}}}
+  });
 }
 
 function renderBrandTable(){
-  const Ls=last(),Ps=prev();
-  let brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
-  const bf=document.getElementById('brand-filter').value,sf=document.getElementById('sort-filter').value;
-  if(bf!=='all')brands=brands.filter(b=>b===bf);
-  const g=(sn,b,ft)=>sn.prices.find(p=>p.brand===b&&p.fuel_type===ft)?.price;
-  let rows=brands.map(b=>({brand:b,r91:g(Ls,b,'Ron 91'),r95:g(Ls,b,'Ron 95'),r97:g(Ls,b,'Ron 97'),dsl:g(Ls,b,'Diesel'),pd:g(Ps,b,'Diesel')}));
-  if(sf==='diesel')rows.sort((a,b)=>(a.dsl||999)-(b.dsl||999));
-  if(sf==='r95')rows.sort((a,b)=>(a.r95||999)-(b.r95||999));
-  document.getElementById('price-tbody').innerHTML=rows.map(r=>{
-    const d=r.dsl&&r.pd?r.dsl-r.pd:0,pc=Math.abs(d)<.01?'pnc':d>0?'pup':'pdn',pt=Math.abs(d)<.01?'—':d>0?'▲ +'+d.toFixed(2):'▼ '+d.toFixed(2);
-    const ic=BICO[r.brand]||{bg:'rgba(255,255,255,.05)',c:'#6b7891'};
-    return`<tr><td><div class="bc"><div class="bico" style="background:${ic.bg};color:${ic.c}">${r.brand.substring(0,2).toUpperCase()}</div><span class="bn" style="color:${ic.c}">${r.brand}</span></div></td><td>${r.r91?'₱'+r.r91.toFixed(2):'—'}</td><td>${r.r95?'₱'+r.r95.toFixed(2):'—'}</td><td>${r.r97?'₱'+r.r97.toFixed(2):'—'}</td><td>${r.dsl?'₱'+r.dsl.toFixed(2):'—'}</td><td><span class="pill ${pc}">${pt}</span></td></tr>`;
+  const Ls = last(), Ps = prev();
+  if(!Ls || !Array.isArray(Ls.prices)) return;
+
+  let brands = ['Petron','Shell','Caltex','Phoenix','Seaoil'];
+  const bf = document.getElementById('brand-filter').value;
+  const sf = document.getElementById('sort-filter').value;
+
+  if(bf !== 'all') brands = brands.filter(b=>b===bf);
+
+  const g = (sn,b,ft)=>sn?.prices?.find(p=>p.brand===b&&p.fuel_type===ft)?.price;
+
+  let rows = brands.map(b=>({
+    brand:b,
+    r91:g(Ls,b,'Ron 91'),
+    r95:g(Ls,b,'Ron 95'),
+    r97:g(Ls,b,'Ron 97'),
+    dsl:g(Ls,b,'Diesel'),
+    pd:g(Ps,b,'Diesel')
+  }));
+
+  if(sf==='diesel') rows.sort((a,b)=>(a.dsl ?? 999)-(b.dsl ?? 999));
+  if(sf==='r95') rows.sort((a,b)=>(a.r95 ?? 999)-(b.r95 ?? 999));
+  if(sf==='brand') rows.sort((a,b)=>a.brand.localeCompare(b.brand));
+
+  document.getElementById('price-tbody').innerHTML = rows.map(r=>{
+    const d = (typeof r.dsl === 'number' && typeof r.pd === 'number') ? r.dsl-r.pd : null;
+    const pc = d === null ? 'pnc' : Math.abs(d)<.01 ? 'pnc' : d>0 ? 'pup' : 'pdn';
+    const pt = d === null ? '—' : Math.abs(d)<.01 ? '—' : d>0 ? '▲ +' + d.toFixed(2) : '▼ ' + Math.abs(d).toFixed(2);
+    const ic = BICO[r.brand]||{bg:'rgba(255,255,255,.05)',c:'#6b7891'};
+    return `<tr>
+      <td><div class="bc"><div class="bico" style="background:${ic.bg};color:${ic.c}">${r.brand.substring(0,2).toUpperCase()}</div><span class="bn" style="color:${ic.c}">${r.brand}</span></div></td>
+      <td>${typeof r.r91 === 'number' ? '₱'+r.r91.toFixed(2) : '—'}</td>
+      <td>${typeof r.r95 === 'number' ? '₱'+r.r95.toFixed(2) : '—'}</td>
+      <td>${typeof r.r97 === 'number' ? '₱'+r.r97.toFixed(2) : '—'}</td>
+      <td>${typeof r.dsl === 'number' ? '₱'+r.dsl.toFixed(2) : '—'}</td>
+      <td><span class="pill ${pc}">${pt}</span></td>
+    </tr>`;
   }).join('');
 }
 
 function renderDoeSum(){
-  const Ls=last(),Ps=prev();
-  document.getElementById('doe-sum-tbody').innerHTML=PRODUCTS.map(p=>{
-    const c=ncr(Ls,p.key),pv=ncr(Ps,p.key);if(!c)return'';
-    const d=pv?c-pv:null,chg=d===null?'—':Math.abs(d)<.01?'<span class="nc">No change</span>':d>0?`<span class="up">▲ +₱${d.toFixed(2)}</span>`:`<span class="dn">▼ ₱${d.toFixed(2)}</span>`;
-    return`<tr><td style="font-family:var(--fh);font-weight:600">${p.label}</td><td>₱${(c-p.lo).toFixed(2)}</td><td>₱${(c+p.hi).toFixed(2)}</td><td style="color:var(--ac);font-weight:600">₱${c.toFixed(2)}</td><td>${chg}</td></tr>`;
+  const Ls = last(), Ps = prev();
+  document.getElementById('doe-sum-tbody').innerHTML = PRODUCTS.map(p=>{
+    const c = ncr(Ls,p.key), pv = Ps ? ncr(Ps,p.key) : null;
+    if(typeof c !== 'number') return '';
+    const d = typeof pv === 'number' ? c-pv : null;
+    const chg = d === null
+      ? '—'
+      : Math.abs(d)<.01
+        ? '<span class="nc">No change</span>'
+        : d>0
+          ? `<span class="up">▲ +₱${d.toFixed(2)}</span>`
+          : `<span class="dn">▼ ₱${Math.abs(d).toFixed(2)}</span>`;
+    return `<tr><td style="font-family:var(--fh);font-weight:600">${p.label}</td><td>₱${(c-p.lo).toFixed(2)}</td><td>₱${(c+p.hi).toFixed(2)}</td><td style="color:var(--ac);font-weight:600">₱${c.toFixed(2)}</td><td>${chg}</td></tr>`;
   }).join('');
 }
 
 function renderHistory(){
-  const snaps=rangeSnaps(histRange),fuelKey=document.getElementById('hist-fuel').value;
-  const view=document.getElementById('hist-view').value,brand=document.getElementById('hist-brand').value;
-  const showBrand=view==='brand';
-  document.getElementById('hist-brand').style.display=showBrand?'':'none';
-  document.getElementById('hist-brand-lbl').style.display=showBrand?'':'none';
-  const ft=PRODUCTS.find(p=>p.key===fuelKey)?.ft||'Ron 91';
+  const snaps = rangeSnaps(histRange);
+  const fuelKey = document.getElementById('hist-fuel').value;
+  const view = document.getElementById('hist-view').value;
+  const brand = document.getElementById('hist-brand').value;
+  const showBrand = view === 'brand';
+
+  document.getElementById('hist-brand').style.display = showBrand ? '' : 'none';
+  document.getElementById('hist-brand-lbl').style.display = showBrand ? '' : 'none';
+
+  const ft = PRODUCTS.find(p=>p.key===fuelKey)?.ft || 'Ron 91';
+
   if(!showBrand){
-    const vals=snaps.map(s=>ncr(s,fuelKey)).filter(Boolean);
+    const vals = snaps.map(s=>ncr(s,fuelKey)).filter(v => typeof v === 'number');
     mkChart('hist-chart','line',{
       labels:snaps.map(s=>fmtD(s.date)),
-      datasets:[{label:'NCR Common Price',borderColor:'#3b9eff',backgroundColor:'rgba(59,158,255,.08)',pointRadius:snaps.length>80?0:2,borderWidth:2,tension:.2,spanGaps:true,fill:true,data:snaps.map(s=>ncr(s,fuelKey))}]
-    },{...CD,scales:{...CD.scales,y:{...CD.scales.y,min:Math.max(0,Math.floor(Math.min(...vals))-5)}}});
+      datasets:[{
+        label:'NCR Common Price',
+        borderColor:'#3b9eff',
+        backgroundColor:'rgba(59,158,255,.08)',
+        pointRadius:snaps.length>80?0:2,
+        borderWidth:2,
+        tension:.2,
+        spanGaps:true,
+        fill:true,
+        data:snaps.map(s=>ncr(s,fuelKey))
+      }]
+    },{
+      ...CD,
+      scales:{...CD.scales,y:{...CD.scales.y,min:vals.length ? Math.max(0,Math.floor(Math.min(...vals))-5) : 0}}
+    });
   } else {
-    const brands=brand==='all'?['Petron','Shell','Caltex','Phoenix','Seaoil']:[brand];
+    const brands = brand==='all' ? ['Petron','Shell','Caltex','Phoenix','Seaoil'] : [brand];
     mkChart('hist-chart','line',{
       labels:snaps.map(s=>fmtD(s.date)),
-      datasets:brands.map(b=>({label:b,borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:snaps.length>80?0:2,borderWidth:2,tension:.2,spanGaps:true,data:snaps.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type===ft)?.price||null)}))
-    },{...CD,plugins:{...CD.plugins,legend:lgn()}});
+      datasets:brands.map(b=>({
+        label:b,
+        borderColor:COLORS[b],
+        backgroundColor:'transparent',
+        pointRadius:snaps.length>80?0:2,
+        borderWidth:2,
+        tension:.2,
+        spanGaps:true,
+        data:snaps.map(s=>s.prices?.find(p=>p.brand===b&&p.fuel_type===ft)?.price ?? null)
+      }))
+    },{
+      ...CD,
+      plugins:{...CD.plugins,legend:lgn()}
+    });
   }
 }
 
 function renderHistTable(){
-  const n=document.getElementById('hist-rows').value;
-  let snaps=[...DB.weekly_snapshots].reverse();
-  if(n!=='all')snaps=snaps.slice(0,parseInt(n));
-  document.getElementById('hist-tbody').innerHTML=snaps.map(s=>{
-    const fmt=k=>s.ncr_common&&s.ncr_common[k]?'₱'+s.ncr_common[k].toFixed(2):'—';
-    const note=s.note?`<span class="pill pnc" style="font-size:9px">${s.note}</span>`:'';
-    return`<tr><td>${s.week}</td><td>${fmtD(s.date)}</td><td>${fmt('ron91')}</td><td>${fmt('ron95')}</td><td>${fmt('ron97')}</td><td>${fmt('diesel')}</td><td>${note}</td></tr>`;
+  const n = document.getElementById('hist-rows').value;
+  let snaps = [...(DB?.weekly_snapshots || [])].filter(isValidSnapshot).reverse();
+  if(n !== 'all') snaps = snaps.slice(0,parseInt(n,10));
+
+  document.getElementById('hist-tbody').innerHTML = snaps.map(s=>{
+    const fmt = k => typeof s.ncr_common?.[k] === 'number' ? '₱' + s.ncr_common[k].toFixed(2) : '—';
+    const note = s.note ? `<span class="pill pnc" style="font-size:9px">${s.note}</span>` : '';
+    return `<tr><td>${s.week}</td><td>${fmtD(s.date)}</td><td>${fmt('ron91')}</td><td>${fmt('ron95')}</td><td>${fmt('ron97')}</td><td>${fmt('diesel')}</td><td>${note}</td></tr>`;
   }).join('');
 }
 
 function renderBrands(){
-  const Ls=last(),brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
-  const fuels=[{l:'RON 91',c:'rgba(59,158,255,.5)',ft:'Ron 91'},{l:'RON 95',c:'rgba(255,200,71,.5)',ft:'Ron 95'},{l:'Diesel',c:'rgba(255,107,53,.5)',ft:'Diesel'},{l:'RON 97',c:'rgba(167,139,250,.5)',ft:'Ron 97'}];
-  const allP=brands.flatMap(b=>fuels.map(f=>Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price||999));
+  const Ls = last();
+  if(!Ls || !Array.isArray(Ls.prices)) return;
+
+  const brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
+  const fuels=[
+    {l:'RON 91',c:'rgba(59,158,255,.5)',ft:'Ron 91'},
+    {l:'RON 95',c:'rgba(255,200,71,.5)',ft:'Ron 95'},
+    {l:'Diesel',c:'rgba(255,107,53,.5)',ft:'Diesel'},
+    {l:'RON 97',c:'rgba(167,139,250,.5)',ft:'Ron 97'}
+  ];
+
+  const allP = brands.flatMap(b=>fuels.map(f=>Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price ?? 999));
+  const validPrices = allP.filter(v=>v<999);
+
   mkChart('brand-chart','bar',{
     labels:brands,
-    datasets:fuels.map(f=>({label:f.l,backgroundColor:f.c,borderRadius:4,data:brands.map(b=>Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price||null)}))
-  },{...CD,plugins:{...CD.plugins,legend:lgn()},scales:{...CD.scales,y:{...CD.scales.y,min:Math.max(0,Math.floor(Math.min(...allP.filter(v=>v<999)))-5)}}});
-  const cd=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Diesel')?.price||999)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price||999)?a:b);
-  const c9=brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Ron 95')?.price||999)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Ron 95')?.price||999)?a:b);
-  document.getElementById('brand-stats').innerHTML=`
+    datasets:fuels.map(f=>({
+      label:f.l,
+      backgroundColor:f.c,
+      borderRadius:4,
+      data:brands.map(b=>Ls.prices.find(p=>p.brand===b&&p.fuel_type===f.ft)?.price ?? null)
+    }))
+  },{
+    ...CD,
+    plugins:{...CD.plugins,legend:lgn()},
+    scales:{...CD.scales,y:{...CD.scales.y,min:validPrices.length ? Math.max(0,Math.floor(Math.min(...validPrices))-5) : 0}}
+  });
+
+  const cd = brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Diesel')?.price ?? 999)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Diesel')?.price ?? 999)?a:b);
+  const c9 = brands.reduce((a,b)=>(Ls.prices.find(p=>p.brand===a&&p.fuel_type==='Ron 95')?.price ?? 999)<(Ls.prices.find(p=>p.brand===b&&p.fuel_type==='Ron 95')?.price ?? 999)?a:b);
+
+  document.getElementById('brand-stats').innerHTML = `
     <div class="sm"><div class="sl">Cheapest diesel this week</div><div class="sv" style="color:${COLORS[cd]}">${cd}</div></div>
     <div class="sm"><div class="sl">Cheapest RON 95 this week</div><div class="sv" style="color:${COLORS[c9]}">${c9}</div></div>
-    <div class="sm"><div class="sl">NCR diesel common price</div><div class="sv">₱${ncr(Ls,'diesel')?.toFixed(2)||'—'}</div></div>`;
+    <div class="sm"><div class="sl">NCR diesel common price</div><div class="sv">₱${ncr(Ls,'diesel')?.toFixed(2) || '—'}</div></div>`;
 }
 
 function renderBrandTrend(){
-  const ft=document.getElementById('brand-trend-fuel').value;
-  const snaps=rangeSnaps('12w'),brands=['Petron','Shell','Caltex','Phoenix','Seaoil'];
+  const ft = document.getElementById('brand-trend-fuel').value;
+  const snaps = rangeSnaps('12w');
+  const brands = ['Petron','Shell','Caltex','Phoenix','Seaoil'];
+
   mkChart('brand-trend-chart','line',{
     labels:snaps.map(s=>fmtD(s.date)),
-    datasets:brands.map(b=>({label:b,borderColor:COLORS[b],backgroundColor:'transparent',pointRadius:2,borderWidth:2,tension:.3,spanGaps:true,data:snaps.map(s=>s.prices.find(p=>p.brand===b&&p.fuel_type===ft)?.price||null)}))
-  },{...CD,plugins:{...CD.plugins,legend:lgn()}});
+    datasets:brands.map(b=>({
+      label:b,
+      borderColor:COLORS[b],
+      backgroundColor:'transparent',
+      pointRadius:2,
+      borderWidth:2,
+      tension:.3,
+      spanGaps:true,
+      data:snaps.map(s=>s.prices?.find(p=>p.brand===b&&p.fuel_type===ft)?.price ?? null)
+    }))
+  },{
+    ...CD,
+    plugins:{...CD.plugins,legend:lgn()}
+  });
 }
 
 function renderRegions(){
-  const Ls=last(),fuel=document.getElementById('reg-fuel').value,base=ncr(Ls,fuel);
-  if(!base)return;
-  const filtered=regFilter==='all'?REGIONS:REGIONS.filter(r=>r.group===regFilter);
+  const Ls = last();
+  const fuel = document.getElementById('reg-fuel').value;
+  const base = ncr(Ls,fuel);
+  if(typeof base !== 'number') return;
 
-  document.getElementById('region-grid').innerHTML=filtered.map(reg=>{
-    const diff=reg.d[fuel]||0,price=(base+diff).toFixed(2);
-    const badge=diff>0?`<span style="color:var(--rd);font-size:10px">+₱${diff.toFixed(1)}</span>`:`<span style="color:var(--gr);font-size:10px">base</span>`;
-    const prow=(lbl,k)=>{const b=ncr(Ls,k),d=reg.d[k]||0;return b?`<div class="rrow"><span class="rf">${lbl}</span><span class="rp">₱${(b+d).toFixed(2)}</span></div>`:''};
-    return`<div class="rcard" style="border-top-color:${GCOL[reg.group]}"><div class="rcard-title">${reg.name} ${badge}</div>${prow('RON 91','ron91')}${prow('RON 95','ron95')}${prow('Diesel','diesel')}</div>`;
+  const filtered = regFilter==='all' ? REGIONS : REGIONS.filter(r=>r.group===regFilter);
+
+  document.getElementById('region-grid').innerHTML = filtered.map(reg=>{
+    const diff = reg.d[fuel] || 0;
+    const badge = diff>0 ? `<span style="color:var(--rd);font-size:10px">+₱${diff.toFixed(1)}</span>` : `<span style="color:var(--gr);font-size:10px">base</span>`;
+    const prow = (lbl,k)=>{
+      const b=ncr(Ls,k), d=reg.d[k]||0;
+      return typeof b === 'number' ? `<div class="rrow"><span class="rf">${lbl}</span><span class="rp">₱${(b+d).toFixed(2)}</span></div>` : '';
+    };
+    return `<div class="rcard" style="border-top-color:${GCOL[reg.group]}"><div class="rcard-title">${reg.name} ${badge}</div>${prow('RON 91','ron91')}${prow('RON 95','ron95')}${prow('Diesel','diesel')}</div>`;
   }).join('');
 
-  const regP=filtered.map(r=>+(base+(r.d[fuel]||0)).toFixed(2));
+  const regP = filtered.map(r=>+(base+(r.d[fuel]||0)).toFixed(2));
   mkChart('region-chart','bar',{
     labels:filtered.map(r=>r.id),
     datasets:[{label:fuel.toUpperCase()+' ₱/L',data:regP,borderRadius:4,backgroundColor:filtered.map(r=>GCOL[r.group]+'aa')}]
-  },{...CD,plugins:{...CD.plugins,legend:lgn()},scales:{...CD.scales,y:{...CD.scales.y,min:Math.floor(Math.min(...regP))-2}}});
+  },{
+    ...CD,
+    plugins:{...CD.plugins,legend:lgn()},
+    scales:{...CD.scales,y:{...CD.scales.y,min:Math.floor(Math.min(...regP))-2}}
+  });
 
-  // Regional trend
-  const histSnaps=rangeSnaps('1y');
-  const groupAvg=grp=>{const arr=REGIONS.filter(r=>r.group===grp).map(r=>r.d[fuel]||0);return arr.length?arr.reduce((a,b)=>a+b,0)/arr.length:0;};
-  const groups=[{l:'NCR',c:'#3b9eff',g:0},{l:'S. Luzon',c:'#2dd4a0',g:groupAvg('SouthLuzon')},{l:'Visayas',c:'#ffc847',g:groupAvg('Visayas')},{l:'Mindanao',c:'#ff4d6d',g:groupAvg('Mindanao')}];
+  const histSnaps = rangeSnaps('1y');
+  const groupAvg = grp=>{
+    const arr = REGIONS.filter(r=>r.group===grp).map(r=>r.d[fuel]||0);
+    return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+  };
+  const groups = [
+    {l:'NCR',c:'#3b9eff',g:0},
+    {l:'S. Luzon',c:'#2dd4a0',g:groupAvg('SouthLuzon')},
+    {l:'Visayas',c:'#ffc847',g:groupAvg('Visayas')},
+    {l:'Mindanao',c:'#ff4d6d',g:groupAvg('Mindanao')}
+  ];
+
   mkChart('region-trend-chart','line',{
     labels:histSnaps.map(s=>fmtD(s.date)),
-    datasets:groups.map(g=>({label:g.l,borderColor:g.c,backgroundColor:'transparent',pointRadius:0,borderWidth:2,tension:.3,spanGaps:true,data:histSnaps.map(s=>{const b=ncr(s,fuel);return b?+(b+g.g).toFixed(2):null;})}))
-  },{...CD,plugins:{...CD.plugins,legend:lgn()}});
+    datasets:groups.map(g=>({
+      label:g.l,
+      borderColor:g.c,
+      backgroundColor:'transparent',
+      pointRadius:0,
+      borderWidth:2,
+      tension:.3,
+      spanGaps:true,
+      data:histSnaps.map(s=>{
+        const b=ncr(s,fuel);
+        return typeof b === 'number' ? +(b+g.g).toFixed(2) : null;
+      })
+    }))
+  },{
+    ...CD,
+    plugins:{...CD.plugins,legend:lgn()}
+  });
 }
 
 /* ═══ UI ═══ */
@@ -853,12 +1030,14 @@ function showPanel(id,el){
 function setTrendRange(r,el){
   trendRange=r;
   document.querySelectorAll('#trendRangeBtns button').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');renderTrend();
+  el.classList.add('active');
+  renderTrend();
 }
 function setHistRange(r,el){
   histRange=r;
   document.querySelectorAll('#histRangeBtns button').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');renderHistory();
+  el.classList.add('active');
+  renderHistory();
 }
 function setTableMode(mode,el){
   tableMode=mode;
@@ -870,7 +1049,8 @@ function setTableMode(mode,el){
 function setRegFilter(g,el){
   regFilter=g;
   document.querySelectorAll('.reg-btn').forEach(b=>b.classList.remove('active'));
-  el.classList.add('active');renderRegions();
+  el.classList.add('active');
+  renderRegions();
 }
 
 loadData();
