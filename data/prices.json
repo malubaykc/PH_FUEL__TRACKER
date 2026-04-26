@@ -10,7 +10,7 @@
       "Russia-Ukraine war: Feb 24, 2022 spike; peak ~Jun-Jul 2022",
       "2026 Hormuz crisis: Iran war started, strait closed Feb 28, 2026; diesel peaked \u20b1153.70 Apr 7-13; \u20b120 rollback Apr 14; \u20b124.94 rollback Apr 21 per President Marcos"
     ],
-    "last_updated": "2026-04-26T15:16:10.380502Z",
+    "last_updated": "2026-04-21T00:00:00Z",
     "total_records": 2480
   },
   "weekly_snapshots": [
@@ -16498,15 +16498,15 @@
     },
     {
       "week": "2026-W17",
-      "date": "2026-04-20",
-      "source": "DOE Philippines OIMB",
+      "date": "2026-04-21",
+      "source": "DOE Philippines (OIMB)",
+      "note": "Rollback 2: RON91 -P3.41, RON95 -P4.00, RON97 -P4.50, Diesel -P24.94 effective Apr 21",
       "ncr_common": {
         "ron91": 82.69,
         "ron95": 84.1,
         "ron97": 93.6,
         "diesel": 98.46
       },
-      "note": "Rollback 2: RON91 -P3.41, Diesel -P24.94 effective Apr 21 (Marcos Apr 18 announcement)",
       "prices": [
         {
           "brand": "Petron",
