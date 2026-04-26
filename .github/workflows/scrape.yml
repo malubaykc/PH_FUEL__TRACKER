@@ -1,39 +1,36 @@
-name: Scrape DOE Fuel Prices
+name: Weekly Fuel Update
 
 on:
   schedule:
-    # Every Tuesday 6:00 AM Manila time (UTC+8 = Monday 22:00 UTC)
-    # zigwheels.ph updates after the DOE Tuesday advisory, so 6AM is safe
-    - cron: '0 22 * * 1'
+    - cron: "0 6 * * 2"  # every Tuesday
   workflow_dispatch:
 
 jobs:
-  scrape:
+  update:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4 lxml
+        run: |
+          pip install pdfplumber requests
 
       - name: Run scraper
         run: python scraper.py
 
-      - name: Commit and push updated prices.json
+      - name: Commit and push if changed
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
           git add data/prices.json
-          git diff --staged --quiet \
-            && echo "No price changes — nothing to commit." \
-            || git commit -m "chore: update fuel prices $(date +'%Y-%m-%d')"
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update fuel prices"
+
           git push
