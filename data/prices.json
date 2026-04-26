@@ -10,8 +10,8 @@
       "Russia-Ukraine war: Feb 24, 2022 spike; peak ~Jun-Jul 2022",
       "2026 Hormuz crisis: Iran war started, strait closed Feb 28, 2026; diesel peaked ₱153.70 Apr 7-13; ₱20 rollback Apr 14; ₱24.94 rollback Apr 21 per President Marcos"
     ],
-    "last_updated": "2026-04-14T00:00:00Z",
-    "total_records": 2460
+    "last_updated": "2026-04-26T15:16:10.380502Z",
+    "total_records": 2480
   },
   "weekly_snapshots": [
     {
@@ -16495,6 +16495,140 @@
           "region": "NCR"
         }
       ]
+    },
+    {
+      "week": "2026-W17",
+      "date": "2026-04-20",
+      "source": "DOE Philippines OIMB",
+      "ncr_common": {
+        "ron91": 56.65,
+        "ron97": 67.99,
+        "ron95": 58.15,
+        "diesel": 59.74
+      },
+      "note": "",
+      "prices": [
+        {
+          "brand": "Petron",
+          "fuel_type": "Ron 91",
+          "price": 56.85,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Ron 97",
+          "price": 68.39,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Ron 95",
+          "price": 58.45,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Diesel",
+          "price": 60.04,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Ron 91",
+          "price": 57.45,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Ron 97",
+          "price": 68.99,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Ron 95",
+          "price": 59.05,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Diesel",
+          "price": 60.54,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Ron 91",
+          "price": 57.05,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Ron 97",
+          "price": 68.59,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Ron 95",
+          "price": 58.65,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Diesel",
+          "price": 60.24,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Ron 91",
+          "price": 56.45,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Ron 97",
+          "price": 67.79,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Ron 95",
+          "price": 57.95,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Diesel",
+          "price": 59.64,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Ron 91",
+          "price": 56.15,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Ron 97",
+          "price": 67.49,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Ron 95",
+          "price": 57.65,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Diesel",
+          "price": 59.44,
+          "region": "NCR"
+        }
+      ]
     }
   ],
   "price_history": {
@@ -17113,6 +17247,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 86.3
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 56.85
       }
     ],
     "Petron|Ron 95": [
@@ -17730,6 +17869,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 88.4
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 58.45
       }
     ],
     "Petron|Ron 97": [
@@ -18347,6 +18491,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 98.5
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 68.39
       }
     ],
     "Petron|Diesel": [
@@ -18964,6 +19113,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 123.7
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 60.04
       }
     ],
     "Shell|Ron 91": [
@@ -19581,6 +19735,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 86.9
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 57.45
       }
     ],
     "Shell|Ron 95": [
@@ -20198,6 +20357,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 89.0
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 59.05
       }
     ],
     "Shell|Ron 97": [
@@ -20815,6 +20979,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 99.1
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 68.99
       }
     ],
     "Shell|Diesel": [
@@ -21432,6 +21601,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 124.2
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 60.54
       }
     ],
     "Caltex|Ron 91": [
@@ -22049,6 +22223,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 86.5
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 57.05
       }
     ],
     "Caltex|Ron 95": [
@@ -22666,6 +22845,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 88.6
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 58.65
       }
     ],
     "Caltex|Ron 97": [
@@ -23283,6 +23467,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 98.7
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 68.59
       }
     ],
     "Caltex|Diesel": [
@@ -23900,6 +24089,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 123.9
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 60.24
       }
     ],
     "Phoenix|Ron 91": [
@@ -24517,6 +24711,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 85.9
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 56.45
       }
     ],
     "Phoenix|Ron 95": [
@@ -25134,6 +25333,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 87.9
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 57.95
       }
     ],
     "Phoenix|Ron 97": [
@@ -25751,6 +25955,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 97.9
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 67.79
       }
     ],
     "Phoenix|Diesel": [
@@ -26368,6 +26577,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 123.3
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 59.64
       }
     ],
     "Seaoil|Ron 91": [
@@ -26985,6 +27199,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 85.6
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 56.15
       }
     ],
     "Seaoil|Ron 95": [
@@ -27602,6 +27821,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 87.6
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 57.65
       }
     ],
     "Seaoil|Ron 97": [
@@ -28219,6 +28443,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 97.6
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 67.49
       }
     ],
     "Seaoil|Diesel": [
@@ -28836,6 +29065,11 @@
         "week": "2026-W16",
         "date": "2026-04-14",
         "price": 123.1
+      },
+      {
+        "week": "2026-W17",
+        "date": "2026-04-20",
+        "price": 59.44
       }
     ]
   }
