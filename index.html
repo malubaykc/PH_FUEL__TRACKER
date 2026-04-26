@@ -147,7 +147,7 @@ footer a{color:var(--ac);text-decoration:none;}
   <div class="tab" onclick="showPanel('history',this)">Price History</div>
   <div class="tab" onclick="showPanel('brands',this)">By Brand</div>
   <div class="tab" onclick="showPanel('regions',this)">By Region</div>
-  <div class="tab" onclick="showPanel('about',this)">About</div>
+
 </div>
 
 <main>
@@ -226,7 +226,7 @@ footer a{color:var(--ac);text-decoration:none;}
           </select>
         </div>
         <table class="pt">
-          <thead><tr><th>Oil Company</th><th>RON 91</th><th>RON 95</th><th>RON 97</th><th>Diesel</th><th>Diesel chg</th></tr></thead>
+          <thead><tr><th>Oil Company</th><th>RON 91</th><th>RON 95</th><th>RON 97</th><th>Diesel</th><th>Diesel Plus</th><th>Kerosene</th><th>Diesel chg</th></tr></thead>
           <tbody id="price-tbody"></tbody>
         </table>
       </div>
@@ -265,6 +265,8 @@ footer a{color:var(--ac);text-decoration:none;}
           <option value="ron95" selected>RON 95</option>
           <option value="ron97">RON 97</option>
           <option value="diesel">Diesel</option>
+          <option value="diesel_plus">Diesel Plus</option>
+          <option value="kerosene">Kerosene</option>
         </select>
         <label>View</label>
         <select id="hist-view" onchange="renderHistory()">
@@ -291,7 +293,7 @@ footer a{color:var(--ac);text-decoration:none;}
       </div>
       <div style="overflow-x:auto;">
         <table class="pt">
-          <thead><tr><th>Week</th><th>Date</th><th>RON 91</th><th>RON 95</th><th>RON 97</th><th>Diesel</th><th>Note</th></tr></thead>
+          <thead><tr><th>Week</th><th>Date</th><th>RON 91</th><th>RON 95</th><th>RON 97</th><th>Diesel</th><th>Diesel Plus</th><th>Kerosene</th><th>Note</th></tr></thead>
           <tbody id="hist-tbody"></tbody>
         </table>
       </div>
@@ -364,40 +366,7 @@ footer a{color:var(--ac);text-decoration:none;}
     </div>
   </div>
 
-  <div class="panel" id="panel-about">
-    <div class="card">
-      <div class="ct">About this tracker</div>
-      <div style="font-size:12px;line-height:2.2;color:var(--mu);">
-        <p style="margin-bottom:14px;color:var(--tx);line-height:1.8;">
-          PH Fuel Tracker displays DOE Philippines weekly retail petroleum price monitoring data.
-          It mirrors the official DOE OIMB format: <strong style="color:var(--ac)">overall range (min–max) and common price per product, brand-agnostic</strong>.
-        </p>
-        <p><strong style="color:var(--tx)">Data Sources</strong></p>
-        <p>· DOE OIMB weekly price monitoring PDFs — <a href="https://prod-cms.doe.gov.ph" target="_blank" style="color:var(--ac)">prod-cms.doe.gov.ph</a></p>
-        <p>· DOE oil monitor portal — <a href="https://doe.gov.ph/oil-monitor" target="_blank" style="color:var(--ac)">doe.gov.ph/oil-monitor</a></p>
-        <p>· CEIC Philippines Energy Database (monthly NCR averages, 2017–2024)</p>
-        <p>· GlobalPetrolPrices.com (cross-verification)</p>
-        <br/>
-        <p><strong style="color:var(--tx)">Key Policy Events</strong></p>
-        <p>· <strong style="color:var(--am)">Jan 1, 2018</strong> — TRAIN Law (RA 10963): +₱2.65/L gasoline excise, +₱2.80/L diesel excise</p>
-        <p>· <strong style="color:var(--am)">Jan 1, 2019</strong> — TRAIN 2nd tranche: +₱1.40/L gasoline, +₱2.00/L diesel</p>
-        <p>· <strong style="color:var(--am)">Apr–May 2020</strong> — COVID-19; historic lows; WTI crude negative Apr 20, 2020</p>
-        <p>· <strong style="color:var(--am)">Feb–Jun 2022</strong> — Russia-Ukraine war; diesel peaked ~₱86/L NCR</p>
-        <p>· <strong style="color:var(--am)">Feb 28, 2026</strong> — Strait of Hormuz closure (Iran war); 20% of world oil supply disrupted</p>
-        <p>· <strong style="color:var(--am)">Mar 24, 2026</strong> — President Marcos declares national energy emergency</p>
-        <p>· <strong style="color:var(--am)">Apr 7–13, 2026</strong> — Diesel peaked ₱153.70/L NCR common (Rappler/DOE)</p>
-        <p>· <strong style="color:var(--am)">Apr 14, 2026</strong> — Rollback 1: diesel −₱20/L → ₱133.70; DOE PDF confirms ₱123.40 common Apr 14-20</p>
-        <p>· <strong style="color:var(--am)">Apr 21, 2026</strong> — Rollback 2: diesel −₱24.94/L, RON91 −₱3.41/L (announced by Marcos Apr 18)</p>
-        <br/>
-        <p><strong style="color:var(--tx)">Methodology</strong></p>
-        <p>· 2017–2024: DOE monthly NCR averages from CEIC + DOE annual situationers</p>
-        <p>· 2025–2026: DOE weekly PDF monitoring reports (prod-cms.doe.gov.ph)</p>
-        <p>· Per-brand prices: DOE NCR common price ± observed brand premium/discount from DOE monitoring tables</p>
-        <p>· Regional prices: NCR common price + DOE per-region monitoring differentials</p>
-        <p>· Auto-updated every Tuesday via GitHub Actions after DOE advisory</p>
-      </div>
-    </div>
-  </div>
+
 </main>
 
 <footer>
@@ -416,10 +385,12 @@ const BICO   = {
   Seaoil:{bg:'rgba(167,139,250,.15)',c:'#a78bfa'}
 };
 const PRODUCTS = [
-  {key:'ron91', label:'Gasoline (RON 91)', ft:'Ron 91', lo:5.5, hi:7.8},
-  {key:'ron95', label:'Gasoline (RON 95)', ft:'Ron 95', lo:5.0, hi:9.7},
-  {key:'ron97', label:'Gasoline (RON 97/100)', ft:'Ron 97', lo:7.0, hi:9.8},
-  {key:'diesel', label:'Diesel', ft:'Diesel', lo:5.0, hi:13.3},
+  {key:'ron91',       label:'Gasoline (RON 91)',    ft:'Ron 91',      lo:5.5, hi:7.8},
+  {key:'ron95',       label:'Gasoline (RON 95)',    ft:'Ron 95',      lo:5.0, hi:9.7},
+  {key:'ron97',       label:'Gasoline (RON 97/100)',ft:'Ron 97',      lo:7.0, hi:9.8},
+  {key:'diesel',      label:'Diesel',               ft:'Diesel',      lo:5.0, hi:13.3},
+  {key:'diesel_plus', label:'Diesel Plus',          ft:'Diesel Plus', lo:6.0, hi:14.0},
+  {key:'kerosene',    label:'Kerosene',             ft:'Kerosene',    lo:8.0, hi:15.0},
 ];
 const REGIONS = [
   {id:'NCR',  name:'NCR (Metro Manila)',            group:'NCR',        d:{ron91:0,   ron95:0,   diesel:0}},
@@ -826,6 +797,8 @@ function renderBrandTable(){
     r95:g(Ls,b,'Ron 95'),
     r97:g(Ls,b,'Ron 97'),
     dsl:g(Ls,b,'Diesel'),
+    dslp:g(Ls,b,'Diesel Plus'),
+    kero:g(Ls,b,'Kerosene'),
     pd:g(Ps,b,'Diesel')
   }));
 
@@ -841,10 +814,12 @@ function renderBrandTable(){
 
     return `<tr>
       <td><div class="bc"><div class="bico" style="background:${ic.bg};color:${ic.c}">${r.brand.substring(0,2).toUpperCase()}</div><span class="bn" style="color:${ic.c}">${r.brand}</span></div></td>
-      <td>${typeof r.r91 === 'number' ? '₱'+r.r91.toFixed(2) : '—'}</td>
-      <td>${typeof r.r95 === 'number' ? '₱'+r.r95.toFixed(2) : '—'}</td>
-      <td>${typeof r.r97 === 'number' ? '₱'+r.r97.toFixed(2) : '—'}</td>
-      <td>${typeof r.dsl === 'number' ? '₱'+r.dsl.toFixed(2) : '—'}</td>
+      <td>${typeof r.r91  === 'number' ? '₱'+r.r91.toFixed(2)  : '—'}</td>
+      <td>${typeof r.r95  === 'number' ? '₱'+r.r95.toFixed(2)  : '—'}</td>
+      <td>${typeof r.r97  === 'number' ? '₱'+r.r97.toFixed(2)  : '—'}</td>
+      <td>${typeof r.dsl  === 'number' ? '₱'+r.dsl.toFixed(2)  : '—'}</td>
+      <td>${typeof r.dslp === 'number' ? '₱'+r.dslp.toFixed(2) : '—'}</td>
+      <td>${typeof r.kero === 'number' ? '₱'+r.kero.toFixed(2) : '—'}</td>
       <td><span class="pill ${pc}">${pt}</span></td>
     </tr>`;
   }).join('');
@@ -928,7 +903,7 @@ function renderHistTable(){
   document.getElementById('hist-tbody').innerHTML = snaps.map(s=>{
     const fmt = k => typeof s.ncr_common?.[k] === 'number' ? '₱' + s.ncr_common[k].toFixed(2) : '—';
     const note = s.note ? `<span class="pill pnc" style="font-size:9px">${s.note}</span>` : '';
-    return `<tr><td>${s.week}</td><td>${fmtD(s.date)}</td><td>${fmt('ron91')}</td><td>${fmt('ron95')}</td><td>${fmt('ron97')}</td><td>${fmt('diesel')}</td><td>${note}</td></tr>`;
+    return `<tr><td>${s.week}</td><td>${fmtD(s.date)}</td><td>${fmt('ron91')}</td><td>${fmt('ron95')}</td><td>${fmt('ron97')}</td><td>${fmt('diesel')}</td><td>${fmt('diesel_plus')}</td><td>${fmt('kerosene')}</td><td>${note}</td></tr>`;
   }).join('');
 }
 
