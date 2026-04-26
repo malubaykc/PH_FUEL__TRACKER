@@ -22,7 +22,9 @@
         "ron91": 36.6,
         "ron95": 38.8,
         "ron97": 41.5,
-        "diesel": 28.5
+        "diesel": 28.5,
+        "diesel_plus": 41.9,
+        "kerosene": 59.7
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -156,7 +158,9 @@
         "ron91": 37.2,
         "ron95": 39.4,
         "ron97": 42.1,
-        "diesel": 29.2
+        "diesel": 29.2,
+        "diesel_plus": 42.6,
+        "kerosene": 60.4
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -290,7 +294,9 @@
         "ron91": 36.8,
         "ron95": 39.0,
         "ron97": 41.7,
-        "diesel": 28.8
+        "diesel": 28.8,
+        "diesel_plus": 42.2,
+        "kerosene": 60.0
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -424,7 +430,9 @@
         "ron91": 36.4,
         "ron95": 38.6,
         "ron97": 41.3,
-        "diesel": 27.9
+        "diesel": 27.9,
+        "diesel_plus": 41.3,
+        "kerosene": 59.1
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -558,7 +566,9 @@
         "ron91": 35.8,
         "ron95": 38.0,
         "ron97": 40.7,
-        "diesel": 26.8
+        "diesel": 26.8,
+        "diesel_plus": 40.2,
+        "kerosene": 58.0
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -692,7 +702,9 @@
         "ron91": 35.2,
         "ron95": 37.4,
         "ron97": 40.1,
-        "diesel": 25.9
+        "diesel": 25.9,
+        "diesel_plus": 39.3,
+        "kerosene": 57.1
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -826,7 +838,9 @@
         "ron91": 35.6,
         "ron95": 37.8,
         "ron97": 40.5,
-        "diesel": 26.3
+        "diesel": 26.3,
+        "diesel_plus": 39.7,
+        "kerosene": 57.5
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -960,7 +974,9 @@
         "ron91": 36.1,
         "ron95": 38.3,
         "ron97": 41.0,
-        "diesel": 27.1
+        "diesel": 27.1,
+        "diesel_plus": 40.5,
+        "kerosene": 58.3
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -1094,7 +1110,9 @@
         "ron91": 37.0,
         "ron95": 39.2,
         "ron97": 41.9,
-        "diesel": 28.0
+        "diesel": 28.0,
+        "diesel_plus": 41.4,
+        "kerosene": 59.2
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -1228,7 +1246,9 @@
         "ron91": 38.1,
         "ron95": 40.3,
         "ron97": 43.0,
-        "diesel": 29.3
+        "diesel": 29.3,
+        "diesel_plus": 42.7,
+        "kerosene": 60.5
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -1362,7 +1382,9 @@
         "ron91": 38.9,
         "ron95": 41.1,
         "ron97": 43.8,
-        "diesel": 30.2
+        "diesel": 30.2,
+        "diesel_plus": 43.6,
+        "kerosene": 61.4
       },
       "note": "Pre-TRAIN",
       "prices": [
@@ -1496,7 +1518,9 @@
         "ron91": 39.2,
         "ron95": 41.4,
         "ron97": 44.1,
-        "diesel": 30.6
+        "diesel": 30.6,
+        "diesel_plus": 44.0,
+        "kerosene": 61.8
       },
       "note": "Pre-TRAIN pre-Dec",
       "prices": [
@@ -1630,7 +1654,9 @@
         "ron91": 43.8,
         "ron95": 46.2,
         "ron97": 49.0,
-        "diesel": 34.1
+        "diesel": 34.1,
+        "diesel_plus": 47.5,
+        "kerosene": 65.3
       },
       "note": "TRAIN law Jan 1 excise hike",
       "prices": [
@@ -1764,7 +1790,9 @@
         "ron91": 44.5,
         "ron95": 46.9,
         "ron97": 49.7,
-        "diesel": 34.8
+        "diesel": 34.8,
+        "diesel_plus": 48.2,
+        "kerosene": 66.0
       },
       "note": "TRAIN",
       "prices": [
@@ -1898,7 +1926,9 @@
         "ron91": 44.9,
         "ron95": 47.3,
         "ron97": 50.1,
-        "diesel": 35.3
+        "diesel": 35.3,
+        "diesel_plus": 48.7,
+        "kerosene": 66.5
       },
       "note": "TRAIN",
       "prices": [
@@ -2032,7 +2062,9 @@
         "ron91": 45.8,
         "ron95": 48.2,
         "ron97": 51.0,
-        "diesel": 36.5
+        "diesel": 36.5,
+        "diesel_plus": 49.9,
+        "kerosene": 67.7
       },
       "note": "TRAIN; oil prices rising",
       "prices": [
@@ -2166,7 +2198,9 @@
         "ron91": 46.9,
         "ron95": 49.3,
         "ron97": 52.1,
-        "diesel": 38.2
+        "diesel": 38.2,
+        "diesel_plus": 51.6,
+        "kerosene": 69.4
       },
       "note": "Peak 2018",
       "prices": [
@@ -2300,7 +2334,9 @@
         "ron91": 48.1,
         "ron95": 50.6,
         "ron97": 53.4,
-        "diesel": 40.1
+        "diesel": 40.1,
+        "diesel_plus": 53.5,
+        "kerosene": 71.3
       },
       "note": "2018 peak period",
       "prices": [
@@ -2434,7 +2470,9 @@
         "ron91": 47.6,
         "ron95": 50.1,
         "ron97": 52.9,
-        "diesel": 39.6
+        "diesel": 39.6,
+        "diesel_plus": 53.0,
+        "kerosene": 70.8
       },
       "note": "",
       "prices": [
@@ -2568,7 +2606,9 @@
         "ron91": 47.2,
         "ron95": 49.7,
         "ron97": 52.5,
-        "diesel": 39.1
+        "diesel": 39.1,
+        "diesel_plus": 52.5,
+        "kerosene": 70.3
       },
       "note": "",
       "prices": [
@@ -2702,7 +2742,9 @@
         "ron91": 47.9,
         "ron95": 50.4,
         "ron97": 53.2,
-        "diesel": 40.3
+        "diesel": 40.3,
+        "diesel_plus": 53.7,
+        "kerosene": 71.5
       },
       "note": "",
       "prices": [
@@ -2836,7 +2878,9 @@
         "ron91": 48.5,
         "ron95": 51.0,
         "ron97": 53.8,
-        "diesel": 41.2
+        "diesel": 41.2,
+        "diesel_plus": 54.6,
+        "kerosene": 72.4
       },
       "note": "TRAIN 2nd tranche preview",
       "prices": [
@@ -2970,7 +3014,9 @@
         "ron91": 45.3,
         "ron95": 47.8,
         "ron97": 50.6,
-        "diesel": 38.5
+        "diesel": 38.5,
+        "diesel_plus": 51.9,
+        "kerosene": 69.7
       },
       "note": "Oil crash Nov 2018",
       "prices": [
@@ -3104,7 +3150,9 @@
         "ron91": 41.9,
         "ron95": 44.4,
         "ron97": 47.2,
-        "diesel": 34.2
+        "diesel": 34.2,
+        "diesel_plus": 47.6,
+        "kerosene": 65.4
       },
       "note": "Continued decline",
       "prices": [
@@ -3238,7 +3286,9 @@
         "ron91": 44.2,
         "ron95": 46.9,
         "ron97": 49.7,
-        "diesel": 37.3
+        "diesel": 37.3,
+        "diesel_plus": 50.7,
+        "kerosene": 68.5
       },
       "note": "TRAIN 2nd tranche",
       "prices": [
@@ -3372,7 +3422,9 @@
         "ron91": 43.6,
         "ron95": 46.3,
         "ron97": 49.1,
-        "diesel": 36.6
+        "diesel": 36.6,
+        "diesel_plus": 50.0,
+        "kerosene": 67.8
       },
       "note": "",
       "prices": [
@@ -3506,7 +3558,9 @@
         "ron91": 44.2,
         "ron95": 46.9,
         "ron97": 49.7,
-        "diesel": 37.4
+        "diesel": 37.4,
+        "diesel_plus": 50.8,
+        "kerosene": 68.6
       },
       "note": "",
       "prices": [
@@ -3640,7 +3694,9 @@
         "ron91": 45.1,
         "ron95": 47.8,
         "ron97": 50.6,
-        "diesel": 38.6
+        "diesel": 38.6,
+        "diesel_plus": 52.0,
+        "kerosene": 69.8
       },
       "note": "",
       "prices": [
@@ -3774,7 +3830,9 @@
         "ron91": 45.8,
         "ron95": 48.5,
         "ron97": 51.3,
-        "diesel": 39.5
+        "diesel": 39.5,
+        "diesel_plus": 52.9,
+        "kerosene": 70.7
       },
       "note": "",
       "prices": [
@@ -3908,7 +3966,9 @@
         "ron91": 44.9,
         "ron95": 47.6,
         "ron97": 50.4,
-        "diesel": 38.4
+        "diesel": 38.4,
+        "diesel_plus": 51.8,
+        "kerosene": 69.6
       },
       "note": "",
       "prices": [
@@ -4042,7 +4102,9 @@
         "ron91": 44.2,
         "ron95": 46.9,
         "ron97": 49.7,
-        "diesel": 37.6
+        "diesel": 37.6,
+        "diesel_plus": 51.0,
+        "kerosene": 68.8
       },
       "note": "",
       "prices": [
@@ -4176,7 +4238,9 @@
         "ron91": 43.5,
         "ron95": 46.2,
         "ron97": 49.0,
-        "diesel": 36.8
+        "diesel": 36.8,
+        "diesel_plus": 50.2,
+        "kerosene": 68.0
       },
       "note": "",
       "prices": [
@@ -4310,7 +4374,9 @@
         "ron91": 44.8,
         "ron95": 47.5,
         "ron97": 50.3,
-        "diesel": 39.2
+        "diesel": 39.2,
+        "diesel_plus": 52.6,
+        "kerosene": 70.4
       },
       "note": "Saudi Aramco attack Sep 14",
       "prices": [
@@ -4444,7 +4510,9 @@
         "ron91": 43.8,
         "ron95": 46.5,
         "ron97": 49.3,
-        "diesel": 37.9
+        "diesel": 37.9,
+        "diesel_plus": 51.3,
+        "kerosene": 69.1
       },
       "note": "",
       "prices": [
@@ -4578,7 +4646,9 @@
         "ron91": 43.2,
         "ron95": 45.9,
         "ron97": 48.7,
-        "diesel": 37.1
+        "diesel": 37.1,
+        "diesel_plus": 50.5,
+        "kerosene": 68.3
       },
       "note": "",
       "prices": [
@@ -4712,7 +4782,9 @@
         "ron91": 43.6,
         "ron95": 46.3,
         "ron97": 49.1,
-        "diesel": 37.5
+        "diesel": 37.5,
+        "diesel_plus": 50.9,
+        "kerosene": 68.7
       },
       "note": "",
       "prices": [
@@ -4846,7 +4918,9 @@
         "ron91": 44.0,
         "ron95": 46.7,
         "ron97": 49.5,
-        "diesel": 37.8
+        "diesel": 37.8,
+        "diesel_plus": 51.2,
+        "kerosene": 69.0
       },
       "note": "Pre-COVID",
       "prices": [
@@ -4980,7 +5054,9 @@
         "ron91": 42.8,
         "ron95": 45.5,
         "ron97": 48.3,
-        "diesel": 36.4
+        "diesel": 36.4,
+        "diesel_plus": 49.8,
+        "kerosene": 67.6
       },
       "note": "COVID concerns",
       "prices": [
@@ -5114,7 +5190,9 @@
         "ron91": 39.2,
         "ron95": 41.9,
         "ron97": 44.7,
-        "diesel": 31.6
+        "diesel": 31.6,
+        "diesel_plus": 45.0,
+        "kerosene": 62.8
       },
       "note": "COVID crash; ECQ March 16",
       "prices": [
@@ -5248,7 +5326,9 @@
         "ron91": 34.5,
         "ron95": 37.2,
         "ron97": 40.0,
-        "diesel": 26.3
+        "diesel": 26.3,
+        "diesel_plus": 39.7,
+        "kerosene": 57.5
       },
       "note": "Full lockdown ECQ",
       "prices": [
@@ -5382,7 +5462,9 @@
         "ron91": 31.8,
         "ron95": 34.5,
         "ron97": 37.3,
-        "diesel": 22.8
+        "diesel": 22.8,
+        "diesel_plus": 36.2,
+        "kerosene": 54.0
       },
       "note": "Historic low; WTI negative Apr 20",
       "prices": [
@@ -5516,7 +5598,9 @@
         "ron91": 33.5,
         "ron95": 36.2,
         "ron97": 39.0,
-        "diesel": 24.8
+        "diesel": 24.8,
+        "diesel_plus": 38.2,
+        "kerosene": 56.0
       },
       "note": "Slight recovery",
       "prices": [
@@ -5650,7 +5734,9 @@
         "ron91": 34.8,
         "ron95": 37.5,
         "ron97": 40.3,
-        "diesel": 26.3
+        "diesel": 26.3,
+        "diesel_plus": 39.7,
+        "kerosene": 57.5
       },
       "note": "",
       "prices": [
@@ -5784,7 +5870,9 @@
         "ron91": 35.4,
         "ron95": 38.1,
         "ron97": 40.9,
-        "diesel": 27.1
+        "diesel": 27.1,
+        "diesel_plus": 40.5,
+        "kerosene": 58.3
       },
       "note": "",
       "prices": [
@@ -5918,7 +6006,9 @@
         "ron91": 35.9,
         "ron95": 38.6,
         "ron97": 41.4,
-        "diesel": 27.8
+        "diesel": 27.8,
+        "diesel_plus": 41.2,
+        "kerosene": 59.0
       },
       "note": "",
       "prices": [
@@ -6052,7 +6142,9 @@
         "ron91": 36.1,
         "ron95": 38.8,
         "ron97": 41.6,
-        "diesel": 28.0
+        "diesel": 28.0,
+        "diesel_plus": 41.4,
+        "kerosene": 59.2
       },
       "note": "",
       "prices": [
@@ -6186,7 +6278,9 @@
         "ron91": 36.8,
         "ron95": 39.5,
         "ron97": 42.3,
-        "diesel": 28.8
+        "diesel": 28.8,
+        "diesel_plus": 42.2,
+        "kerosene": 60.0
       },
       "note": "Vaccine news; recovery",
       "prices": [
@@ -6320,7 +6414,9 @@
         "ron91": 37.5,
         "ron95": 40.2,
         "ron97": 43.0,
-        "diesel": 29.6
+        "diesel": 29.6,
+        "diesel_plus": 43.0,
+        "kerosene": 60.8
       },
       "note": "",
       "prices": [
@@ -6454,7 +6550,9 @@
         "ron91": 38.2,
         "ron95": 40.9,
         "ron97": 43.7,
-        "diesel": 30.5
+        "diesel": 30.5,
+        "diesel_plus": 43.9,
+        "kerosene": 61.7
       },
       "note": "",
       "prices": [
@@ -6588,7 +6686,9 @@
         "ron91": 39.5,
         "ron95": 42.2,
         "ron97": 45.0,
-        "diesel": 32.1
+        "diesel": 32.1,
+        "diesel_plus": 45.5,
+        "kerosene": 63.3
       },
       "note": "Oil recovery",
       "prices": [
@@ -6722,7 +6822,9 @@
         "ron91": 41.2,
         "ron95": 43.9,
         "ron97": 46.7,
-        "diesel": 34.2
+        "diesel": 34.2,
+        "diesel_plus": 47.6,
+        "kerosene": 65.4
       },
       "note": "",
       "prices": [
@@ -6856,7 +6958,9 @@
         "ron91": 42.8,
         "ron95": 45.5,
         "ron97": 48.3,
-        "diesel": 36.0
+        "diesel": 36.0,
+        "diesel_plus": 49.4,
+        "kerosene": 67.2
       },
       "note": "",
       "prices": [
@@ -6990,7 +7094,9 @@
         "ron91": 44.1,
         "ron95": 46.8,
         "ron97": 49.6,
-        "diesel": 37.8
+        "diesel": 37.8,
+        "diesel_plus": 51.2,
+        "kerosene": 69.0
       },
       "note": "",
       "prices": [
@@ -7124,7 +7230,9 @@
         "ron91": 45.9,
         "ron95": 48.6,
         "ron97": 51.4,
-        "diesel": 40.2
+        "diesel": 40.2,
+        "diesel_plus": 53.6,
+        "kerosene": 71.4
       },
       "note": "",
       "prices": [
@@ -7258,7 +7366,9 @@
         "ron91": 47.2,
         "ron95": 49.9,
         "ron97": 52.7,
-        "diesel": 42.0
+        "diesel": 42.0,
+        "diesel_plus": 55.4,
+        "kerosene": 73.2
       },
       "note": "Delta variant",
       "prices": [
@@ -7392,7 +7502,9 @@
         "ron91": 48.1,
         "ron95": 50.8,
         "ron97": 53.6,
-        "diesel": 43.2
+        "diesel": 43.2,
+        "diesel_plus": 56.6,
+        "kerosene": 74.4
       },
       "note": "",
       "prices": [
@@ -7526,7 +7638,9 @@
         "ron91": 49.8,
         "ron95": 52.5,
         "ron97": 55.3,
-        "diesel": 45.5
+        "diesel": 45.5,
+        "diesel_plus": 58.9,
+        "kerosene": 76.7
       },
       "note": "",
       "prices": [
@@ -7660,7 +7774,9 @@
         "ron91": 52.3,
         "ron95": 55.0,
         "ron97": 57.8,
-        "diesel": 49.1
+        "diesel": 49.1,
+        "diesel_plus": 62.5,
+        "kerosene": 80.3
       },
       "note": "Global supply squeeze",
       "prices": [
@@ -7794,7 +7910,9 @@
         "ron91": 53.8,
         "ron95": 56.5,
         "ron97": 59.3,
-        "diesel": 51.2
+        "diesel": 51.2,
+        "diesel_plus": 64.6,
+        "kerosene": 82.4
       },
       "note": "",
       "prices": [
@@ -7928,7 +8046,9 @@
         "ron91": 51.2,
         "ron95": 53.9,
         "ron97": 56.7,
-        "diesel": 48.3
+        "diesel": 48.3,
+        "diesel_plus": 61.7,
+        "kerosene": 79.5
       },
       "note": "Omicron; SPR release",
       "prices": [
@@ -8062,7 +8182,9 @@
         "ron91": 52.1,
         "ron95": 54.8,
         "ron97": 57.6,
-        "diesel": 49.8
+        "diesel": 49.8,
+        "diesel_plus": 63.2,
+        "kerosene": 81.0
       },
       "note": "",
       "prices": [
@@ -8196,7 +8318,9 @@
         "ron91": 54.8,
         "ron95": 57.5,
         "ron97": 60.3,
-        "diesel": 53.2
+        "diesel": 53.2,
+        "diesel_plus": 66.6,
+        "kerosene": 84.4
       },
       "note": "Ukraine invasion Feb 24",
       "prices": [
@@ -8330,7 +8454,9 @@
         "ron91": 62.5,
         "ron95": 65.2,
         "ron97": 68.0,
-        "diesel": 67.8
+        "diesel": 67.8,
+        "diesel_plus": 81.2,
+        "kerosene": 99.0
       },
       "note": "War spike; Russia-Ukraine",
       "prices": [
@@ -8464,7 +8590,9 @@
         "ron91": 73.2,
         "ron95": 75.9,
         "ron97": 78.7,
-        "diesel": 77.5
+        "diesel": 77.5,
+        "diesel_plus": 90.9,
+        "kerosene": 108.7
       },
       "note": "Peak war period",
       "prices": [
@@ -8598,7 +8726,9 @@
         "ron91": 79.4,
         "ron95": 82.1,
         "ron97": 84.9,
-        "diesel": 82.3
+        "diesel": 82.3,
+        "diesel_plus": 95.7,
+        "kerosene": 113.5
       },
       "note": "",
       "prices": [
@@ -8732,7 +8862,9 @@
         "ron91": 82.1,
         "ron95": 84.8,
         "ron97": 87.6,
-        "diesel": 86.2
+        "diesel": 86.2,
+        "diesel_plus": 99.6,
+        "kerosene": 117.4
       },
       "note": "All-time high 2022",
       "prices": [
@@ -8866,7 +8998,9 @@
         "ron91": 78.9,
         "ron95": 81.6,
         "ron97": 84.4,
-        "diesel": 81.5
+        "diesel": 81.5,
+        "diesel_plus": 94.9,
+        "kerosene": 112.7
       },
       "note": "Demand fears; pullback",
       "prices": [
@@ -9000,7 +9134,9 @@
         "ron91": 74.2,
         "ron95": 76.9,
         "ron97": 79.7,
-        "diesel": 75.8
+        "diesel": 75.8,
+        "diesel_plus": 89.2,
+        "kerosene": 107.0
       },
       "note": "",
       "prices": [
@@ -9134,7 +9270,9 @@
         "ron91": 70.1,
         "ron95": 72.8,
         "ron97": 75.6,
-        "diesel": 71.2
+        "diesel": 71.2,
+        "diesel_plus": 84.6,
+        "kerosene": 102.4
       },
       "note": "",
       "prices": [
@@ -9268,7 +9406,9 @@
         "ron91": 71.5,
         "ron95": 74.2,
         "ron97": 77.0,
-        "diesel": 73.8
+        "diesel": 73.8,
+        "diesel_plus": 87.2,
+        "kerosene": 105.0
       },
       "note": "",
       "prices": [
@@ -9402,7 +9542,9 @@
         "ron91": 67.3,
         "ron95": 70.0,
         "ron97": 72.8,
-        "diesel": 68.4
+        "diesel": 68.4,
+        "diesel_plus": 81.8,
+        "kerosene": 99.6
       },
       "note": "",
       "prices": [
@@ -9536,7 +9678,9 @@
         "ron91": 63.2,
         "ron95": 65.9,
         "ron97": 68.7,
-        "diesel": 62.1
+        "diesel": 62.1,
+        "diesel_plus": 75.5,
+        "kerosene": 93.3
       },
       "note": "Rapid decline",
       "prices": [
@@ -9670,7 +9814,9 @@
         "ron91": 62.8,
         "ron95": 65.5,
         "ron97": 68.3,
-        "diesel": 61.2
+        "diesel": 61.2,
+        "diesel_plus": 74.6,
+        "kerosene": 92.4
       },
       "note": "",
       "prices": [
@@ -9804,7 +9950,9 @@
         "ron91": 63.5,
         "ron95": 66.2,
         "ron97": 69.0,
-        "diesel": 62.4
+        "diesel": 62.4,
+        "diesel_plus": 75.8,
+        "kerosene": 93.6
       },
       "note": "",
       "prices": [
@@ -9938,7 +10086,9 @@
         "ron91": 62.1,
         "ron95": 64.8,
         "ron97": 67.6,
-        "diesel": 60.3
+        "diesel": 60.3,
+        "diesel_plus": 73.7,
+        "kerosene": 91.5
       },
       "note": "SVB crisis; oil drop",
       "prices": [
@@ -10072,7 +10222,9 @@
         "ron91": 64.2,
         "ron95": 66.9,
         "ron97": 69.7,
-        "diesel": 62.8
+        "diesel": 62.8,
+        "diesel_plus": 76.2,
+        "kerosene": 94.0
       },
       "note": "OPEC+ surprise cut",
       "prices": [
@@ -10206,7 +10358,9 @@
         "ron91": 63.8,
         "ron95": 66.5,
         "ron97": 69.3,
-        "diesel": 61.9
+        "diesel": 61.9,
+        "diesel_plus": 75.3,
+        "kerosene": 93.1
       },
       "note": "",
       "prices": [
@@ -10340,7 +10494,9 @@
         "ron91": 62.4,
         "ron95": 65.1,
         "ron97": 67.9,
-        "diesel": 59.8
+        "diesel": 59.8,
+        "diesel_plus": 73.2,
+        "kerosene": 91.0
       },
       "note": "",
       "prices": [
@@ -10474,7 +10630,9 @@
         "ron91": 63.9,
         "ron95": 66.6,
         "ron97": 69.4,
-        "diesel": 61.5
+        "diesel": 61.5,
+        "diesel_plus": 74.9,
+        "kerosene": 92.7
       },
       "note": "",
       "prices": [
@@ -10608,7 +10766,9 @@
         "ron91": 65.8,
         "ron95": 68.5,
         "ron97": 71.3,
-        "diesel": 64.2
+        "diesel": 64.2,
+        "diesel_plus": 77.6,
+        "kerosene": 95.4
       },
       "note": "Saudi cut extension",
       "prices": [
@@ -10742,7 +10902,9 @@
         "ron91": 67.4,
         "ron95": 70.1,
         "ron97": 72.9,
-        "diesel": 66.8
+        "diesel": 66.8,
+        "diesel_plus": 80.2,
+        "kerosene": 98.0
       },
       "note": "",
       "prices": [
@@ -10876,7 +11038,9 @@
         "ron91": 68.1,
         "ron95": 70.8,
         "ron97": 73.6,
-        "diesel": 67.5
+        "diesel": 67.5,
+        "diesel_plus": 80.9,
+        "kerosene": 98.7
       },
       "note": "Hamas-Israel conflict",
       "prices": [
@@ -11010,7 +11174,9 @@
         "ron91": 65.2,
         "ron95": 67.9,
         "ron97": 70.7,
-        "diesel": 63.4
+        "diesel": 63.4,
+        "diesel_plus": 76.8,
+        "kerosene": 94.6
       },
       "note": "",
       "prices": [
@@ -11144,7 +11310,9 @@
         "ron91": 62.8,
         "ron95": 65.5,
         "ron97": 68.3,
-        "diesel": 59.8
+        "diesel": 59.8,
+        "diesel_plus": 73.2,
+        "kerosene": 91.0
       },
       "note": "Demand concern",
       "prices": [
@@ -11278,7 +11446,9 @@
         "ron91": 63.1,
         "ron95": 65.8,
         "ron97": 68.6,
-        "diesel": 60.2
+        "diesel": 60.2,
+        "diesel_plus": 73.6,
+        "kerosene": 91.4
       },
       "note": "",
       "prices": [
@@ -11412,7 +11582,9 @@
         "ron91": 63.8,
         "ron95": 66.5,
         "ron97": 69.3,
-        "diesel": 61.1
+        "diesel": 61.1,
+        "diesel_plus": 74.5,
+        "kerosene": 92.3
       },
       "note": "",
       "prices": [
@@ -11546,7 +11718,9 @@
         "ron91": 65.2,
         "ron95": 67.9,
         "ron97": 70.7,
-        "diesel": 63.4
+        "diesel": 63.4,
+        "diesel_plus": 76.8,
+        "kerosene": 94.6
       },
       "note": "",
       "prices": [
@@ -11680,7 +11854,9 @@
         "ron91": 66.1,
         "ron95": 68.8,
         "ron97": 71.6,
-        "diesel": 64.8
+        "diesel": 64.8,
+        "diesel_plus": 78.2,
+        "kerosene": 96.0
       },
       "note": "Mid-East tensions",
       "prices": [
@@ -11814,7 +11990,9 @@
         "ron91": 65.4,
         "ron95": 68.1,
         "ron97": 70.9,
-        "diesel": 63.5
+        "diesel": 63.5,
+        "diesel_plus": 76.9,
+        "kerosene": 94.7
       },
       "note": "",
       "prices": [
@@ -11948,7 +12126,9 @@
         "ron91": 64.8,
         "ron95": 67.5,
         "ron97": 70.3,
-        "diesel": 62.6
+        "diesel": 62.6,
+        "diesel_plus": 76.0,
+        "kerosene": 93.8
       },
       "note": "",
       "prices": [
@@ -12082,7 +12262,9 @@
         "ron91": 62.5,
         "ron95": 65.2,
         "ron97": 68.0,
-        "diesel": 59.8
+        "diesel": 59.8,
+        "diesel_plus": 73.2,
+        "kerosene": 91.0
       },
       "note": "",
       "prices": [
@@ -12216,7 +12398,9 @@
         "ron91": 60.1,
         "ron95": 62.8,
         "ron97": 65.6,
-        "diesel": 57.2
+        "diesel": 57.2,
+        "diesel_plus": 70.6,
+        "kerosene": 88.4
       },
       "note": "Demand concerns",
       "prices": [
@@ -12350,7 +12534,9 @@
         "ron91": 58.8,
         "ron95": 61.5,
         "ron97": 64.3,
-        "diesel": 55.4
+        "diesel": 55.4,
+        "diesel_plus": 68.8,
+        "kerosene": 86.6
       },
       "note": "",
       "prices": [
@@ -12484,7 +12670,9 @@
         "ron91": 57.2,
         "ron95": 59.9,
         "ron97": 62.7,
-        "diesel": 53.1
+        "diesel": 53.1,
+        "diesel_plus": 66.5,
+        "kerosene": 84.3
       },
       "note": "",
       "prices": [
@@ -12618,7 +12806,9 @@
         "ron91": 56.1,
         "ron95": 58.8,
         "ron97": 61.6,
-        "diesel": 51.8
+        "diesel": 51.8,
+        "diesel_plus": 65.2,
+        "kerosene": 83.0
       },
       "note": "",
       "prices": [
@@ -12752,7 +12942,9 @@
         "ron91": 55.2,
         "ron95": 57.9,
         "ron97": 60.7,
-        "diesel": 50.6
+        "diesel": 50.6,
+        "diesel_plus": 64.0,
+        "kerosene": 81.8
       },
       "note": "",
       "prices": [
@@ -12886,7 +13078,9 @@
         "ron91": 55.9,
         "ron95": 58.6,
         "ron97": 61.4,
-        "diesel": 51.1
+        "diesel": 51.1,
+        "diesel_plus": 64.5,
+        "kerosene": 82.3
       },
       "note": "Late Dec 2024",
       "prices": [
@@ -13020,7 +13214,9 @@
         "ron91": 56.3,
         "ron95": 59.0,
         "ron97": 61.8,
-        "diesel": 51.8
+        "diesel": 51.8,
+        "diesel_plus": 65.2,
+        "kerosene": 83.0
       },
       "note": "",
       "prices": [
@@ -13154,7 +13350,9 @@
         "ron91": 57.5,
         "ron95": 60.2,
         "ron97": 63.0,
-        "diesel": 53.2
+        "diesel": 53.2,
+        "diesel_plus": 66.6,
+        "kerosene": 84.4
       },
       "note": "",
       "prices": [
@@ -13288,7 +13486,9 @@
         "ron91": 58.2,
         "ron95": 60.9,
         "ron97": 63.7,
-        "diesel": 54.1
+        "diesel": 54.1,
+        "diesel_plus": 67.5,
+        "kerosene": 85.3
       },
       "note": "",
       "prices": [
@@ -13422,7 +13622,9 @@
         "ron91": 58.8,
         "ron95": 61.5,
         "ron97": 64.3,
-        "diesel": 54.9
+        "diesel": 54.9,
+        "diesel_plus": 68.3,
+        "kerosene": 86.1
       },
       "note": "",
       "prices": [
@@ -13556,7 +13758,9 @@
         "ron91": 58.1,
         "ron95": 60.8,
         "ron97": 63.6,
-        "diesel": 54.2
+        "diesel": 54.2,
+        "diesel_plus": 67.6,
+        "kerosene": 85.4
       },
       "note": "",
       "prices": [
@@ -13690,7 +13894,9 @@
         "ron91": 57.8,
         "ron95": 60.5,
         "ron97": 63.3,
-        "diesel": 53.8
+        "diesel": 53.8,
+        "diesel_plus": 67.2,
+        "kerosene": 85.0
       },
       "note": "",
       "prices": [
@@ -13824,7 +14030,9 @@
         "ron91": 57.2,
         "ron95": 59.9,
         "ron97": 62.7,
-        "diesel": 53.1
+        "diesel": 53.1,
+        "diesel_plus": 66.5,
+        "kerosene": 84.3
       },
       "note": "",
       "prices": [
@@ -13958,7 +14166,9 @@
         "ron91": 55.25,
         "ron95": 57.95,
         "ron97": 62.55,
-        "diesel": 50.8
+        "diesel": 50.8,
+        "diesel_plus": 64.2,
+        "kerosene": 82.0
       },
       "note": "Jul 8-14 DOE PDF",
       "prices": [
@@ -14092,7 +14302,9 @@
         "ron91": 55.3,
         "ron95": 58.8,
         "ron97": 68.18,
-        "diesel": 51.2
+        "diesel": 51.2,
+        "diesel_plus": 64.6,
+        "kerosene": 82.4
       },
       "note": "Aug 5-11 DOE PDF",
       "prices": [
@@ -14226,7 +14438,9 @@
         "ron91": 55.7,
         "ron95": 57.7,
         "ron97": 66.98,
-        "diesel": 52.4
+        "diesel": 52.4,
+        "diesel_plus": 65.8,
+        "kerosene": 83.6
       },
       "note": "Aug 26-Sep 1 DOE PDF",
       "prices": [
@@ -14360,7 +14574,9 @@
         "ron91": 53.8,
         "ron95": 57.0,
         "ron97": 62.55,
-        "diesel": 57.8
+        "diesel": 57.8,
+        "diesel_plus": 71.2,
+        "kerosene": 89.0
       },
       "note": "Sep 30 DOE PDF",
       "prices": [
@@ -14494,7 +14710,9 @@
         "ron91": 52.4,
         "ron95": 55.2,
         "ron97": 62.55,
-        "diesel": 57.8
+        "diesel": 57.8,
+        "diesel_plus": 71.2,
+        "kerosene": 89.0
       },
       "note": "Oct 20-27 DOE PDF",
       "prices": [
@@ -14628,7 +14846,9 @@
         "ron91": 51.5,
         "ron95": 54.3,
         "ron97": 60.8,
-        "diesel": 55.2
+        "diesel": 55.2,
+        "diesel_plus": 68.6,
+        "kerosene": 86.4
       },
       "note": "Nov 3 DOE PDF",
       "prices": [
@@ -14762,7 +14982,9 @@
         "ron91": 50.8,
         "ron95": 53.6,
         "ron97": 59.5,
-        "diesel": 51.8
+        "diesel": 51.8,
+        "diesel_plus": 65.2,
+        "kerosene": 83.0
       },
       "note": "Dec 2025",
       "prices": [
@@ -14896,7 +15118,9 @@
         "ron91": 50.7,
         "ron95": 53.5,
         "ron97": 59.3,
-        "diesel": 51.1
+        "diesel": 51.1,
+        "diesel_plus": 64.5,
+        "kerosene": 82.3
       },
       "note": "Dec 16 2025",
       "prices": [
@@ -15030,7 +15254,9 @@
         "ron91": 51.0,
         "ron95": 53.8,
         "ron97": 59.5,
-        "diesel": 51.8
+        "diesel": 51.8,
+        "diesel_plus": 65.2,
+        "kerosene": 83.0
       },
       "note": "",
       "prices": [
@@ -15164,7 +15390,9 @@
         "ron91": 52.3,
         "ron95": 55.0,
         "ron97": 61.1,
-        "diesel": 53.1
+        "diesel": 53.1,
+        "diesel_plus": 66.5,
+        "kerosene": 84.3
       },
       "note": "",
       "prices": [
@@ -15298,7 +15526,9 @@
         "ron91": 53.8,
         "ron95": 56.5,
         "ron97": 62.3,
-        "diesel": 54.2
+        "diesel": 54.2,
+        "diesel_plus": 67.6,
+        "kerosene": 85.4
       },
       "note": "Pre-Hormuz closure",
       "prices": [
@@ -15432,7 +15662,9 @@
         "ron91": 55.0,
         "ron95": 57.8,
         "ron97": 63.5,
-        "diesel": 55.4
+        "diesel": 55.4,
+        "diesel_plus": 68.8,
+        "kerosene": 86.6
       },
       "note": "Hormuz closure Feb 28",
       "prices": [
@@ -15566,7 +15798,9 @@
         "ron91": 61.3,
         "ron95": 64.1,
         "ron97": 70.2,
-        "diesel": 63.5
+        "diesel": 63.5,
+        "diesel_plus": 76.9,
+        "kerosene": 94.7
       },
       "note": "Crisis week 1; 20% world supply cut",
       "prices": [
@@ -15700,7 +15934,9 @@
         "ron91": 67.8,
         "ron95": 70.6,
         "ron97": 76.8,
-        "diesel": 73.6
+        "diesel": 73.6,
+        "diesel_plus": 87.0,
+        "kerosene": 104.8
       },
       "note": "Crisis week 2",
       "prices": [
@@ -15834,7 +16070,9 @@
         "ron91": 76.2,
         "ron95": 79.0,
         "ron97": 85.5,
-        "diesel": 92.8
+        "diesel": 92.8,
+        "diesel_plus": 106.2,
+        "kerosene": 124.0
       },
       "note": "Diesel >\u20b180; national emergency looming",
       "prices": [
@@ -15968,7 +16206,9 @@
         "ron91": 84.5,
         "ron95": 87.3,
         "ron97": 94.2,
-        "diesel": 118.4
+        "diesel": 118.4,
+        "diesel_plus": 131.8,
+        "kerosene": 149.6
       },
       "note": "National emergency declared; diesel >\u20b1100",
       "prices": [
@@ -16102,7 +16342,9 @@
         "ron91": 91.0,
         "ron95": 93.8,
         "ron97": 100.1,
-        "diesel": 135.6
+        "diesel": 135.6,
+        "diesel_plus": 149.0,
+        "kerosene": 166.8
       },
       "note": "",
       "prices": [
@@ -16236,7 +16478,9 @@
         "ron91": 94.5,
         "ron95": 97.3,
         "ron97": 103.9,
-        "diesel": 153.7
+        "diesel": 153.7,
+        "diesel_plus": 167.1,
+        "kerosene": 184.9
       },
       "note": "Pre-rollback peak per Rappler",
       "prices": [
@@ -16370,7 +16614,9 @@
         "ron91": 86.1,
         "ron95": 88.1,
         "ron97": 98.1,
-        "diesel": 123.4
+        "diesel": 123.4,
+        "diesel_plus": 136.8,
+        "kerosene": 154.6
       },
       "note": "Apr 14-20 DOE PDF; rollback \u20b120 diesel",
       "prices": [
@@ -16493,20 +16739,82 @@
           "fuel_type": "Diesel",
           "price": 123.1,
           "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Diesel Plus",
+          "price": 137.1,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Kerosene",
+          "price": 154.9,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Diesel Plus",
+          "price": 137.6,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Kerosene",
+          "price": 155.1,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Diesel Plus",
+          "price": 137.3,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Kerosene",
+          "price": 154.8,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Diesel Plus",
+          "price": 136.7,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Kerosene",
+          "price": 154.4,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Diesel Plus",
+          "price": 136.5,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Kerosene",
+          "price": 154.2,
+          "region": "NCR"
         }
       ]
     },
     {
       "week": "2026-W17",
       "date": "2026-04-21",
-      "source": "DOE Philippines (OIMB)",
-      "note": "Rollback 2: RON91 -P3.41, RON95 -P4.00, RON97 -P4.50, Diesel -P24.94 effective Apr 21",
+      "source": "DOE Philippines OIMB",
       "ncr_common": {
         "ron91": 82.69,
-        "ron95": 84.1,
         "ron97": 93.6,
-        "diesel": 98.46
+        "ron95": 84.1,
+        "diesel": 98.46,
+        "diesel_plus": 111.86,
+        "kerosene": 152.6
       },
+      "note": "Rollback 2: RON91 -P3.41, RON95 -P4.00, RON97 -P4.50, Diesel -P24.94, Kerosene -P2.00 effective Apr 21",
       "prices": [
         {
           "brand": "Petron",
@@ -16530,6 +16838,18 @@
           "brand": "Petron",
           "fuel_type": "Diesel",
           "price": 98.76,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Diesel Plus",
+          "price": 112.16,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Kerosene",
+          "price": 152.9,
           "region": "NCR"
         },
         {
@@ -16557,6 +16877,18 @@
           "region": "NCR"
         },
         {
+          "brand": "Shell",
+          "fuel_type": "Diesel Plus",
+          "price": 112.66,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Kerosene",
+          "price": 153.1,
+          "region": "NCR"
+        },
+        {
           "brand": "Caltex",
           "fuel_type": "Ron 91",
           "price": 83.09,
@@ -16578,6 +16910,18 @@
           "brand": "Caltex",
           "fuel_type": "Diesel",
           "price": 98.96,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Diesel Plus",
+          "price": 112.3,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Kerosene",
+          "price": 152.8,
           "region": "NCR"
         },
         {
@@ -16605,6 +16949,18 @@
           "region": "NCR"
         },
         {
+          "brand": "Phoenix",
+          "fuel_type": "Diesel Plus",
+          "price": 111.76,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Kerosene",
+          "price": 152.4,
+          "region": "NCR"
+        },
+        {
           "brand": "Seaoil",
           "fuel_type": "Ron 91",
           "price": 82.19,
@@ -16626,6 +16982,18 @@
           "brand": "Seaoil",
           "fuel_type": "Diesel",
           "price": 98.16,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Diesel Plus",
+          "price": 111.56,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Kerosene",
+          "price": 152.2,
           "region": "NCR"
         }
       ]
