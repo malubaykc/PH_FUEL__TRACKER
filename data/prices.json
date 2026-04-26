@@ -1,14 +1,14 @@
 {
   "meta": {
-    "source": "DOE Philippines — Oil Industry Management Bureau (OIMB)",
+    "source": "DOE Philippines \u2014 Oil Industry Management Bureau (OIMB)",
     "url": "https://doe.gov.ph/oil-monitor",
     "description": "Weekly NCR retail pump prices per liter (PHP). Brand prices derived from DOE common price + typical brand premium/discount.",
     "notes": [
-      "TRAIN law (RA 10963): excise taxes took effect Jan 1, 2018 (+₱2.65/L gasoline, +₱2.80/L diesel)",
-      "TRAIN 2nd tranche: Jan 1, 2019 (+₱1.40/L gasoline, +₱2.00/L diesel)",
+      "TRAIN law (RA 10963): excise taxes took effect Jan 1, 2018 (+\u20b12.65/L gasoline, +\u20b12.80/L diesel)",
+      "TRAIN 2nd tranche: Jan 1, 2019 (+\u20b11.40/L gasoline, +\u20b12.00/L diesel)",
       "COVID-19: historic lows Apr-May 2020 (WTI briefly negative Apr 20, 2020)",
       "Russia-Ukraine war: Feb 24, 2022 spike; peak ~Jun-Jul 2022",
-      "2026 Hormuz crisis: Iran war started, strait closed Feb 28, 2026; diesel peaked ₱153.70 Apr 7-13; ₱20 rollback Apr 14; ₱24.94 rollback Apr 21 per President Marcos"
+      "2026 Hormuz crisis: Iran war started, strait closed Feb 28, 2026; diesel peaked \u20b1153.70 Apr 7-13; \u20b120 rollback Apr 14; \u20b124.94 rollback Apr 21 per President Marcos"
     ],
     "last_updated": "2026-04-26T15:16:10.380502Z",
     "total_records": 2480
@@ -15836,7 +15836,7 @@
         "ron97": 85.5,
         "diesel": 92.8
       },
-      "note": "Diesel >₱80; national emergency looming",
+      "note": "Diesel >\u20b180; national emergency looming",
       "prices": [
         {
           "brand": "Petron",
@@ -15970,7 +15970,7 @@
         "ron97": 94.2,
         "diesel": 118.4
       },
-      "note": "National emergency declared; diesel >₱100",
+      "note": "National emergency declared; diesel >\u20b1100",
       "prices": [
         {
           "brand": "Petron",
@@ -16372,7 +16372,7 @@
         "ron97": 98.1,
         "diesel": 123.4
       },
-      "note": "Apr 14-20 DOE PDF; rollback ₱20 diesel",
+      "note": "Apr 14-20 DOE PDF; rollback \u20b120 diesel",
       "prices": [
         {
           "brand": "Petron",
@@ -16501,131 +16501,131 @@
       "date": "2026-04-20",
       "source": "DOE Philippines OIMB",
       "ncr_common": {
-        "ron91": 56.65,
-        "ron97": 67.99,
-        "ron95": 58.15,
-        "diesel": 59.74
+        "ron91": 82.69,
+        "ron95": 84.1,
+        "ron97": 93.6,
+        "diesel": 98.46
       },
-      "note": "",
+      "note": "Rollback 2: RON91 -P3.41, Diesel -P24.94 effective Apr 21 (Marcos Apr 18 announcement)",
       "prices": [
         {
           "brand": "Petron",
           "fuel_type": "Ron 91",
-          "price": 56.85,
-          "region": "NCR"
-        },
-        {
-          "brand": "Petron",
-          "fuel_type": "Ron 97",
-          "price": 68.39,
+          "price": 82.89,
           "region": "NCR"
         },
         {
           "brand": "Petron",
           "fuel_type": "Ron 95",
-          "price": 58.45,
+          "price": 84.4,
+          "region": "NCR"
+        },
+        {
+          "brand": "Petron",
+          "fuel_type": "Ron 97",
+          "price": 94.0,
           "region": "NCR"
         },
         {
           "brand": "Petron",
           "fuel_type": "Diesel",
-          "price": 60.04,
+          "price": 98.76,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Ron 91",
-          "price": 57.45,
-          "region": "NCR"
-        },
-        {
-          "brand": "Shell",
-          "fuel_type": "Ron 97",
-          "price": 68.99,
+          "price": 83.49,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Ron 95",
-          "price": 59.05,
+          "price": 85.0,
+          "region": "NCR"
+        },
+        {
+          "brand": "Shell",
+          "fuel_type": "Ron 97",
+          "price": 94.6,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Diesel",
-          "price": 60.54,
+          "price": 99.26,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Ron 91",
-          "price": 57.05,
-          "region": "NCR"
-        },
-        {
-          "brand": "Caltex",
-          "fuel_type": "Ron 97",
-          "price": 68.59,
+          "price": 83.09,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Ron 95",
-          "price": 58.65,
+          "price": 84.6,
+          "region": "NCR"
+        },
+        {
+          "brand": "Caltex",
+          "fuel_type": "Ron 97",
+          "price": 94.2,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Diesel",
-          "price": 60.24,
+          "price": 98.96,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Ron 91",
-          "price": 56.45,
-          "region": "NCR"
-        },
-        {
-          "brand": "Phoenix",
-          "fuel_type": "Ron 97",
-          "price": 67.79,
+          "price": 82.49,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Ron 95",
-          "price": 57.95,
+          "price": 83.9,
+          "region": "NCR"
+        },
+        {
+          "brand": "Phoenix",
+          "fuel_type": "Ron 97",
+          "price": 93.4,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Diesel",
-          "price": 59.64,
+          "price": 98.36,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Ron 91",
-          "price": 56.15,
-          "region": "NCR"
-        },
-        {
-          "brand": "Seaoil",
-          "fuel_type": "Ron 97",
-          "price": 67.49,
+          "price": 82.19,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Ron 95",
-          "price": 57.65,
+          "price": 83.6,
+          "region": "NCR"
+        },
+        {
+          "brand": "Seaoil",
+          "fuel_type": "Ron 97",
+          "price": 93.1,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Diesel",
-          "price": 59.44,
+          "price": 98.16,
           "region": "NCR"
         }
       ]
