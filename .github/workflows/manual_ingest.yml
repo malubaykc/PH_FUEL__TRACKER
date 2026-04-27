@@ -26,9 +26,9 @@ jobs:
 
       - name: Find uploaded PDF
         run: |
-          PDF=$(ls data/pdfs/*.pdf 2>/dev/null | grep -v ".gitkeep" | head -1)
+          PDF=$(ls data/pdfs/*.pdf 2>/dev/null | head -1)
           if [ -z "$PDF" ]; then
-            echo "❌ No PDF found in data/pdfs/ — upload one first"
+            echo "❌ No PDF found in data/pdfs/"
             exit 1
           fi
           echo "PDF_PATH=$PDF" >> $GITHUB_ENV
