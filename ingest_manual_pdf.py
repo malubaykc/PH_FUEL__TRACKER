@@ -29,17 +29,25 @@ DATA_PATH = Path("data/prices.json")
 
 # ── PARSE ─────────────────────────────────────────────────────────────────────
 
+SUMMARY_HEADER = "PREVAILING RETAIL PRICES OF PETROLEUM PRODUCTS NCR"
+
 def parse_summary_table(text: str) -> dict:
     """
-    Parse the PREVAILING RETAIL PRICES summary block at the bottom of the DOE PDF.
-    Looks for lines like:
-      Gasoline (RON91)       74.00  -  89.50   88.60
-      Gasoline (RON95)       75.00  -  98.50   98.50
-      ...
-    The LAST number on each matching line is the common price.
+    Parse ONLY the summary block at the bottom of the DOE PDF.
+    Slices to the summary header first so per-city rows are excluded.
+    Format: product  min  max  common_price
+    Returns dict with prices + _ranges dict with real min/max from PDF.
     """
+    idx = text.find(SUMMARY_HEADER)
+    if idx == -1:
+        print("  [summary] Header not found in PDF text")
+        return {}
+
+    summary_text = text[idx:]
     data = {}
-    for line in text.split("\n"):
+    ranges = {}
+
+    for line in summary_text.split("\n"):
         line_upper = line.upper()
         numbers = re.findall(r"\d+\.?\d*", line.replace(",", ""))
         floats = [float(n) for n in numbers if 50.0 <= float(n) <= 300.0]
@@ -47,21 +55,28 @@ def parse_summary_table(text: str) -> dict:
         if len(floats) < 3:
             continue
 
-        common_price = floats[-1]   # last column = common price
+        common_price = floats[-1]
+        range_min    = floats[-3]
+        range_max    = floats[-2]
+
+        def store(key):
+            data[key]   = common_price
+            ranges[key] = {"min": range_min, "max": range_max}
 
         if re.search(r"RON\s*97|RON\s*97/100", line_upper) and "ron97" not in data:
-            data["ron97"] = common_price
+            store("ron97")
         elif re.search(r"RON\s*95", line_upper) and "ron95" not in data:
-            data["ron95"] = common_price
+            store("ron95")
         elif re.search(r"RON\s*91", line_upper) and "ron91" not in data:
-            data["ron91"] = common_price
+            store("ron91")
         elif re.search(r"\bDIESEL PLUS\b", line_upper) and "diesel_plus" not in data:
-            data["diesel_plus"] = common_price
+            store("diesel_plus")
         elif re.search(r"\bDIESEL\b", line_upper) and "DIESEL PLUS" not in line_upper and "diesel" not in data:
-            data["diesel"] = common_price
+            store("diesel")
         elif re.search(r"\bKEROSENE\b", line_upper) and "kerosene" not in data:
-            data["kerosene"] = common_price
+            store("kerosene")
 
+    data["_ranges"] = ranges
     return data
 
 
@@ -156,6 +171,7 @@ def update_data(date: datetime, prices: dict):
             "diesel_plus": prices.get("diesel_plus"),
             "kerosene":    prices.get("kerosene"),
         },
+        "ncr_range": prices.get("_ranges", {}),
         "prices": (
             brand_entries("Petron") +
             brand_entries("Shell") +
