@@ -618,8 +618,9 @@ function render(){
     const c = ncr(Ls,p.key);
     const pv = Ps ? ncr(Ps,p.key) : null;
     if(typeof c !== 'number') return '';
-    const mn = (c-p.lo).toFixed(2);
-    const mx = (c+p.hi).toFixed(2);
+    const rng = Ls?.ncr_range?.[p.key];
+    const mn = rng ? rng.min.toFixed(2) : (c-p.lo).toFixed(2);
+    const mx = rng ? rng.max.toFixed(2) : (c+p.hi).toFixed(2);
     const d = typeof pv === 'number' ? c - pv : null;
     const chg = d === null
       ? '—'
