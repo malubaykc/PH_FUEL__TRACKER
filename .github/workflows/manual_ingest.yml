@@ -15,37 +15,42 @@ jobs:
   ingest:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Install dependencies
         run: pip install pdfplumber requests
 
-      - name: Find uploaded PDF
+      - name: Find PDF in data/pdfs
         run: |
+          echo "📂 Contents of data/pdfs/:"
+          ls -la data/pdfs/
           PDF=$(ls data/pdfs/*.pdf 2>/dev/null | head -1)
           if [ -z "$PDF" ]; then
-            echo "❌ No PDF found in data/pdfs/"
+            echo "❌ No .pdf file found in data/pdfs/"
+            echo "   Make sure you committed the PDF to the repo first."
             exit 1
           fi
+          echo "✅ Using PDF: $PDF"
           echo "PDF_PATH=$PDF" >> $GITHUB_ENV
-          echo "✅ Found: $PDF"
 
       - name: Run ingest
         run: |
           python ingest_manual_pdf.py "$PDF_PATH" \
             --date "${{ github.event.inputs.pdf_date }}"
 
-      - name: Commit and push
+      - name: Commit and push updated prices
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/prices.json
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "✅ No changes — prices already up to date"
           else
             git commit -m "🛢️ Manual ingest — ${{ github.event.inputs.pdf_date }}"
             git push
