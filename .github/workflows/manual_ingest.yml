@@ -3,10 +3,6 @@ name: Manual PDF Ingest
 on:
   workflow_dispatch:
     inputs:
-      pdf_url:
-        description: "Direct URL to the DOE PDF (from doe.gov.ph)"
-        required: true
-        type: string
       pdf_date:
         description: "Week date in YYYY-MM-DD format (e.g. 2026-04-21)"
         required: true
@@ -28,22 +24,19 @@ jobs:
       - name: Install dependencies
         run: pip install pdfplumber requests
 
-      - name: Download PDF
+      - name: Find uploaded PDF
         run: |
-          mkdir -p data/pdfs
-          curl -L "${{ github.event.inputs.pdf_url }}" \
-               -o "data/pdfs/manual_upload.pdf" \
-               -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.0.0 Safari/537.36" \
-               -H "Referer: https://www.doe.gov.ph/price-monitor" \
-               --fail \
-               --show-error
-          # Verify it's actually a PDF
-          file data/pdfs/manual_upload.pdf
-          head -c 4 data/pdfs/manual_upload.pdf | xxd
+          PDF=$(ls data/pdfs/*.pdf 2>/dev/null | grep -v ".gitkeep" | head -1)
+          if [ -z "$PDF" ]; then
+            echo "❌ No PDF found in data/pdfs/ — upload one first"
+            exit 1
+          fi
+          echo "PDF_PATH=$PDF" >> $GITHUB_ENV
+          echo "✅ Found: $PDF"
 
       - name: Run ingest
         run: |
-          python ingest_manual_pdf.py data/pdfs/manual_upload.pdf \
+          python ingest_manual_pdf.py "$PDF_PATH" \
             --date "${{ github.event.inputs.pdf_date }}"
 
       - name: Commit and push
