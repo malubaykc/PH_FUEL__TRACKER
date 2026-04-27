@@ -2,7 +2,9 @@ name: Weekly Fuel Update
 
 on:
   schedule:
-    - cron: "0 6 * * 2"  # every Tuesday
+    - cron: "0 6 * * 2"   # Tuesday 6AM UTC = 2PM Manila (first attempt)
+    - cron: "0 0 * * 3"   # Wednesday midnight UTC = 8AM Manila (retry if Tuesday failed)
+    - cron: "0 6 * * 3"   # Wednesday 6AM UTC = 2PM Manila (last resort retry)
   workflow_dispatch:
 
 jobs:
@@ -30,7 +32,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git add data/prices.json
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update fuel prices"
+          git add data/prices.json data/pdfs/
+          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update fuel prices + PDF backup"
 
           git push
