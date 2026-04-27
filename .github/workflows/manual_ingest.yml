@@ -1,0 +1,50 @@
+name: Manual PDF Ingest
+
+on:
+  workflow_dispatch:
+    inputs:
+      pdf_url:
+        description: "Direct URL to the DOE PDF (from doe.gov.ph)"
+        required: true
+        type: string
+      pdf_date:
+        description: "Week date in YYYY-MM-DD format (e.g. 2026-04-21)"
+        required: true
+        type: string
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pdfplumber requests
+
+      - name: Download PDF
+        run: |
+          mkdir -p data/pdfs
+          curl -L "${{ github.event.inputs.pdf_url }}" \
+               -o "data/pdfs/manual_upload.pdf" \
+               -H "Referer: https://www.doe.gov.ph/price-monitor"
+
+      - name: Run ingest
+        run: |
+          python ingest_manual_pdf.py data/pdfs/manual_upload.pdf \
+            --date "${{ github.event.inputs.pdf_date }}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/prices.json
+          if git diff --staged --quiet; then
+            echo "No changes"
+          else
+            git commit -m "🛢️ Manual ingest — ${{ github.event.inputs.pdf_date }}"
+            git push
+          fi
