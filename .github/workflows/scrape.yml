@@ -1,11 +1,14 @@
-name: Weekly Fuel Update
+name: Weekly Fuel Price Update
 
 on:
   schedule:
-    - cron: "0 6 * * 2"   # Tuesday 6AM UTC = 2PM Manila (first attempt)
-    - cron: "0 0 * * 3"   # Wednesday midnight UTC = 8AM Manila (retry if Tuesday failed)
-    - cron: "0 6 * * 3"   # Wednesday 6AM UTC = 2PM Manila (last resort retry)
-  workflow_dispatch:
+    # Tuesday 6AM UTC = 2PM Manila (DOE usually publishes Tuesday morning)
+    - cron: "0 6 * * 2"
+    # Tuesday 11PM UTC = 7AM Wednesday Manila (retry if morning failed)
+    - cron: "0 23 * * 2"
+    # Wednesday 6AM UTC = 2PM Manila (last resort retry)
+    - cron: "0 6 * * 3"
+  workflow_dispatch: # allow manual trigger from GitHub Actions tab
 
 jobs:
   update:
@@ -13,26 +16,43 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-${{ runner.os }}-pdfplumber-requests
 
       - name: Install dependencies
         run: |
           pip install pdfplumber requests
+
+      - name: Ensure pdfs directory exists
+        run: |
+          mkdir -p data/pdfs
+          touch data/pdfs/.gitkeep
 
       - name: Run scraper
         run: python scraper.py
 
       - name: Commit and push if changed
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add data/prices.json data/pdfs/
-          git diff --quiet && git diff --staged --quiet || git commit -m "Auto update fuel prices + PDF backup"
 
-          git push
+          # Only commit if something actually changed
+          if git diff --staged --quiet; then
+            echo "✅ No changes — data is already up to date"
+          else
+            WEEK=$(date -u +"%Y-W%U")
+            git commit -m "🛢️ Auto update fuel prices — ${WEEK}"
+            git push
+          fi
