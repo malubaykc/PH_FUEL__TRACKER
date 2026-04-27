@@ -171,58 +171,55 @@ def extract_prices(pdf_bytes, date):
     return data
 
 
+SUMMARY_HEADER = "PREVAILING RETAIL PRICES OF PETROLEUM PRODUCTS NCR"
+
 def parse_summary_table(text):
     """
-    Parse the summary block at the bottom of the DOE PDF.
-    Looks like:
-      Gasoline (RON97/100)   83.00   107.90   98.10
-      Gasoline (RON95)       77.00   107.80   88.10
-      Gasoline (RON91)       76.00   102.10   86.10
-      Diesel                105.00   136.70  123.40
-      Diesel Plus           120.20   171.70  136.80
-      Kerosene              149.35   165.69  154.60
-
-    FIX: Use >= 3 (not == 3) and always take floats[-1] as common price.
+    Parse ONLY the summary block at the bottom of the DOE PDF.
+    We slice to the summary header first so per-city rows are excluded.
+    Format: product  min  max  common_price
+    Returns dict with prices + _ranges dict with real min/max from PDF.
     """
-    data = {}
-    lines = text.split("\n")
+    idx = text.find(SUMMARY_HEADER)
+    if idx == -1:
+        print("  [summary] Header not found — falling back to full parse")
+        return {}
 
-    for line in lines:
+    summary_text = text[idx:]
+    data = {}
+    ranges = {}
+
+    for line in summary_text.split("\n"):
         line_upper = line.upper()
         numbers = re.findall(r"\d+\.?\d*", line.replace(",", ""))
-        # FIX: was `== 3`, which dropped lines with extra numbers
         floats = [float(n) for n in numbers if 50.0 <= float(n) <= 300.0]
 
         if len(floats) < 3:
             continue
 
-        # FIX: always take LAST float — that's the common price column
         common_price = floats[-1]
+        range_min    = floats[-3]
+        range_max    = floats[-2]
+
+        def store(key):
+            data[key]   = common_price
+            ranges[key] = {"min": range_min, "max": range_max}
+            print(f"  [summary] {key} = {common_price}  range {range_min}–{range_max}")
 
         if re.search(r"RON\s*97|RON\s*97/100", line_upper) and "ron97" not in data:
-            data["ron97"] = common_price
-            print(f"  [summary] ron97 = {common_price}")
-
+            store("ron97")
         elif re.search(r"RON\s*95", line_upper) and "ron95" not in data:
-            data["ron95"] = common_price
-            print(f"  [summary] ron95 = {common_price}")
-
+            store("ron95")
         elif re.search(r"RON\s*91", line_upper) and "ron91" not in data:
-            data["ron91"] = common_price
-            print(f"  [summary] ron91 = {common_price}")
-
+            store("ron91")
         elif re.search(r"\bDIESEL PLUS\b", line_upper) and "diesel_plus" not in data:
-            data["diesel_plus"] = common_price
-            print(f"  [summary] diesel_plus = {common_price}")
-
+            store("diesel_plus")
         elif re.search(r"\bDIESEL\b", line_upper) and "DIESEL PLUS" not in line_upper and "diesel" not in data:
-            data["diesel"] = common_price
-            print(f"  [summary] diesel = {common_price}")
-
+            store("diesel")
         elif re.search(r"\bKEROSENE\b", line_upper) and "kerosene" not in data:
-            data["kerosene"] = common_price
-            print(f"  [summary] kerosene = {common_price}")
+            store("kerosene")
 
+    data["_ranges"] = ranges
     return data
 
 
@@ -318,6 +315,7 @@ def update_data(date, prices):
             "diesel_plus": prices.get("diesel_plus"),
             "kerosene":    prices.get("kerosene"),
         },
+        "ncr_range": prices.get("_ranges", {}),
         # NOTE: brand prices below are real NCR common prices from DOE.
         # Per-brand breakdown requires parsing the full city table —
         # using common price for all brands is more accurate than fake offsets.
