@@ -16805,27 +16805,27 @@
     {
       "week": "2026-W17",
       "date": "2026-04-21",
-      "source": "DOE Philippines OIMB",
+      "source": "DOE Philippines (OIMB)",
       "ncr_common": {
-        "ron91": 82.69,
+        "ron91": 82.7,
+        "ron95": 83.7,
         "ron97": 93.6,
-        "ron95": 84.1,
-        "diesel": 98.46,
-        "diesel_plus": 111.86,
-        "kerosene": 152.6
+        "diesel": 99.9,
+        "diesel_plus": 97.2,
+        "kerosene": 146.0
       },
-      "note": "Rollback 2: RON91 -P3.41, RON95 -P4.00, RON97 -P4.50, Diesel -P24.94, Kerosene -P2.00 effective Apr 21",
+      "note": "Corrected from PDF summary table: RON91=82.70 RON95=83.70 RON97=93.60 Diesel=99.90 DiePlus=97.20 Kerosene=146.00",
       "prices": [
         {
           "brand": "Petron",
           "fuel_type": "Ron 91",
-          "price": 82.69,
+          "price": 82.7,
           "region": "NCR"
         },
         {
           "brand": "Petron",
           "fuel_type": "Ron 95",
-          "price": 84.1,
+          "price": 83.7,
           "region": "NCR"
         },
         {
@@ -16837,31 +16837,31 @@
         {
           "brand": "Petron",
           "fuel_type": "Diesel",
-          "price": 98.46,
+          "price": 99.9,
           "region": "NCR"
         },
         {
           "brand": "Petron",
           "fuel_type": "Diesel Plus",
-          "price": 111.86,
+          "price": 97.2,
           "region": "NCR"
         },
         {
           "brand": "Petron",
           "fuel_type": "Kerosene",
-          "price": 152.6,
+          "price": 146.0,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Ron 91",
-          "price": 82.69,
+          "price": 82.7,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Ron 95",
-          "price": 84.1,
+          "price": 83.7,
           "region": "NCR"
         },
         {
@@ -16873,31 +16873,31 @@
         {
           "brand": "Shell",
           "fuel_type": "Diesel",
-          "price": 98.46,
+          "price": 99.9,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Diesel Plus",
-          "price": 111.86,
+          "price": 97.2,
           "region": "NCR"
         },
         {
           "brand": "Shell",
           "fuel_type": "Kerosene",
-          "price": 152.6,
+          "price": 146.0,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Ron 91",
-          "price": 82.69,
+          "price": 82.7,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Ron 95",
-          "price": 84.1,
+          "price": 83.7,
           "region": "NCR"
         },
         {
@@ -16909,31 +16909,31 @@
         {
           "brand": "Caltex",
           "fuel_type": "Diesel",
-          "price": 98.46,
+          "price": 99.9,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Diesel Plus",
-          "price": 111.86,
+          "price": 97.2,
           "region": "NCR"
         },
         {
           "brand": "Caltex",
           "fuel_type": "Kerosene",
-          "price": 152.6,
+          "price": 146.0,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Ron 91",
-          "price": 82.69,
+          "price": 82.7,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Ron 95",
-          "price": 84.1,
+          "price": 83.7,
           "region": "NCR"
         },
         {
@@ -16945,31 +16945,31 @@
         {
           "brand": "Phoenix",
           "fuel_type": "Diesel",
-          "price": 98.46,
+          "price": 99.9,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Diesel Plus",
-          "price": 111.86,
+          "price": 97.2,
           "region": "NCR"
         },
         {
           "brand": "Phoenix",
           "fuel_type": "Kerosene",
-          "price": 152.6,
+          "price": 146.0,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Ron 91",
-          "price": 82.69,
+          "price": 82.7,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Ron 95",
-          "price": 84.1,
+          "price": 83.7,
           "region": "NCR"
         },
         {
@@ -16981,19 +16981,19 @@
         {
           "brand": "Seaoil",
           "fuel_type": "Diesel",
-          "price": 98.46,
+          "price": 99.9,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Diesel Plus",
-          "price": 111.86,
+          "price": 97.2,
           "region": "NCR"
         },
         {
           "brand": "Seaoil",
           "fuel_type": "Kerosene",
-          "price": 152.6,
+          "price": 146.0,
           "region": "NCR"
         }
       ]
