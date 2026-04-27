@@ -30,17 +30,19 @@ jobs:
         run: |
           echo "📂 Contents of data/pdfs/:"
           ls -la data/pdfs/
-          PDF=$(ls data/pdfs/*.pdf 2>/dev/null | head -1)
+          PDF=$(find data/pdfs -name "*.pdf" | head -1)
           if [ -z "$PDF" ]; then
             echo "❌ No .pdf file found in data/pdfs/"
             exit 1
           fi
           echo "✅ Using PDF: $PDF"
-          echo "PDF_PATH=$PDF" >> $GITHUB_ENV
+          # Write to file to avoid spaces-in-path issues
+          echo "$PDF" > /tmp/pdf_path.txt
 
       - name: Run ingest
         run: |
-          python ingest_manual_pdf.py "$PDF_PATH" \
+          PDF=$(cat /tmp/pdf_path.txt)
+          python ingest_manual_pdf.py "$PDF" \
             --date "${{ github.event.inputs.pdf_date }}"
 
       - name: Commit and push updated prices
